@@ -13,6 +13,9 @@ const toggle = useToggle(mode)
         Toggle Size
       </button>
     </div>
-    <TheImageProxy :class="mode ? 'w-50 h-50' : 'w-60 h-30'" rounded-xl />
+    <TheImageProxy
+      :class="mode ? 'w-50 h-50' : 'w-60 h-30'"
+      :attrs="{class: 'rounded-xl'}"
+    />
   </div>
 </template>

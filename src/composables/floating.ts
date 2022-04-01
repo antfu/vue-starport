@@ -1,56 +1,86 @@
-import type { Component, StyleValue } from 'vue'
+import { nanoid } from 'nanoid'
+import type { Component, Ref, StyleValue } from 'vue'
 import { Teleport, h } from 'vue'
 
-export interface FloatingOptions {
+export interface StarportOptions {
   duration?: number
   landing?: boolean
 }
 
-export function createFloating<T extends Component>(
+export type ResolvedStarportOptions = Required<StarportOptions>
+
+export interface StarportInstance {
+  component: Component
+  container: Component
+  proxy: Component
+  options: StarportOptions
+}
+
+export class StarportContext {
+  el: Ref<HTMLElement | undefined> = ref()
+  props: Ref<any> = ref()
+  attrs: Ref<any> = ref()
+  landed: Ref<boolean> = ref(false)
+  rect: Ref<DOMRect | undefined> = ref()
+
+  private landingTimer: any
+
+  constructor(public options: ResolvedStarportOptions) {}
+
+  updateRect(el = this.el.value) {
+    this.rect.value = el?.getClientRects()?.[0]
+  }
+
+  liftOff() {
+    this.landed.value = false
+    clearTimeout(this.landingTimer)
+  }
+
+  land() {
+    clearTimeout(this.landingTimer)
+    this.landingTimer = setTimeout(() => {
+      this.landed.value = true
+    }, this.options.duration)
+  }
+}
+
+export function createStarport<T extends Component>(
   component: T,
-  options?: FloatingOptions,
+  options: StarportOptions = {},
 ) {
-  const {
-    duration = 1000,
+  const resolved: ResolvedStarportOptions = {
+    duration: 800,
     // TODO: fix teleports
-    landing = false,
-  } = options || {}
-  const metadata = reactive<any>({
-    props: {},
-    attrs: {},
-  })
-  const proxyEl = ref<HTMLElement | null>()
-  // const id = nanoid()
-
-  let timer: any
-  let isLanded = $ref(true)
-
-  function liftOff() {
-    isLanded = false
-    clearTimeout(timer)
+    landing: false,
+    ...options,
   }
 
-  function land() {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      isLanded = true
-    }, duration * 3)
-  }
+  const defaultId = nanoid()
+  const contextMap = new Map<string, StarportContext>()
 
-  let rect = $ref<DOMRect | undefined>()
-
-  function update(el = proxyEl.value) {
-    rect = el?.getClientRects()?.[0]
+  function getContext(port = defaultId) {
+    if (!contextMap.has(port))
+      contextMap.set(port, new StarportContext(resolved))
+    return contextMap.get(port)!
   }
 
   const container = defineComponent({
-    setup() {
+    props: {
+      port: {
+        type: String,
+        default: defaultId,
+      },
+    },
+    setup(props) {
+      const context = $computed(() => getContext(props.port))
+      const { rect, el: proxyEl, attrs } = $(context)
+
       const style = computed((): StyleValue => {
         const fixed: StyleValue = {
-          transition: `all ${duration}ms ease-in-out`,
+          transition: `all ${resolved.duration}ms ease-in-out`,
           position: 'fixed',
         }
-        if (!rect || !proxyEl.value) {
+        if (!rect || !proxyEl) {
           return {
             opacity: 0,
             pointerEvents: 'none',
@@ -60,28 +90,30 @@ export function createFloating<T extends Component>(
           ...fixed,
           left: `${rect.x ?? 0}px`,
           top: `${rect.y ?? 0}px`,
+          width: `${rect.width ?? 0}px`,
+          height: `${rect.height ?? 0}px`,
         }
       })
 
-      useMutationObserver(proxyEl, () => update(), {
-        childList: true,
-        subtree: true,
+      useMutationObserver(context.el, () => context.updateRect(), {
         attributes: true,
-        characterData: true,
       })
-      useEventListener('resize', () => update())
-      watchEffect(() => update())
+      useEventListener('resize', () => context.updateRect())
+      watchEffect(() => context.updateRect())
 
       return () => {
-        const comp = h(component, metadata.attrs)
-        const teleports = !!(landing && isLanded && proxyEl.value)
+        const comp = h(component, attrs)
+        const teleports = false // TODO:
         return h(
           'div',
-          { style: style.value, class: 'floating-container' },
+          {
+            style: style.value,
+            class: 'starport-container',
+          },
           [
             teleports
               ? h(Teleport, {
-                to: proxyEl.value,
+                to: proxyEl,
                 disabled: teleports,
               },
               [comp])
@@ -93,32 +125,43 @@ export function createFloating<T extends Component>(
   }) as T
 
   const proxy = defineComponent({
-    inheritAttrs: false,
-    props: (component as any)?.props || {},
+    props: {
+      port: {
+        type: String,
+        default: defaultId,
+      },
+      props: {
+        type: Object,
+        default: () => {},
+      },
+      attrs: {
+        type: Object,
+        default: () => {},
+      },
+    },
     setup(props, ctx) {
-      const attrs = useAttrs()
+      const context = $computed(() => getContext(props.port))
+
+      context.attrs.value = props.attrs
+      context.props.value = props.props
       const el = ref<HTMLElement>()
 
-      metadata.attrs = attrs
-
       onMounted(() => {
-        proxyEl.value = el.value
-        update(el.value)
-        land()
+        context.el.value = el.value
+        context.updateRect(el.value)
+        context.land()
       })
 
       onBeforeUnmount(() => {
-        update(el.value)
-        liftOff()
+        context.updateRect(el.value)
+        context.liftOff()
         // TODO: fixme
         // proxyEl.value = undefined
       })
 
       return () => h('div', {
         ref: el,
-        class: 'floating-proxy',
-        // TODO:
-        style: attrs.style,
+        class: 'starport-proxy',
       }, [
         ctx.slots.default
           ? h(ctx.slots.default)
