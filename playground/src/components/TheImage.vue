@@ -20,8 +20,9 @@ onMounted(() => {
       bg-gray-400:20
     >
     <div
-      absolute pt-5 left-0 right-0 bottom-0 bg-gradient-to-t from-black:40
-      to-transprent text-white font-mono
+      absolute pt-5 left-0 right-0 bottom-0
+      bg-gradient-to-t from-black:40 to-transparent
+      text-white font-mono
       flex items-center justify-center
     >
       {{ counter }}
