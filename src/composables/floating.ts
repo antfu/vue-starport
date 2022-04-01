@@ -28,9 +28,8 @@ export function createFloating<T extends Component>(
         }
         if (!rect || !proxyEl.value) {
           return {
-            ...fixed,
+            position: 'fixed',
             opacity: 0,
-            transform: 'translateY(-100px)',
             pointerEvents: 'none',
           }
         }

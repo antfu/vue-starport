@@ -9,6 +9,7 @@ declare module 'vue' {
     FloatProxy: typeof import('./src/components/FloatProxy.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Image: typeof import('./src/components/TheImage.vue')['default']
+    Nav: typeof import('./src/components/TheNav.vue')['default']
     TheImage: typeof import('./src/components/TheImage.vue')['default']
   }
 }

@@ -6,21 +6,8 @@ const toggle = useToggle(mode)
 </script>
 
 <template>
-  <div>
-    <div>Index</div>
-    <div>
-      <RouterLink
-        class="m-3 text-sm btn"
-        to="/foo"
-      >
-        Foo
-      </RouterLink>
-      <RouterLink
-        class="m-3 text-sm btn"
-        to="/bar"
-      >
-        Bar
-      </RouterLink>
+  <div p4>
+    <div p4>
       <button btn @click="toggle()">
         Toggle
       </button>
