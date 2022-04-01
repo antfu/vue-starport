@@ -11,6 +11,7 @@ declare module 'vue' {
     Image: typeof import('./src/components/TheImage.vue')['default']
     Nav: typeof import('./src/components/TheNav.vue')['default']
     TheImage: typeof import('./src/components/TheImage.vue')['default']
+    TheNav: typeof import('./src/components/TheNav.vue')['default']
   }
 }
 

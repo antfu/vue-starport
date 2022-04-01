@@ -6,10 +6,11 @@ const toggle = useToggle(mode)
 </script>
 
 <template>
-  <div p4>
+  <div px8 py-2>
+    <p>Shared component across routes with animations</p>
     <div p4>
       <button btn @click="toggle()">
-        Toggle
+        Toggle Size
       </button>
     </div>
     <TheImageProxy :class="mode ? 'w-50 h-50' : 'w-60 h-30'" rounded-xl />
