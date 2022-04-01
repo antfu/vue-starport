@@ -93,6 +93,8 @@ export function createFloating<T extends Component>(
   }) as T
 
   const proxy = defineComponent({
+    inheritAttrs: false,
+    props: (component as any)?.props || {},
     setup(props, ctx) {
       const attrs = useAttrs()
       const el = ref<HTMLElement>()
@@ -112,7 +114,12 @@ export function createFloating<T extends Component>(
         // proxyEl.value = undefined
       })
 
-      return () => h('div', { ref: el, class: 'floating-proxy' }, [
+      return () => h('div', {
+        ref: el,
+        class: 'floating-proxy',
+        // TODO:
+        style: attrs.style,
+      }, [
         ctx.slots.default
           ? h(ctx.slots.default)
           : null,

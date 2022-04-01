@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isDark, toggleDark } from '~/composables'
 const route = useRoute()
 </script>
 
@@ -8,7 +9,12 @@ const route = useRoute()
       {{ route.path }}
     </div>
     <div flex-auto />
-    <div flex="~ gap1" justify-center>
+
+    <div flex="~ gap3" justify-center>
+      <button class="icon-btn !outline-none" @click="toggleDark()">
+        <div v-if="isDark" i-carbon-moon />
+        <div v-else i-carbon-sun />
+      </button>
       <router-link btn to="/">
         /
       </router-link>
