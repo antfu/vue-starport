@@ -10,7 +10,7 @@ export function createFloating<T extends Component>(
   options?: FloatingOptions,
 ) {
   const {
-    duration = 500,
+    duration = 1000,
   } = options || {}
   const metadata = reactive<any>({
     props: {},
@@ -54,7 +54,9 @@ export function createFloating<T extends Component>(
       useEventListener('resize', update)
       watchEffect(update)
 
-      return () => h('div', { style: style.value }, [
+      return () => h('div', {
+        style: style.value,
+      }, [
         h(component, metadata.attrs),
       ])
     },
@@ -72,7 +74,8 @@ export function createFloating<T extends Component>(
       })
 
       onBeforeUnmount(() => {
-        proxyEl.value = undefined
+        // TODO: fixme
+        // proxyEl.value = undefined
       })
 
       return () => h('div', { ref: el }, [

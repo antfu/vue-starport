@@ -1,9 +1,13 @@
 <script setup lang="ts">
 const a = $ref(false)
+
+onMounted(() => {
+  console.log('Image Mounted')
+})
 </script>
 
 <template>
-  <div overflow-hidden transition-all @click="a = !a">
+  <div overflow-hidden transition-all duration-800 @click="a = !a">
     <img v-if="a" object-cover block w-full h-full src="https://images.unsplash.com/photo-1648737851351-b40fce70e77e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1335&q=80">
     <img v-else object-cover block w-full h-full src="https://images.unsplash.com/photo-1648721946556-b9266caf9370?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80">
   </div>
