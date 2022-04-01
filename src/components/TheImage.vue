@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const counter = $ref(0)
+const counter = $ref(Math.round(Math.random() * 100))
 
 onMounted(() => {
   console.log('Image Mounted')
