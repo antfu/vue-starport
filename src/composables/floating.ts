@@ -1,7 +1,17 @@
 import type { Component, StyleValue } from 'vue'
 import { h } from 'vue'
 
-export function createFloating<T extends Component>(component: T) {
+export interface FloatingOptions {
+  duration?: number
+}
+
+export function createFloating<T extends Component>(
+  component: T,
+  options?: FloatingOptions,
+) {
+  const {
+    duration = 500,
+  } = options || {}
   const metadata = reactive<any>({
     props: {},
     attrs: {},
@@ -13,7 +23,7 @@ export function createFloating<T extends Component>(component: T) {
       let rect = $ref<DOMRect | undefined>()
       const style = computed((): StyleValue => {
         const fixed: StyleValue = {
-          transition: 'all .3s ease-in-out',
+          transition: `all ${duration}ms ease-in-out`,
           position: 'fixed',
         }
         if (!rect || !proxyEl.value) {
@@ -48,7 +58,7 @@ export function createFloating<T extends Component>(component: T) {
         h(component, metadata.attrs),
       ])
     },
-  })
+  }) as T
 
   const proxy = defineComponent({
     setup(props, ctx) {
@@ -71,7 +81,7 @@ export function createFloating<T extends Component>(component: T) {
           : null,
       ])
     },
-  })
+  }) as T
 
   return {
     container,
