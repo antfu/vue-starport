@@ -2,6 +2,7 @@
 const counter = $ref(Math.round(Math.random() * 100))
 
 onMounted(() => {
+  // eslint-disable-next-line no-console
   console.log('Image Mounted')
 })
 </script>

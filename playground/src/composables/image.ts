@@ -1,5 +1,5 @@
 import TheImage from '../components/TheImage.vue'
-import { createStarport } from './floating'
+import { createStarport } from '../../../src'
 
 const {
   container: TheImageContainer,

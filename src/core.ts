@@ -1,48 +1,9 @@
 import { nanoid } from 'nanoid'
-import type { Component, Ref, StyleValue } from 'vue'
-import { Teleport, h } from 'vue'
-
-export interface StarportOptions {
-  duration?: number
-  landing?: boolean
-}
-
-export type ResolvedStarportOptions = Required<StarportOptions>
-
-export interface StarportInstance {
-  component: Component
-  container: Component
-  proxy: Component
-  options: StarportOptions
-}
-
-export class StarportContext {
-  el: Ref<HTMLElement | undefined> = ref()
-  props: Ref<any> = ref()
-  attrs: Ref<any> = ref()
-  landed: Ref<boolean> = ref(false)
-  rect: Ref<DOMRect | undefined> = ref()
-
-  private landingTimer: any
-
-  constructor(public options: ResolvedStarportOptions) {}
-
-  updateRect(el = this.el.value) {
-    this.rect.value = el?.getClientRects()?.[0]
-  }
-
-  liftOff() {
-    this.landed.value = false
-    clearTimeout(this.landingTimer)
-  }
-
-  land() {
-    clearTimeout(this.landingTimer)
-    this.landingTimer = setTimeout(() => {
-      this.landed.value = true
-    }, this.options.duration)
-  }
-}
+import type { Component, StyleValue } from 'vue'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, watchEffect } from 'vue'
+import { useEventListener, useMutationObserver } from '@vueuse/core'
+import { StarportContext } from './context'
+import type { ResolvedStarportOptions, StarportOptions } from './types'
 
 export function createStarport<T extends Component>(
   component: T,
@@ -72,15 +33,15 @@ export function createStarport<T extends Component>(
       },
     },
     setup(props) {
-      const context = $computed(() => getContext(props.port))
-      const { rect, el: proxyEl, attrs } = $(context)
+      const context = computed(() => getContext(props.port))
 
       const style = computed((): StyleValue => {
         const fixed: StyleValue = {
           transition: `all ${resolved.duration}ms ease-in-out`,
           position: 'fixed',
         }
-        if (!rect || !proxyEl) {
+        const rect = context.value.rect.value
+        if (!rect || !context.value.el.value) {
           return {
             opacity: 0,
             pointerEvents: 'none',
@@ -95,14 +56,17 @@ export function createStarport<T extends Component>(
         }
       })
 
-      useMutationObserver(context.el, () => context.updateRect(), {
+      useMutationObserver(context.value.el, () => context.value.updateRect(), {
         attributes: true,
       })
-      useEventListener('resize', () => context.updateRect())
-      watchEffect(() => context.updateRect())
+      useEventListener('resize', () => context.value.updateRect())
+      watchEffect(() => context.value.updateRect())
 
       return () => {
-        const comp = h(component, attrs)
+        const comp = h(component as any, {
+          ...context.value.props.value,
+          ...context.value.attrs.value,
+        })
         const teleports = false // TODO:
         return h(
           'div',
@@ -113,7 +77,7 @@ export function createStarport<T extends Component>(
           [
             teleports
               ? h(Teleport, {
-                to: proxyEl,
+                to: context.value.el.value,
                 disabled: teleports,
               },
               [comp])
@@ -122,7 +86,7 @@ export function createStarport<T extends Component>(
         )
       }
     },
-  }) as T
+  }) as any as T
 
   const proxy = defineComponent({
     props: {
@@ -140,21 +104,21 @@ export function createStarport<T extends Component>(
       },
     },
     setup(props, ctx) {
-      const context = $computed(() => getContext(props.port))
+      const context = computed(() => getContext(props.port))
 
-      context.attrs.value = props.attrs
-      context.props.value = props.props
+      context.value.attrs.value = props.attrs
+      context.value.props.value = props.props
       const el = ref<HTMLElement>()
 
       onMounted(() => {
-        context.el.value = el.value
-        context.updateRect(el.value)
-        context.land()
+        context.value.el.value = el.value
+        context.value.updateRect(el.value)
+        context.value.land()
       })
 
       onBeforeUnmount(() => {
-        context.updateRect(el.value)
-        context.liftOff()
+        context.value.updateRect(el.value)
+        context.value.liftOff()
         // TODO: fixme
         // proxyEl.value = undefined
       })
@@ -168,7 +132,7 @@ export function createStarport<T extends Component>(
           : null,
       ])
     },
-  }) as T
+  }) as any as T
 
   return {
     container,

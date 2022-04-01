@@ -40,7 +40,9 @@ export default defineConfig({
 
     // https://github.com/antfu/unocss
     // see unocss.config.ts for config
-    Unocss(),
+    Unocss({
+      configFile: path.resolve(__dirname, 'uno.config.ts'),
+    }),
   ],
 
   // https://github.com/vitest-dev/vitest
