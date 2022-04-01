@@ -110,7 +110,7 @@ export function createStarport<T extends Component>(
       context.value.props.value = props.props
       const el = ref<HTMLElement>()
 
-      onMounted(() => {
+      onMounted(async() => {
         context.value.el.value = el.value
         context.value.updateRect(el.value)
         context.value.land()

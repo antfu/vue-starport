@@ -13,8 +13,11 @@ function reset() {
 </script>
 
 <template>
-  <div flex="~ col" items-center>
-    <div flex="~ gap-2">
+  <div px6 py-2 flex="~ col" items-center>
+    <div p2 flex="~ gap-2">
+      <router-link btn to="/" saturate-0>
+        Back
+      </router-link>
       <button btn @click="enlarge()">
         Enlarge
       </button>

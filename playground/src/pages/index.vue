@@ -6,13 +6,18 @@ const toggle = useToggle(mode)
 </script>
 
 <template>
-  <div px8 py-2>
-    <p>Shared component across routes with animations</p>
-    <div p4>
+  <div px6 py-2>
+    <div p2 flex="~ gap-2" justify-center>
       <button btn @click="toggle()">
         Toggle Size
       </button>
+      <router-link btn to="/foo" saturate-0>
+        Navigate
+      </router-link>
     </div>
+    <p pb-10>
+      Shared component across routes with animations
+    </p>
     <TheImageProxy
       :class="mode ? 'w-50 h-50' : 'w-60 h-30'"
       :attrs="{class: 'rounded-xl'}"

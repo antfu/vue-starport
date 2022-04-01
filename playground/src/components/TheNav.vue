@@ -5,6 +5,9 @@ const route = useRoute()
 
 <template>
   <div p4 border="b gray-400/10" mb-4 flex="~" items-center>
+    <div font-mono text-left leading-1em mr6>
+      Vue<br>Starport
+    </div>
     <div text-lg font-mono>
       {{ route.path }}
     </div>

@@ -9,3 +9,13 @@ body,
 html.dark {
   background: #121212;
 }
+
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}

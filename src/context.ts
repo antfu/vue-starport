@@ -24,8 +24,11 @@ export class StarportContext {
 
   land() {
     clearTimeout(this.landingTimer)
-    this.landingTimer = setTimeout(() => {
-      this.landed.value = true
-    }, this.options.duration)
+    this.landingTimer = setTimeout(
+      () => {
+        this.landed.value = true
+      },
+      this.options.duration,
+    )
   }
 }
