@@ -1,34 +1,31 @@
-import type { Ref } from 'vue'
-import { ref } from 'vue'
+import type { UseElementBoundingReturn } from '@vueuse/core'
+import { nanoid } from 'nanoid'
+import type { Ref, UnwrapNestedRefs } from 'vue'
+import { reactive, ref } from 'vue'
 import type { ResolvedStarportOptions } from './types'
 
 export class StarportContext {
   el: Ref<HTMLElement | undefined> = ref()
   props: Ref<any> = ref()
   attrs: Ref<any> = ref()
-  landed: Ref<boolean> = ref(false)
-  rect: Ref<DOMRect | undefined> = ref()
+  isLanded: Ref<boolean> = ref(false)
+  rect: UnwrapNestedRefs<UseElementBoundingReturn> = undefined!
+  scope = effectScope(true)
+  id = nanoid()
 
-  private landingTimer: any
-
-  constructor(public options: ResolvedStarportOptions) {}
-
-  updateRect(el = this.el.value) {
-    this.rect.value = el?.getClientRects()?.[0]
+  constructor(public options: ResolvedStarportOptions) {
+    this.scope.run(() => {
+      this.rect = reactive(useElementBounding(this.el))
+    })
   }
 
   liftOff() {
-    this.landed.value = false
-    clearTimeout(this.landingTimer)
+    this.isLanded.value = false
+    // console.log('lift up')
   }
 
   land() {
-    clearTimeout(this.landingTimer)
-    this.landingTimer = setTimeout(
-      () => {
-        this.landed.value = true
-      },
-      this.options.duration,
-    )
+    this.isLanded.value = true
+    // console.log('landed up')
   }
 }

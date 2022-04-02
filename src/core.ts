@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid'
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, watchEffect } from 'vue'
-import { useEventListener, useMutationObserver } from '@vueuse/core'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount } from 'vue'
 import { StarportContext } from './context'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 
@@ -11,7 +10,6 @@ export function createStarport<T extends Component>(
 ) {
   const resolved: ResolvedStarportOptions = {
     duration: 800,
-    // TODO: fix teleports
     landing: false,
     ...options,
   }
@@ -33,6 +31,7 @@ export function createStarport<T extends Component>(
       },
     },
     setup(props) {
+      const router = useRouter()
       const context = computed(() => getContext(props.port))
 
       const style = computed((): StyleValue => {
@@ -40,7 +39,7 @@ export function createStarport<T extends Component>(
           transition: `all ${resolved.duration}ms ease-in-out`,
           position: 'fixed',
         }
-        const rect = context.value.rect.value
+        const rect = context.value.rect
         if (!rect || !context.value.el.value) {
           return {
             opacity: 0,
@@ -56,33 +55,38 @@ export function createStarport<T extends Component>(
         }
       })
 
-      useMutationObserver(context.value.el, () => context.value.updateRect(), {
-        attributes: true,
+      const cleanRouterGuard = router.beforeEach(async() => {
+        context.value.liftOff()
+        await nextTick()
       })
-      useEventListener('resize', () => context.value.updateRect())
-      watchEffect(() => context.value.updateRect())
+
+      onBeforeUnmount(() => {
+        cleanRouterGuard()
+      })
 
       return () => {
         const comp = h(component as any, {
           ...context.value.props.value,
           ...context.value.attrs.value,
         })
-        const teleports = false // TODO:
         return h(
           'div',
           {
             style: style.value,
             class: 'starport-container',
+            onTransitionend: async() => {
+              await nextTick()
+              context.value.land()
+            },
           },
-          [
-            teleports
-              ? h(Teleport, {
-                to: context.value.el.value,
-                disabled: teleports,
-              },
-              [comp])
-              : comp,
-          ],
+          h(Teleport, {
+            to: context.value.isLanded.value
+              ? `#${context.value.id}`
+              : 'body',
+            disabled: !context.value.isLanded.value,
+          },
+          comp,
+          ),
         )
       }
     },
@@ -106,31 +110,24 @@ export function createStarport<T extends Component>(
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
 
+      onBeforeUnmount(() => {
+        context.value.liftOff()
+      })
+
       context.value.attrs.value = props.attrs
       context.value.props.value = props.props
-      const el = ref<HTMLElement>()
 
-      onMounted(async() => {
-        context.value.el.value = el.value
-        context.value.updateRect(el.value)
-        context.value.land()
-      })
-
-      onBeforeUnmount(() => {
-        context.value.updateRect(el.value)
-        context.value.liftOff()
-        // TODO: fixme
-        // proxyEl.value = undefined
-      })
-
-      return () => h('div', {
-        ref: el,
-        class: 'starport-proxy',
-      }, [
+      return () => h(
+        'div',
+        {
+          ref: context.value.el,
+          id: context.value.id,
+          class: 'starport-proxy',
+        },
         ctx.slots.default
           ? h(ctx.slots.default)
-          : null,
-      ])
+          : undefined,
+      )
     },
   }) as any as T
 
