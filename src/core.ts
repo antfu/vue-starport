@@ -35,36 +35,33 @@ export function createStarport<T extends Component>(
       const context = computed(() => getContext(props.port))
 
       const style = computed((): StyleValue => {
-        const fixed: StyleValue = {
-          transition: `all ${resolved.duration}ms ease-in-out`,
-          position: 'fixed',
-        }
-        if (context.value.isLanded)
-          fixed.pointerEvents = 'none'
         const rect = context.value.rect
-        if (!rect || !context.value.el) {
-          return {
-            opacity: 0,
-            pointerEvents: 'none',
-          }
-        }
-        return {
-          ...fixed,
+        const style: StyleValue = {
+          position: 'fixed',
           left: `${rect.x ?? 0}px`,
           top: `${rect.y ?? 0}px`,
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
         }
+        if (!context.value.isVisible || !context.value.el) {
+          return {
+            ...style,
+            display: 'none',
+          }
+        }
+        if (context.value.isLanded)
+          style.pointerEvents = 'none'
+        else
+          style.transition = `all ${resolved.duration}ms ease-in-out`
+        return style
       })
 
       const cleanRouterGuard = router.beforeEach(async() => {
-        context.value.liftOff()
+        await context.value.liftOff()
         await nextTick()
       })
 
-      onBeforeUnmount(() => {
-        cleanRouterGuard()
-      })
+      onBeforeUnmount(cleanRouterGuard)
 
       return () => {
         const comp = h(component as any, {
@@ -113,7 +110,11 @@ export function createStarport<T extends Component>(
       const context = computed(() => getContext(props.port))
       const el = context.value.elRef()
 
+      if (!context.value.isVisible)
+        context.value.land()
+
       onBeforeUnmount(() => {
+        context.value.rect.update()
         context.value.liftOff()
       })
 

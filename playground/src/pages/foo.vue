@@ -27,6 +27,7 @@ function reset() {
     </div>
     <div m10 flex="~ col sm:row-reverse gap-4" items-center max-w-180>
       <TheImageProxy
+        transition-all duration-600
         :style="{ width: size + 'px', height: size + 'px' }"
         :attrs="{ class: 'rounded-1/2 shadow-xl' }"
       />
