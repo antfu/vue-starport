@@ -1,31 +1,47 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
-import { nanoid } from 'nanoid'
-import type { Ref, UnwrapNestedRefs } from 'vue'
+import { customAlphabet } from 'nanoid'
+import type { Ref } from 'vue'
 import { reactive, ref } from 'vue'
-import type { ResolvedStarportOptions } from './types'
 
-export class StarportContext {
-  el: Ref<HTMLElement | undefined> = ref()
-  props: Ref<any> = ref()
-  attrs: Ref<any> = ref()
-  isLanded: Ref<boolean> = ref(false)
-  rect: UnwrapNestedRefs<UseElementBoundingReturn> = undefined!
-  scope = effectScope(true)
-  id = nanoid()
+const getId = customAlphabet('abcdefghijklmnopqrstuvwxyz', 10)
 
-  constructor(public options: ResolvedStarportOptions) {
-    this.scope.run(() => {
-      this.rect = reactive(useElementBounding(this.el))
-    })
-  }
+export function createStarportContext() {
+  const el: Ref<HTMLElement | undefined> = ref()
+  const props: Ref<any> = ref()
+  const attrs: Ref<any> = ref()
+  const isLanded: Ref<boolean> = ref(false)
+  let rect: UseElementBoundingReturn = undefined!
+  const scope = effectScope(true)
+  const id = getId()
 
-  liftOff() {
-    this.isLanded.value = false
-    // console.log('lift up')
-  }
+  scope.run(() => {
+    rect = useElementBounding(el)
+  })
 
-  land() {
-    this.isLanded.value = true
+  return reactive({
+    el,
+    props,
+    attrs,
+    isLanded,
+    rect,
+    scope,
+    id,
+    elRef() {
+      return el
+    },
+    updateRect() {
+      rect.update()
+    },
+    liftOff() {
+      rect.update()
+      isLanded.value = false
+      // console.log('lift up')
+    },
+    land() {
+      isLanded.value = true
     // console.log('landed up')
-  }
+    },
+  })
 }
+
+export type StarportContext = ReturnType<typeof createStarportContext>

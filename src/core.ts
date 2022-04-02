@@ -1,7 +1,8 @@
 import { nanoid } from 'nanoid'
 import type { Component, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, h, onBeforeUnmount } from 'vue'
-import { StarportContext } from './context'
+import type { StarportContext } from './context'
+import { createStarportContext } from './context'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 
 export function createStarport<T extends Component>(
@@ -10,7 +11,6 @@ export function createStarport<T extends Component>(
 ) {
   const resolved: ResolvedStarportOptions = {
     duration: 800,
-    landing: false,
     ...options,
   }
 
@@ -19,7 +19,7 @@ export function createStarport<T extends Component>(
 
   function getContext(port = defaultId) {
     if (!contextMap.has(port))
-      contextMap.set(port, new StarportContext(resolved))
+      contextMap.set(port, createStarportContext())
     return contextMap.get(port)!
   }
 
@@ -39,8 +39,10 @@ export function createStarport<T extends Component>(
           transition: `all ${resolved.duration}ms ease-in-out`,
           position: 'fixed',
         }
+        if (context.value.isLanded)
+          fixed.pointerEvents = 'none'
         const rect = context.value.rect
-        if (!rect || !context.value.el.value) {
+        if (!rect || !context.value.el) {
           return {
             opacity: 0,
             pointerEvents: 'none',
@@ -66,8 +68,8 @@ export function createStarport<T extends Component>(
 
       return () => {
         const comp = h(component as any, {
-          ...context.value.props.value,
-          ...context.value.attrs.value,
+          ...context.value.props,
+          ...context.value.attrs,
         })
         return h(
           'div',
@@ -80,10 +82,10 @@ export function createStarport<T extends Component>(
             },
           },
           h(Teleport, {
-            to: context.value.isLanded.value
+            to: context.value.isLanded
               ? `#${context.value.id}`
               : 'body',
-            disabled: !context.value.isLanded.value,
+            disabled: !context.value.isLanded,
           },
           comp,
           ),
@@ -109,18 +111,19 @@ export function createStarport<T extends Component>(
     },
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
+      const el = context.value.elRef()
 
       onBeforeUnmount(() => {
         context.value.liftOff()
       })
 
-      context.value.attrs.value = props.attrs
-      context.value.props.value = props.props
+      context.value.attrs = props.attrs
+      context.value.props = props.props
 
       return () => h(
         'div',
         {
-          ref: context.value.el,
+          ref: el,
           id: context.value.id,
           class: 'starport-proxy',
         },

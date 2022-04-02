@@ -24,9 +24,9 @@ const route = useRoute()
       <router-link btn to="/foo">
         /foo
       </router-link>
-      <!-- <router-link btn to="/bar">
+      <router-link btn to="/bar">
         /bar
-      </router-link> -->
+      </router-link>
     </div>
   </div>
 </template>

@@ -2,7 +2,6 @@ import type { Component } from 'vue'
 
 export interface StarportOptions {
   duration?: number
-  landing?: boolean
 }
 
 export type ResolvedStarportOptions = Required<StarportOptions>
