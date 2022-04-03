@@ -5,6 +5,22 @@ import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 
+const componetMap = new Map<Component, StarportInstance>()
+
+type StarportInstance = ReturnType<typeof createStarport>
+
+export function getStarportProxy<T extends Component>(componet: T) {
+  if (!componetMap.has(componet))
+    componetMap.set(componet, createStarport(componet))
+  return componetMap.get(componet)!.proxy
+}
+
+export function getStarportCarrier<T extends Component>(componet: T) {
+  if (!componetMap.has(componet))
+    componetMap.set(componet, createStarport(componet))
+  return componetMap.get(componet)!.carrier
+}
+
 export function createStarport<T extends Component>(
   component: T,
   options: StarportOptions = {},

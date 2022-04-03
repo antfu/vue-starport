@@ -14,9 +14,5 @@ import { TheImageCarrier } from './composables/image'
       </transition>
     </router-view>
   </main>
-  <!-- <TheImageCraft port="0" />
-  <TheImageCraft port="1" />
-  <TheImageCraft port="2" />
-  <TheImageCraft port="3" /> -->
   <TheImageCarrier />
 </template>
