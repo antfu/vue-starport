@@ -2,7 +2,7 @@
 import { images } from '../composables/data'
 import { Starport } from '../../../src'
 
-const mode = ref(false)
+const mode = useStorage('starport-image-mode', true)
 const toggle = useToggle(mode)
 </script>
 
@@ -16,7 +16,7 @@ const toggle = useToggle(mode)
     <p pb-10>
       Shared component across routes with animations
     </p>
-    <div flex="~ gap-4 wrap" justify-center>
+    <div flex="~ gap-4 wrap" px-10>
       <RouterLink
         v-for="img, idx of images"
         :key="img"
@@ -25,10 +25,10 @@ const toggle = useToggle(mode)
         <Starport
           transition-all duration-800
           :port="String(idx)"
-          :class="mode ? 'w-50 h-50' : 'w-60 h-30'"
+          :class="mode ? 'w-50 h-50' : 'w-70 h-30'"
         >
           <TheImage
-            class="rounded-xl"
+            :class="mode ? 'rounded-xl' : 'rounded'"
             :src="img"
           />
         </Starport>
