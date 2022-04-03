@@ -6,9 +6,9 @@ export interface StarportOptions {
 
 export type ResolvedStarportOptions = Required<StarportOptions>
 
-export interface StarportInstance<T extends Component = Component> {
-  component: T
-  container: T
-  proxy: T
+export interface StarportInstance {
+  starcraft: Component
+  carrier: Component
+  proxy: Component
   options: StarportOptions
 }

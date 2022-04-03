@@ -1,5 +1,26 @@
-import { defineComponent, renderList } from 'vue'
-import { componetMap, componetMapCounter, getStarport, getStarportCarrier } from './core'
+import type { Component } from 'vue'
+import { defineComponent, h, ref, renderList } from 'vue'
+import { createStarport } from './core'
+import type { StarportInstance } from './types'
+
+const componetMapCounter = ref(0)
+const componetMap = new Map<Component, StarportInstance>()
+
+export function getStarport<T extends Component>(componet: T) {
+  if (!componetMap.has(componet)) {
+    componetMapCounter.value += 1
+    componetMap.set(componet, createStarport(componet))
+  }
+  return componetMap.get(componet)!.proxy
+}
+
+export function getStarportCarrier<T extends Component>(componet: T): Component {
+  if (!componetMap.has(componet)) {
+    componetMapCounter.value += 1
+    componetMap.set(componet, createStarport(componet))
+  }
+  return componetMap.get(componet)!.carrier
+}
 
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
@@ -9,7 +30,7 @@ export const StarportCarrier = defineComponent({
     componetMapCounter.value
     return renderList(
       Array.from(componetMap.keys()),
-      (comp, idx) => h(getStarportCarrier(comp), {
+      (comp, idx) => h(getStarportCarrier(comp) as any, {
         key: idx,
       }),
     )

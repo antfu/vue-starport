@@ -1,9 +1,8 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
-import { customAlphabet } from 'nanoid'
+import { useElementBounding } from '@vueuse/core'
 import type { Ref } from 'vue'
-import { reactive, ref, watch } from 'vue'
-
-const getId = customAlphabet('abcdefghijklmnopqrstuvwxyz', 10)
+import { effectScope, nextTick, reactive, ref, watch } from 'vue'
+import { nanoid } from './utils'
 
 export function createStarportContext() {
   const el: Ref<HTMLElement | undefined> = ref()
@@ -11,7 +10,7 @@ export function createStarportContext() {
   const attrs: Ref<any> = ref()
   let rect: UseElementBoundingReturn = undefined!
   const scope = effectScope(true)
-  const id = getId()
+  const id = nanoid()
 
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)

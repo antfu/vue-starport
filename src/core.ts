@@ -1,35 +1,15 @@
-import { nanoid } from 'nanoid'
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, renderList } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList } from 'vue'
+import { useRouter } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
-import type { ResolvedStarportOptions, StarportOptions } from './types'
-
-export const componetMapCounter = ref(0)
-export const componetMap = new Map<Component, StarportInstance>()
-
-type StarportInstance = ReturnType<typeof createStarport>
-
-export function getStarport<T extends Component>(componet: T) {
-  if (!componetMap.has(componet)) {
-    componetMapCounter.value += 1
-    componetMap.set(componet, createStarport(componet))
-  }
-  return componetMap.get(componet)!.proxy
-}
-
-export function getStarportCarrier<T extends Component>(componet: T) {
-  if (!componetMap.has(componet)) {
-    componetMapCounter.value += 1
-    componetMap.set(componet, createStarport(componet))
-  }
-  return componetMap.get(componet)!.carrier
-}
+import type { ResolvedStarportOptions, StarportInstance, StarportOptions } from './types'
+import { nanoid } from './utils'
 
 export function createStarport<T extends Component>(
   component: T,
   options: StarportOptions = {},
-) {
+): StarportInstance {
   const resolved: ResolvedStarportOptions = {
     duration: 800,
     ...options,
@@ -93,25 +73,22 @@ export function createStarport<T extends Component>(
           ...context.value.props,
           ...context.value.attrs,
         })
-        return h(
-          'div',
-          {
-            style: style.value,
-            class: 'starport-container',
-            onTransitionend: async() => {
-              await nextTick()
-              context.value.land()
-            },
+        return h('div', {
+          style: style.value,
+          class: 'starport-container',
+          onTransitionend: async() => {
+            await nextTick()
+            context.value.land()
           },
-          h(Teleport, {
-            to: context.value.isLanded
-              ? `#${context.value.id}`
-              : 'body',
-            disabled: !context.value.isLanded,
-          },
-          comp,
-          ),
-        )
+        },
+        h(Teleport, {
+          to: context.value.isLanded
+            ? `#${context.value.id}`
+            : 'body',
+          disabled: !context.value.isLanded,
+        },
+        comp,
+        ))
       }
     },
   })
@@ -142,6 +119,11 @@ export function createStarport<T extends Component>(
       onBeforeUnmount(() => {
         context.value.rect.update()
         context.value.liftOff()
+      })
+
+      onMounted(async() => {
+        await nextTick()
+        context.value.rect.update()
       })
 
       context.value.attrs = props.attrs
@@ -181,5 +163,6 @@ export function createStarport<T extends Component>(
     carrier,
     starcraft,
     proxy,
+    options,
   }
 }

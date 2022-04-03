@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "esnext",
+    "baseUrl": ".",
     "lib": ["esnext", "DOM"],
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -10,9 +11,16 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "types": [
+      "vite/client",
+      "vite-plugin-pages/client"
+    ],
     "paths": {
-      "~/": [
-        "./src"
+      "~/*": [
+        "src/*"
+      ],
+      "vue-starport": [
+        "../src/index.ts"
       ]
     }
   }

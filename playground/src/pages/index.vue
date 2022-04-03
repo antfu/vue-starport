@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { images } from '../composables/data'
-import { Starport } from '../../../src'
+import { Starport } from 'vue-starport'
+import { images } from '~/composables/data'
 
 const mode = useStorage('starport-image-mode', true)
 const toggle = useToggle(mode)
@@ -34,8 +34,5 @@ const toggle = useToggle(mode)
         </Starport>
       </RouterLink>
     </div>
-    <Starport w-100 h-20 mxa>
-      <Footer />
-    </Starport>
   </div>
 </template>
