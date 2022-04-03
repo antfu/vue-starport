@@ -34,5 +34,8 @@ const toggle = useToggle(mode)
         </StarportProxy>
       </RouterLink>
     </div>
+    <StarportProxy>
+      <Footer />
+    </StarportProxy>
   </div>
 </template>

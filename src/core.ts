@@ -5,19 +5,24 @@ import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 
-const componetMap = new Map<Component, StarportInstance>()
+export const componetMapCounter = ref(0)
+export const componetMap = new Map<Component, StarportInstance>()
 
 type StarportInstance = ReturnType<typeof createStarport>
 
 export function getStarportProxy<T extends Component>(componet: T) {
-  if (!componetMap.has(componet))
+  if (!componetMap.has(componet)) {
+    componetMapCounter.value += 1
     componetMap.set(componet, createStarport(componet))
+  }
   return componetMap.get(componet)!.proxy
 }
 
 export function getStarportCarrier<T extends Component>(componet: T) {
-  if (!componetMap.has(componet))
+  if (!componetMap.has(componet)) {
+    componetMapCounter.value += 1
     componetMap.set(componet, createStarport(componet))
+  }
   return componetMap.get(componet)!.carrier
 }
 
