@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount } from 'vue'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount, renderList } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
@@ -15,15 +15,19 @@ export function createStarport<T extends Component>(
   }
 
   const defaultId = nanoid()
+  const counter = ref(0)
   const portMap = new Map<string, StarportContext>()
 
   function getContext(port = defaultId) {
-    if (!portMap.has(port))
+    if (!portMap.has(port)) {
+      counter.value += 1
       portMap.set(port, createStarportContext())
+    }
     return portMap.get(port)!
   }
 
-  const container = defineComponent({
+  const starcraft = defineComponent({
+    name: 'StarportCraft',
     props: {
       port: {
         type: String,
@@ -92,6 +96,7 @@ export function createStarport<T extends Component>(
   })
 
   const proxy = defineComponent({
+    name: 'StarportProxy',
     props: {
       port: {
         type: String,
@@ -135,8 +140,25 @@ export function createStarport<T extends Component>(
     },
   })
 
+  const carrier = defineComponent({
+    name: 'StarportCarrier',
+    render() {
+      // Workaround: force renderer
+      // eslint-disable-next-line no-unused-expressions
+      counter.value
+      return renderList(
+        Array.from(portMap.keys()),
+        port => h(starcraft, {
+          port,
+          key: port,
+        }),
+      )
+    },
+  })
+
   return {
-    container,
+    carrier,
+    starcraft,
     proxy,
   }
 }
