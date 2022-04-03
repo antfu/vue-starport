@@ -7,7 +7,6 @@ import { nanoid } from './utils'
 export function createStarportContext() {
   const el: Ref<HTMLElement | undefined> = ref()
   const props: Ref<any> = ref()
-  const attrs: Ref<any> = ref()
   let rect: UseElementBoundingReturn = undefined!
   const scope = effectScope(true)
   const id = nanoid()
@@ -29,7 +28,6 @@ export function createStarportContext() {
   return reactive({
     el,
     props,
-    attrs,
     rect,
     scope,
     id,
@@ -38,12 +36,12 @@ export function createStarportContext() {
     elRef() {
       return el
     },
-    async liftOff() {
+    liftOff() {
       if (!isLanded.value)
         return
       isLanded.value = false
     },
-    async land() {
+    land() {
       if (isLanded.value)
         return
       isLanded.value = true

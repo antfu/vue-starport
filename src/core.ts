@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
@@ -62,33 +62,34 @@ export function createStarport<T extends Component>(
       })
 
       const cleanRouterGuard = router.beforeEach(async() => {
-        await context.value.liftOff()
+        context.value.liftOff()
         await nextTick()
       })
 
       onBeforeUnmount(cleanRouterGuard)
 
       return () => {
-        const comp = h(component as any, {
-          ...context.value.props,
-          ...context.value.attrs,
-        })
-        return h('div', {
-          style: style.value,
-          class: 'starport-container',
-          onTransitionend: async() => {
-            await nextTick()
-            context.value.land()
+        return h(
+          'div',
+          {
+            style: style.value,
+            class: 'starport-container',
+            onTransitionend: async() => {
+              await nextTick()
+              context.value.land()
+            },
           },
-        },
-        h(Teleport, {
-          to: context.value.isLanded
-            ? `#${context.value.id}`
-            : 'body',
-          disabled: !context.value.isLanded,
-        },
-        comp,
-        ))
+          h(
+            Teleport,
+            {
+              to: context.value.isLanded
+                ? `#${context.value.id}`
+                : 'body',
+              disabled: !context.value.isLanded,
+            },
+            h(component as any, context.value.props),
+          ),
+        )
       }
     },
   })
@@ -126,8 +127,11 @@ export function createStarport<T extends Component>(
         context.value.rect.update()
       })
 
-      context.value.attrs = props.attrs
-      context.value.props = props.props
+      watch(
+        () => props.props,
+        () => context.value.props = props.props,
+        { deep: true, immediate: true },
+      )
 
       return () => h(
         'div',

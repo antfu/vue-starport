@@ -8,15 +8,16 @@ const toggle = useToggle(mode)
 
 <template>
   <div px6 py-2>
-    <div p2 flex="~ gap-2" justify-center>
+    <img src="/logo.png" w-40 h-40 ma>
+    <p pb-5>
+      Shared component across routes with animations
+    </p>
+    <div p5 flex="~ gap-2" justify-center>
       <button btn @click="toggle()">
         Toggle Size
       </button>
     </div>
-    <p pb-10>
-      Shared component across routes with animations
-    </p>
-    <div flex="~ gap-4 wrap" px-10>
+    <div grid="~ cols-1 md:cols-3 lg:cols-4 xl:cols-6" px-10 justify-center>
       <RouterLink
         v-for="img, idx of images"
         :key="img"
@@ -25,10 +26,10 @@ const toggle = useToggle(mode)
         <Starport
           transition-all duration-800
           :port="String(idx)"
-          :class="mode ? 'w-50 h-50' : 'w-70 h-30'"
+          :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
         >
           <TheImage
-            :class="mode ? 'rounded-xl' : 'rounded'"
+            :class="mode ? 'rounded shadow-lg' : ''"
             :src="img"
           />
         </Starport>
