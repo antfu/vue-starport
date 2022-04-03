@@ -11,7 +11,7 @@ export function createStarport<T extends Component>(
   options: StarportOptions = {},
 ): StarportInstance {
   const resolved: ResolvedStarportOptions = {
-    duration: 800,
+    duration: 650,
     ...options,
   }
 
@@ -51,7 +51,10 @@ export function createStarport<T extends Component>(
         if (!context.value.isVisible || !context.value.el) {
           return {
             ...style,
-            display: 'none',
+            opacity: 0,
+            zIndex: -1,
+            pointerEvents: 'none',
+            transition: 'all 200ms ease-in-out',
           }
         }
         if (context.value.isLanded)

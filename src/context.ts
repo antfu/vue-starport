@@ -15,7 +15,7 @@ export function createStarportContext() {
   const isVisible = ref(false)
 
   scope.run(() => {
-    rect = useElementBounding(el)
+    rect = useElementBounding(el, { reset: false })
     watch(el, async(v) => {
       if (v)
         isVisible.value = true

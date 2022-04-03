@@ -8,7 +8,7 @@ const toggle = useToggle(mode)
 
 <template>
   <div px6 py-2>
-    <img src="/logo.png" w-40 h-40 ma>
+    <TheLogo w40 h40 ma />
     <p pb-5>
       Shared component across routes with animations
     </p>
@@ -24,7 +24,7 @@ const toggle = useToggle(mode)
         :to="`/${idx}`"
       >
         <Starport
-          transition-all duration-800
+          transition-all duration-600
           :port="String(idx)"
           :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
         >

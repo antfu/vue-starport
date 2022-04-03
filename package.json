@@ -22,7 +22,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@vueuse/core": "^8.2.3",
+    "@vueuse/core": "^8.2.4",
     "nanoid": "^3.3.2",
     "vue": "^3.2.31"
   },

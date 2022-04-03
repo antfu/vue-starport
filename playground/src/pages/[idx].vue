@@ -30,7 +30,7 @@ function reset() {
         Reset
       </button>
     </div>
-    <div m10 flex="~ col sm:row-reverse gap-4" items-center max-w-180>
+    <div m10 flex="~ col sm:row gap6" items-center max-w-180>
       <Starport
         transition-all duration-600
         :port="idx"

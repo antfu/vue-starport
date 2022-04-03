@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
   <div
     overflow-hidden w-full h-full
-    transition-all duration-800
+    transition-all duration-600
     relative select-none
     @click="counter += 1"
   >
