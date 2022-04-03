@@ -14,5 +14,8 @@ import { TheImageContainer } from './composables/image'
       </transition>
     </router-view>
   </main>
-  <TheImageContainer />
+  <TheImageContainer port="0" />
+  <TheImageContainer port="1" />
+  <TheImageContainer port="2" />
+  <TheImageContainer port="3" />
 </template>

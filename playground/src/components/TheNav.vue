@@ -21,12 +21,6 @@ const route = useRoute()
       <router-link btn to="/">
         /
       </router-link>
-      <router-link btn to="/foo">
-        /foo
-      </router-link>
-      <router-link btn to="/bar">
-        /bar
-      </router-link>
     </div>
   </div>
 </template>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps<{
+  src: string
+}>()
+
 const counter = $ref(Math.round(Math.random() * 100))
 
 onMounted(() => {
@@ -16,8 +20,8 @@ onMounted(() => {
   >
     <img
       object-cover block w-full h-full
-      src="https://source.unsplash.com/collection/94734566/512x512"
       bg-gray-400:20
+      :src="src"
     >
     <div
       absolute pt-5 left-0 right-0 bottom-0

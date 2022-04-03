@@ -15,12 +15,12 @@ export function createStarport<T extends Component>(
   }
 
   const defaultId = nanoid()
-  const contextMap = new Map<string, StarportContext>()
+  const portMap = new Map<string, StarportContext>()
 
   function getContext(port = defaultId) {
-    if (!contextMap.has(port))
-      contextMap.set(port, createStarportContext())
-    return contextMap.get(port)!
+    if (!portMap.has(port))
+      portMap.set(port, createStarportContext())
+    return portMap.get(port)!
   }
 
   const container = defineComponent({
@@ -89,7 +89,7 @@ export function createStarport<T extends Component>(
         )
       }
     },
-  }) as any as T
+  })
 
   const proxy = defineComponent({
     props: {
@@ -133,7 +133,7 @@ export function createStarport<T extends Component>(
           : undefined,
       )
     },
-  }) as any as T
+  })
 
   return {
     container,
