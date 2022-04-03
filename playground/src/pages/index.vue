@@ -34,7 +34,7 @@ const toggle = useToggle(mode)
         </Starport>
       </RouterLink>
     </div>
-    <Starport>
+    <Starport w-100 h-20 mxa>
       <Footer />
     </Starport>
   </div>

@@ -12,15 +12,5 @@ const route = useRoute()
       {{ route.path }}
     </div>
     <div flex-auto />
-
-    <div flex="~ gap3" justify-center>
-      <button class="icon-btn !outline-none" @click="toggleDark()">
-        <div v-if="isDark" i-carbon-moon />
-        <div v-else i-carbon-sun />
-      </button>
-      <router-link btn to="/">
-        /
-      </router-link>
-    </div>
   </div>
 </template>
