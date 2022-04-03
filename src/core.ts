@@ -10,7 +10,7 @@ export const componetMap = new Map<Component, StarportInstance>()
 
 type StarportInstance = ReturnType<typeof createStarport>
 
-export function getStarportProxy<T extends Component>(componet: T) {
+export function getStarport<T extends Component>(componet: T) {
   if (!componetMap.has(componet)) {
     componetMapCounter.value += 1
     componetMap.set(componet, createStarport(componet))
@@ -162,7 +162,7 @@ export function createStarport<T extends Component>(
   })
 
   const carrier = defineComponent({
-    name: 'StarportCarrier',
+    name: 'StarportSubCarrier',
     render() {
       // Workaround: force renderer
       // eslint-disable-next-line no-unused-expressions

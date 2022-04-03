@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StarportProxy } from '../../../src'
+import { Starport } from '../../../src'
 import { images } from '../composables/data'
 
 const props = defineProps<{
@@ -31,7 +31,7 @@ function reset() {
       </button>
     </div>
     <div m10 flex="~ col sm:row-reverse gap-4" items-center max-w-180>
-      <StarportProxy
+      <Starport
         transition-all duration-600
         :port="idx"
         :style="{ width: size + 'px', height: size + 'px' }"
@@ -40,13 +40,13 @@ function reset() {
           class="rounded-1/2 shadow-xl"
           :src="images[+idx]"
         />
-      </StarportProxy>
+      </Starport>
       <p flex-1 text-left>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </p>
     </div>
-    <StarportProxy>
+    <Starport>
       <Footer />
-    </StarportProxy>
+    </Starport>
   </div>
 </template>

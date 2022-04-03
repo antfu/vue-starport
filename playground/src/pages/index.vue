@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { images } from '../composables/data'
-import { StarportProxy } from '../../../src'
+import { Starport } from '../../../src'
 
 const mode = ref(false)
 const toggle = useToggle(mode)
@@ -22,7 +22,7 @@ const toggle = useToggle(mode)
         :key="img"
         :to="`/${idx}`"
       >
-        <StarportProxy
+        <Starport
           transition-all duration-800
           :port="String(idx)"
           :class="mode ? 'w-50 h-50' : 'w-60 h-30'"
@@ -31,11 +31,11 @@ const toggle = useToggle(mode)
             class="rounded-xl"
             :src="img"
           />
-        </StarportProxy>
+        </Starport>
       </RouterLink>
     </div>
-    <StarportProxy>
+    <Starport>
       <Footer />
-    </StarportProxy>
+    </Starport>
   </div>
 </template>
