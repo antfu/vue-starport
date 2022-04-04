@@ -24,7 +24,8 @@
   "dependencies": {
     "@vueuse/core": "^8.2.4",
     "nanoid": "^3.3.2",
-    "vue": "^3.2.31"
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.19.4",
