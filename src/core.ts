@@ -38,6 +38,8 @@ export function createStarport<T extends Component>(
     setup(props) {
       const router = useRouter()
       const context = computed(() => getContext(props.port))
+      const id = computed(() => context.value.el?.id || context.value.id)
+      const isMounted = ref(false)
 
       const style = computed((): StyleValue => {
         const rect = context.value.rect
@@ -68,10 +70,29 @@ export function createStarport<T extends Component>(
         context.value.liftOff()
         await nextTick()
       })
-
       onBeforeUnmount(cleanRouterGuard)
 
+      async function pollingMounted() {
+        if (isMounted.value)
+          return
+        if (document.getElementById(id.value))
+          isMounted.value = true
+
+        else
+          requestAnimationFrame(pollingMounted)
+      }
+
+      watch(
+        () => context.value.isLanded,
+        () => {
+          isMounted.value = false
+          pollingMounted()
+        },
+        { immediate: true, flush: 'pre' },
+      )
+
       return () => {
+        const teleport = context.value.isLanded && isMounted.value
         return h(
           'div',
           {
@@ -85,10 +106,10 @@ export function createStarport<T extends Component>(
           h(
             Teleport,
             {
-              to: context.value.isLanded
-                ? `#${context.value.id}`
+              to: teleport
+                ? `#${id.value}`
                 : 'body',
-              disabled: !context.value.isLanded,
+              disabled: !teleport,
             },
             h(component as any, context.value.props),
           ),
@@ -116,6 +137,7 @@ export function createStarport<T extends Component>(
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
       const el = context.value.elRef()
+      const id = nanoid()
 
       if (!context.value.isVisible)
         context.value.land()
@@ -140,7 +162,7 @@ export function createStarport<T extends Component>(
         'div',
         {
           ref: el,
-          id: context.value.id,
+          id,
           style: `transition: all ${resolved.duration}ms ease`,
           class: 'starport-proxy',
         },
