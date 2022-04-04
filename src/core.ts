@@ -35,7 +35,6 @@ export function createStarport<T extends Component>(
       const router = useRouter()
       const context = computed(() => getContext(props.port))
       const id = computed(() => context.value.el?.id || context.value.id)
-      const isMounted = ref(false)
 
       const style = computed((): StyleValue => {
         const rect = context.value.rect
@@ -74,27 +73,8 @@ export function createStarport<T extends Component>(
       })
       onBeforeUnmount(cleanRouterGuard)
 
-      async function pollingMounted() {
-        if (isMounted.value)
-          return
-        if (document.getElementById(id.value))
-          isMounted.value = true
-
-        else
-          requestAnimationFrame(pollingMounted)
-      }
-
-      watch(
-        () => context.value.isLanded,
-        () => {
-          isMounted.value = false
-          pollingMounted()
-        },
-        { immediate: true, flush: 'pre' },
-      )
-
       return () => {
-        const teleport = context.value.isLanded && isMounted.value
+        const teleport = context.value.isLanded && context.value.el
         return h(
           'div',
           {
