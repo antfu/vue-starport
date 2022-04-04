@@ -31,6 +31,9 @@ function reset() {
       <button btn @click="reset()">
         Reset
       </button>
+      <!-- <router-link btn :to="`/${next}`" saturate-0>
+        Next
+      </router-link> -->
     </div>
     <div m10 flex="~ col sm:row gap6" items-center max-w-180>
       <Starport

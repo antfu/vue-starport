@@ -62,6 +62,7 @@ export const Starport = defineComponent({
       return h(proxy, {
         port: props.port,
         props: slot.props,
+        key: props.port,
       })
     }
   },
