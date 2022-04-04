@@ -50,7 +50,54 @@ This is very similar to [Terran's Buildings](https://starcraft.fandom.com/wiki/L
 
 ## Usage
 
-> TODO
+At root `App.vue`, add `<StarportCarrier>` component from `vue-starport` at the end of the dom.
+
+```html
+<script setup>
+import { StarportCarrier } from 'vue-starport'
+</script>
+
+<template>
+  <RouterView />
+  <StarportCarrier /> <!-- here -->
+</template>
+```
+
+In routes, wrap the component you want to do the transitions bettween routes.
+
+```html
+<!-- PageA.vue -->
+<script setup>
+import { Starport } from 'vue-starport'
+</script>
+
+<template>
+  <div>
+    <!-- ... -->
+    <Starport
+      port="some-id"
+      style="height:400px"
+    > 
+      <MyComponent :prop="value"/>
+    </Starport>
+  </div>
+</template>
+```
+
+On the other page, we do the same thing with the same `port` id to identify the instance.
+
+Note that you might need to apply some styles to `<Starport>` to make it have a defined size indicating the area for the "floating starcraft" to land.
+
+### Register Components Globally
+
+```ts
+// main.ts
+import StarportPlugin from 'vue-starport'
+
+app.use(StarportPlugin())
+```
+
+And then you can use `Starport` and `StarportCarrier` components without importing.
 
 ## License
 
