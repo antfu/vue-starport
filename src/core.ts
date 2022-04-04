@@ -72,7 +72,7 @@ export function createStarport<T extends Component>(
       onBeforeUnmount(cleanRouterGuard)
 
       return () => {
-        const teleport = context.value.isLanded && context.value.el && context.value.isMounted
+        const teleport = context.value.isLanded && context.value.el
         return h(
           'div',
           {
@@ -130,7 +130,6 @@ export function createStarport<T extends Component>(
       onMounted(async() => {
         await nextTick()
         context.value.rect.update()
-        context.value.isMounted = true
       })
 
       watch(
