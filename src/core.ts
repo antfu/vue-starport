@@ -3,6 +3,7 @@ import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMo
 import { useRouter } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
+import { optionsProps } from './options'
 import type { StarportInstance, StarportOptions } from './types'
 import { nanoid } from './utils'
 
@@ -130,10 +131,7 @@ export function createStarport<T extends Component>(
         type: Object,
         default: () => {},
       },
-      attrs: {
-        type: Object,
-        default: () => {},
-      },
+      ...optionsProps,
     },
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
@@ -154,8 +152,12 @@ export function createStarport<T extends Component>(
       })
 
       watch(
-        () => props.props,
-        () => context.value.props = props.props,
+        () => props,
+        () => {
+          const { props: childProps, ...options } = props
+          context.value.props = childProps
+          context.value.setLocalOptions(options)
+        },
         { deep: true, immediate: true },
       )
 

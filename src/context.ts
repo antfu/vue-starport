@@ -1,27 +1,29 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { useElementBounding } from '@vueuse/core'
 import type { Ref } from 'vue'
-import { effectScope, nextTick, reactive, ref, watch } from 'vue'
+import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
 import { defaultOptions } from './options'
-import type { StarportOptions } from './types'
+import type { ResolvedStarportOptions, StarportOptions } from './types'
 import { nanoid } from './utils'
 
 export function createStarportContext(
   port: string,
-  options: StarportOptions = {},
+  inlineOptions: StarportOptions = {},
 ) {
   const el: Ref<HTMLElement | undefined> = ref()
   const props: Ref<any> = ref()
-  let rect: UseElementBoundingReturn = undefined!
-  const scope = effectScope(true)
-  const id = nanoid()
-  const resolved = {
-    ...defaultOptions,
-    ...options,
-  }
-
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)
+  const scope = effectScope(true)
+  const id = nanoid()
+  const localOptions = ref<StarportOptions>({})
+  const options = computed<ResolvedStarportOptions>(() => ({
+    ...defaultOptions,
+    ...inlineOptions,
+    ...localOptions.value,
+  }))
+
+  let rect: UseElementBoundingReturn = undefined!
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
@@ -43,7 +45,10 @@ export function createStarportContext(
     id,
     isLanded,
     isVisible,
-    options: resolved,
+    options,
+    setLocalOptions(options: StarportOptions = {}) {
+      localOptions.value = JSON.parse(JSON.stringify(options))
+    },
     elRef() {
       return el
     },

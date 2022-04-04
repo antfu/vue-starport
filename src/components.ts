@@ -2,6 +2,7 @@ import { isObject } from '@vueuse/core'
 import type { Component } from 'vue'
 import { defineComponent, h, isVNode, ref, renderList } from 'vue'
 import { createStarport } from './core'
+import { optionsProps } from './options'
 import type { StarportInstance } from './types'
 
 const componetMapCounter = ref(0)
@@ -46,6 +47,7 @@ export const Starport = defineComponent({
       type: String,
       required: false,
     },
+    ...optionsProps,
   },
   setup(props, ctx) {
     return () => {
@@ -60,6 +62,7 @@ export const Starport = defineComponent({
         throw new Error('The slot in Starport must be a component')
       const proxy = toStarportProxy(component) as any
       return h(proxy, {
+        ...props,
         port: props.port,
         props: slot.props,
         key: props.port,
