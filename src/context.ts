@@ -13,6 +13,7 @@ export function createStarportContext() {
 
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)
+  const isMounted = ref(false)
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
@@ -33,6 +34,7 @@ export function createStarportContext() {
     id,
     isLanded,
     isVisible,
+    isMounted,
     elRef() {
       return el
     },
