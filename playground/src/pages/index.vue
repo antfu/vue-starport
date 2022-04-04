@@ -9,7 +9,7 @@ const toggle = useToggle(mode)
 <template>
   <div px6 py-2>
     <TheLogo w40 h40 ma />
-    <p pb-5>
+    <p pb5>
       Shared component across routes with animations
     </p>
     <div p5 flex="~ gap-2" justify-center>
