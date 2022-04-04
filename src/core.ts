@@ -15,11 +15,11 @@ export function createStarport<T extends Component>(
     ...options,
   }
 
-  const defaultId = nanoid()
+  const defaultPort = nanoid()
   const counter = ref(0)
   const portMap = new Map<string, StarportContext>()
 
-  function getContext(port = defaultId) {
+  function getContext(port = defaultPort) {
     if (!portMap.has(port)) {
       counter.value += 1
       portMap.set(port, createStarportContext())
@@ -32,7 +32,7 @@ export function createStarport<T extends Component>(
     props: {
       port: {
         type: String,
-        default: defaultId,
+        default: defaultPort,
       },
     },
     setup(props) {
@@ -54,7 +54,7 @@ export function createStarport<T extends Component>(
             opacity: 0,
             zIndex: -1,
             pointerEvents: 'none',
-            transition: 'all 200ms ease-in-out',
+            transition: 'all 400ms ease-in-out',
           }
         }
         if (context.value.isLanded)
@@ -102,7 +102,7 @@ export function createStarport<T extends Component>(
     props: {
       port: {
         type: String,
-        default: defaultId,
+        default: defaultPort,
       },
       props: {
         type: Object,
