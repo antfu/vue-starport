@@ -1,6 +1,6 @@
 {
   "name": "vue-starport",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@6.32.3",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
