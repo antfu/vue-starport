@@ -3,18 +3,13 @@ import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMo
 import { useRouter } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
-import type { ResolvedStarportOptions, StarportInstance, StarportOptions } from './types'
+import type { StarportInstance, StarportOptions } from './types'
 import { nanoid } from './utils'
 
 export function createStarport<T extends Component>(
   component: T,
   options: StarportOptions = {},
 ): StarportInstance {
-  const resolved: ResolvedStarportOptions = {
-    duration: 650,
-    ...options,
-  }
-
   const defaultPort = nanoid()
   const counter = ref(0)
   const portMap = new Map<string, StarportContext>()
@@ -22,7 +17,7 @@ export function createStarport<T extends Component>(
   function getContext(port = defaultPort) {
     if (!portMap.has(port)) {
       counter.value += 1
-      portMap.set(port, createStarportContext())
+      portMap.set(port, createStarportContext(port))
     }
     return portMap.get(port)!
   }
@@ -59,10 +54,16 @@ export function createStarport<T extends Component>(
             transition: 'all 400ms ease-in-out',
           }
         }
-        if (context.value.isLanded)
+        if (context.value.isLanded) {
           style.pointerEvents = 'none'
-        else
-          style.transition = `all ${resolved.duration}ms ease-in-out`
+        }
+        else {
+          Object.assign(style, {
+            transitionProperty: 'all',
+            transitionDuration: `${context.value.options.duration}ms`,
+            transitionTimingFunction: context.value.options.easing,
+          })
+        }
         return style
       })
 
@@ -163,7 +164,11 @@ export function createStarport<T extends Component>(
         {
           ref: el,
           id,
-          style: `transition: all ${resolved.duration}ms ease`,
+          style: {
+            transitionProperty: 'all',
+            transitionDuration: `${context.value.options.duration}ms`,
+            transitionTimingFunction: context.value.options.easing,
+          },
           class: 'starport-proxy',
         },
         ctx.slots.default

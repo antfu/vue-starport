@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
   <div
     overflow-hidden w-full h-full
-    transition-all duration-600
+    transition-all duration-900
     relative select-none
   >
     <img
