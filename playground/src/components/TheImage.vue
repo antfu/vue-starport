@@ -16,7 +16,6 @@ onMounted(() => {
     overflow-hidden w-full h-full
     transition-all duration-600
     relative select-none
-    @click="counter += 1"
   >
     <img
       object-cover block w-full h-full

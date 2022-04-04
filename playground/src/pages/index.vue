@@ -24,7 +24,6 @@ const toggle = useToggle(mode)
         :to="`/${idx}`"
       >
         <Starport
-          transition-all duration-600
           :port="String(idx)"
           :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
         >

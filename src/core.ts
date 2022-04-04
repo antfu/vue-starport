@@ -141,6 +141,7 @@ export function createStarport<T extends Component>(
         {
           ref: el,
           id: context.value.id,
+          style: `transition: all ${resolved.duration}ms ease`,
           class: 'starport-proxy',
         },
         ctx.slots.default
