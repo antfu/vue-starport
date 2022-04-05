@@ -1,6 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, renderList } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -32,7 +31,6 @@ export function createStarport<T extends Component>(
       },
     },
     setup(props) {
-      const router = useRouter()
       const context = computed(() => getContext(props.port))
       const id = computed(() => context.value.el?.id || context.value.id)
 
@@ -45,7 +43,7 @@ export function createStarport<T extends Component>(
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
         }
-        if (!context.value.isVisible || !context.value.el) {
+        if (!context.value.el) {
           return {
             ...style,
             opacity: 0,
@@ -67,11 +65,6 @@ export function createStarport<T extends Component>(
         return style
       })
 
-      const cleanRouterGuard = router.beforeEach(async() => {
-        context.value.liftOff()
-        await nextTick()
-      })
-      onBeforeUnmount(cleanRouterGuard)
 
       return () => {
         const teleport = context.value.isLanded && context.value.el
@@ -80,10 +73,10 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            onTransitionend: async() => {
-              await nextTick()
+            ontransitionend: () => {
               context.value.land()
-            },
+              console.log('transitionend')
+            }
           },
           h(
             Teleport,
@@ -109,37 +102,28 @@ export function createStarport<T extends Component>(
       },
       props: {
         type: Object,
-        default: () => {},
+        default: () => { },
       },
       ...optionsProps,
     },
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
-      const el = context.value.elRef()
+      const el = ref<HTMLElement>()
       const id = nanoid()
 
-      if (!context.value.isVisible)
-        context.value.land()
-
       onBeforeUnmount(() => {
-        context.value.rect.update()
         context.value.liftOff()
+        context.value.el = undefined
+      })
+      onMounted(() => {
+        context.value.el = el.value
       })
 
-      onMounted(async() => {
-        await nextTick()
-        context.value.rect.update()
+      watchEffect(() => {
+        const { props: childProps, ...options } = props
+        context.value.props = childProps
+        context.value.setLocalOptions(options)
       })
-
-      watch(
-        () => props,
-        () => {
-          const { props: childProps, ...options } = props
-          context.value.props = childProps
-          context.value.setLocalOptions(options)
-        },
-        { deep: true, immediate: true },
-      )
 
       return () => h(
         'div',

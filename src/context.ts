@@ -13,7 +13,6 @@ export function createStarportContext(
   const el: Ref<HTMLElement | undefined> = ref()
   const props: Ref<any> = ref()
   const isLanded: Ref<boolean> = ref(false)
-  const isVisible = ref(false)
   const scope = effectScope(true)
   const id = nanoid()
   const localOptions = ref<StarportOptions>({})
@@ -27,13 +26,6 @@ export function createStarportContext(
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
-    watch(el, async(v) => {
-      if (v)
-        isVisible.value = true
-      await nextTick()
-      if (!el.value)
-        isVisible.value = false
-    })
   })
 
   return reactive({
@@ -44,24 +36,16 @@ export function createStarportContext(
     scope,
     id,
     isLanded,
-    isVisible,
     options,
     setLocalOptions(options: StarportOptions = {}) {
       localOptions.value = JSON.parse(JSON.stringify(options))
     },
-    elRef() {
-      return el
-    },
-    liftOff() {
-      if (!isLanded.value)
-        return
-      isLanded.value = false
-    },
     land() {
-      if (isLanded.value)
-        return
       isLanded.value = true
     },
+    liftOff() {
+      isLanded.value = false
+    }
   })
 }
 
