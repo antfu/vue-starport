@@ -43,7 +43,7 @@ export function createStarport<T extends Component>(
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
         }
-        if (!context.value.el || !context.value.isVisible) {
+        if (!context.value.isVisible || !context.value.el) {
           return {
             ...style,
             opacity: 0,
@@ -74,7 +74,7 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            ontransitionend: async() => {
+            onTransitionend: async() => {
               disabled.value = false
               context.value.land()
             },
