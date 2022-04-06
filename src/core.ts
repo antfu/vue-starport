@@ -117,6 +117,10 @@ export function createStarport<T extends Component>(
       const context = computed(() => getContext(props.port))
       const el = ref<HTMLElement>()
       const id = nanoid()
+
+      if (!context.value.isVisible)
+        context.value.land()
+
       onBeforeUnmount(() => {
         context.value.liftOff()
         context.value.el = undefined
