@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watchEffect } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -125,11 +125,15 @@ export function createStarport<T extends Component>(
         context.value.el = el.value
       })
 
-      watchEffect(() => {
-        const { props: childProps, ...options } = props
-        context.value.props = childProps
-        context.value.setLocalOptions(options)
-      })
+      watch(
+        () => props,
+        () => {
+          const { props: childProps, ...options } = props
+          context.value.props = childProps
+          context.value.setLocalOptions(options)
+        },
+        { deep: true, immediate: true },
+      )
 
       return () => h(
         'div',
