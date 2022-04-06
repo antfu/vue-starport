@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, renderList, nextTick } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watchEffect } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -43,7 +43,7 @@ export function createStarport<T extends Component>(
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
         }
-        if (!context.value.el) {
+        if (!context.value.el || !context.value.isVisible) {
           return {
             ...style,
             opacity: 0,
@@ -62,12 +62,6 @@ export function createStarport<T extends Component>(
             transitionTimingFunction: context.value.options.easing,
           })
         }
-        function match() {
-          return /\/[0-9]/.test(location.pathname)
-        }
-        if (match()) {
-          style.pointerEvents = ''
-        }
         return style
       })
 
@@ -80,10 +74,10 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            ontransitionend: async () => {
+            ontransitionend: async() => {
               disabled.value = false
               context.value.land()
-            }
+            },
           },
           h(
             Teleport,
@@ -125,7 +119,8 @@ export function createStarport<T extends Component>(
         context.value.liftOff()
         context.value.el = undefined
       })
-      onMounted(async () => {
+
+      onMounted(async() => {
         await nextTick()
         context.value.el = el.value
       })

@@ -1,9 +1,3 @@
-/*
- * @Author: Simon
- * @Date: 2022-04-06 14:50:25
- * @LastEditTime: 2022-04-06 18:34:43
- * @FilePath: \vue-starport\src\context.ts
- */
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { useElementBounding } from '@vueuse/core'
 import type { Ref } from 'vue'
@@ -29,12 +23,11 @@ export function createStarportContext(
     ...localOptions.value,
   }))
 
-
   let rect: UseElementBoundingReturn = undefined!
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
-    watch(el, async (v) => {
+    watch(el, async(v) => {
       if (v)
         isVisible.value = true
       await nextTick()
@@ -61,7 +54,7 @@ export function createStarportContext(
     },
     liftOff() {
       isLanded.value = false
-    }
+    },
   })
 }
 
