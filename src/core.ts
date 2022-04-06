@@ -1,11 +1,5 @@
-/*
- * @Author: Simon
- * @Date: 2022-04-06 08:11:06
- * @LastEditTime: 2022-04-06 08:14:37
- * @FilePath: \vue-starport\src\core.ts
- */
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, renderList } from 'vue'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, renderList, nextTick } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -68,9 +62,16 @@ export function createStarport<T extends Component>(
             transitionTimingFunction: context.value.options.easing,
           })
         }
+        function match() {
+          return /\/[0-9]/.test(location.pathname)
+        }
+        if (match()) {
+          style.pointerEvents = ''
+        }
         return style
       })
 
+      const disabled = ref(!(context.value.isLanded && context.value.el))
 
       return () => {
         const teleport = context.value.isLanded && context.value.el
@@ -79,9 +80,9 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            ontransitionend: () => {
+            ontransitionend: async () => {
+              disabled.value = false
               context.value.land()
-              console.log('transitionend')
             }
           },
           h(
@@ -90,7 +91,7 @@ export function createStarport<T extends Component>(
               to: teleport
                 ? `#${id.value}`
                 : 'body',
-              disabled: !teleport,
+              disabled,
             },
             h(component as any, context.value.props),
           ),
@@ -116,12 +117,12 @@ export function createStarport<T extends Component>(
       const context = computed(() => getContext(props.port))
       const el = ref<HTMLElement>()
       const id = nanoid()
-
       onBeforeUnmount(() => {
         context.value.liftOff()
         context.value.el = undefined
       })
-      onMounted(() => {
+      onMounted(async () => {
+        await nextTick()
         context.value.el = el.value
       })
 

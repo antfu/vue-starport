@@ -1,3 +1,9 @@
+/*
+ * @Author: Simon
+ * @Date: 2022-04-06 08:10:10
+ * @LastEditTime: 2022-04-06 17:46:07
+ * @FilePath: \vue-starport\playground\src\main.ts
+ */
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from 'virtual:generated-pages'
