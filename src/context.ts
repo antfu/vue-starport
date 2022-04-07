@@ -15,7 +15,7 @@ export function createStarportContext(
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)
   const scope = effectScope(true)
-  const id = nanoid()
+  const id = `starport-${nanoid()}`
   const localOptions = ref<StarportOptions>({})
   const options = computed<ResolvedStarportOptions>(() => ({
     ...defaultOptions,
