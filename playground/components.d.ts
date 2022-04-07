@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    MyComponent: typeof import('./src/components/MyComponent.vue')['default']
     TheImage: typeof import('./src/components/TheImage.vue')['default']
     TheLogo: typeof import('./src/components/TheLogo.vue')['default']
     TheNav: typeof import('./src/components/TheNav.vue')['default']

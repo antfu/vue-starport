@@ -28,7 +28,7 @@ const toggle = useToggle(mode)
           :port="String(idx)"
           :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
         >
-          <TheImage
+          <MyComponent
             :class="mode ? 'rounded shadow-lg' : ''"
             :src="img"
           />

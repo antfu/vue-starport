@@ -44,7 +44,7 @@ function reset() {
         :port="String(index)"
         :style="{ width: size + 'px', height: size + 'px' }"
       >
-        <TheImage
+        <MyComponent
           class="rounded-1/2 shadow-xl"
           :src="images[index]"
         />
@@ -67,7 +67,7 @@ function reset() {
         :port="String(next)"
         :style="{ width: size + 'px', height: size + 'px' }"
       >
-        <TheImage
+        <MyComponent
           class="rounded-1/2 shadow-xl"
           :src="images[next]"
         />

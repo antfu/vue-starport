@@ -4,9 +4,10 @@ import type { Ref } from 'vue'
 import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
 import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
-import { nanoid } from './utils'
+import { kebabCase, nanoid } from './utils'
 
 export function createStarportContext(
+  componentId: string,
   port: string,
   inlineOptions: StarportOptions = {},
 ) {
@@ -15,7 +16,6 @@ export function createStarportContext(
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)
   const scope = effectScope(true)
-  const id = `starport-${nanoid()}`
   const localOptions = ref<StarportOptions>({})
   const options = computed<ResolvedStarportOptions>(() => ({
     ...defaultOptions,
@@ -36,16 +36,24 @@ export function createStarportContext(
     })
   })
 
+  const portId = kebabCase(port)
+  function generateId() {
+    return `starport-${componentId}-${portId}-${nanoid()}`
+  }
+
+  const id = generateId()
+
   return reactive({
     el,
+    id,
     port,
     props,
     rect,
     scope,
-    id,
     isLanded,
     isVisible,
     options,
+    generateId,
     setLocalOptions(options: StarportOptions = {}) {
       localOptions.value = JSON.parse(JSON.stringify(options))
     },
