@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, renderList, nextTick } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -44,7 +44,7 @@ export function createStarport<T extends Component>(
           height: `${rect.height ?? 0}px`,
           transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px, 0px)`,
         }
-        if (!context.value.el) {
+        if (!context.value.isVisible || !context.value.el) {
           return {
             ...style,
             opacity: 0,
@@ -64,12 +64,6 @@ export function createStarport<T extends Component>(
             transitionTimingFunction: context.value.options.easing,
           })
         }
-        function match() {
-          return /\/[0-9]/.test(location.pathname)
-        }
-        if (match()) {
-          style.pointerEvents = ''
-        }
         return style
       })
 
@@ -82,10 +76,10 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            ontransitionend: async () => {
+            onTransitionend: async() => {
               disabled.value = false
               context.value.land()
-            }
+            },
           },
           h(
             Teleport,
@@ -127,16 +121,21 @@ export function createStarport<T extends Component>(
         context.value.liftOff()
         context.value.el = undefined
       })
-      onMounted(async () => {
+
+      onMounted(async() => {
         await nextTick()
         context.value.el = el.value
       })
 
-      watchEffect(() => {
-        const { props: childProps, ...options } = props
-        context.value.props = childProps
-        context.value.setLocalOptions(options)
-      })
+      watch(
+        () => props,
+        () => {
+          const { props: childProps, ...options } = props
+          context.value.props = childProps
+          context.value.setLocalOptions(options)
+        },
+        { deep: true, immediate: true },
+      )
 
       return () => h(
         'div',
