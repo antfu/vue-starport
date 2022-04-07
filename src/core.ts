@@ -116,7 +116,7 @@ export function createStarport<T extends Component>(
     setup(props, ctx) {
       const context = computed(() => getContext(props.port))
       const el = context.value.elRef()
-      const id = nanoid()
+      const id = `starport-${nanoid()}`
 
       if (!context.value.isVisible)
         context.value.land()
