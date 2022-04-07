@@ -2,6 +2,19 @@
   "name": "vue-starport",
   "version": "0.0.1",
   "packageManager": "pnpm@6.32.3",
+  "description": "Shared Vue component across routes with animations",
+  "keywords": ["vue", "animation", "transition"],
+  "homepage": "https://github.com/antfu/vue-starport#readme",
+  "bugs": {
+    "url": "https://github.com/antfu/vue-starport/issues"
+  },
+  "license": "MIT",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfu/vue-starport.git"
+  },
+  "funding": "https://github.com/sponsors/antfu",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
