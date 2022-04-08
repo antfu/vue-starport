@@ -70,7 +70,7 @@ export function createStarport<T extends Component>(
         return style
       })
 
-      const cleanRouterGuard = router.beforeEach(async() => {
+      const cleanRouterGuard = router.beforeEach(async () => {
         context.liftOff()
         await nextTick()
       })
@@ -83,10 +83,7 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: `starport-container-${componentId}`,
-            onTransitionend: async() => {
-              await nextTick()
-              context.land()
-            },
+            onTransitionend: context.land,
           },
           h(
             Teleport,
@@ -124,12 +121,7 @@ export function createStarport<T extends Component>(
       if (!context.isVisible)
         context.land()
 
-      onBeforeUnmount(() => {
-        context.rect.update()
-        context.liftOff()
-      })
-
-      onMounted(async() => {
+      onMounted(async () => {
         await nextTick()
         context.rect.update()
       })

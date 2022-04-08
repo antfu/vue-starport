@@ -27,10 +27,9 @@ export function createStarportContext(
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
-    watch(el, async(v) => {
+    watch(el, async (v) => {
       if (v)
         isVisible.value = true
-      await nextTick()
       if (!el.value)
         isVisible.value = false
     })
