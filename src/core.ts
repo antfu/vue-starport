@@ -40,10 +40,11 @@ export function createStarport<T extends Component>(
         const rect = context.value.rect
         const style: StyleValue = {
           position: 'fixed',
-          left: `${rect.x ?? 0}px`,
-          top: `${rect.y ?? 0}px`,
+          left: 0,
+          top: 0,
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
+          transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
         }
         if (!context.value.isVisible || !context.value.el) {
           return {
@@ -67,7 +68,7 @@ export function createStarport<T extends Component>(
         return style
       })
 
-      const cleanRouterGuard = router.beforeEach(async() => {
+      const cleanRouterGuard = router.beforeEach(async () => {
         context.value.liftOff()
         await nextTick()
       })
@@ -80,7 +81,7 @@ export function createStarport<T extends Component>(
           {
             style: style.value,
             class: 'starport-container',
-            onTransitionend: async() => {
+            onTransitionend: async () => {
               await nextTick()
               context.value.land()
             },
@@ -109,7 +110,7 @@ export function createStarport<T extends Component>(
       },
       props: {
         type: Object,
-        default: () => {},
+        default: () => { },
       },
       ...optionsProps,
     },
@@ -126,7 +127,7 @@ export function createStarport<T extends Component>(
         context.value.liftOff()
       })
 
-      onMounted(async() => {
+      onMounted(async () => {
         await nextTick()
         context.value.rect.update()
       })
