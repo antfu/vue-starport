@@ -42,10 +42,11 @@ export function createStarport<T extends Component>(
         const rect = context.rect
         const style: StyleValue = {
           position: 'fixed',
-          left: `${rect.x ?? 0}px`,
-          top: `${rect.y ?? 0}px`,
+          left: 0,
+          top: 0,
           width: `${rect.width ?? 0}px`,
           height: `${rect.height ?? 0}px`,
+          transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
         }
         if (!context.isVisible || !context.el) {
           return {
@@ -111,7 +112,7 @@ export function createStarport<T extends Component>(
       },
       props: {
         type: Object,
-        default: () => {},
+        default: () => { },
       },
       ...optionsProps,
     },
@@ -128,7 +129,7 @@ export function createStarport<T extends Component>(
         context.liftOff()
       })
 
-      onMounted(async() => {
+      onMounted(async () => {
         await nextTick()
         context.rect.update()
       })
