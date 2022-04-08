@@ -1,3 +1,5 @@
+<br>
+<br>
 <p align="center">
 <img height="200" src="./graphs/logo.png" alt="Vue Starport">
 </p>
@@ -99,7 +101,14 @@ app.use(StarportPlugin())
 
 And then you can use `Starport` and `StarportCarrier` components without importing.
 
+## Sponsors
+
+<p align="center">
+  <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
+    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg'/>
+  </a>
+</p>
+
 ## License
 
 [MIT](./LICENSE) License © 2022 [Anthony Fu](https://github.com/antfu)
-

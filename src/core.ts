@@ -5,26 +5,28 @@ import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
 import type { StarportInstance, StarportOptions } from './types'
-import { nanoid } from './utils'
+import { kebabCase, nanoid } from './utils'
 
 export function createStarport<T extends Component>(
   component: T,
   options: StarportOptions = {},
 ): StarportInstance {
-  const defaultPort = nanoid()
+  // @ts-expect-error untyped attr
+  const componentId = kebabCase(component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || '') || nanoid()
+  const defaultPort = 'default'
   const counter = ref(0)
   const portMap = new Map<string, StarportContext>()
 
   function getContext(port = defaultPort) {
     if (!portMap.has(port)) {
       counter.value += 1
-      portMap.set(port, createStarportContext(port))
+      portMap.set(port, createStarportContext(componentId, port))
     }
     return portMap.get(port)!
   }
 
   const starcraft = defineComponent({
-    name: 'StarportCraft',
+    name: `starport-craft-${componentId}`,
     props: {
       port: {
         type: String,
@@ -33,11 +35,11 @@ export function createStarport<T extends Component>(
     },
     setup(props) {
       const router = useRouter()
-      const context = computed(() => getContext(props.port))
-      const id = computed(() => context.value.el?.id || context.value.id)
+      const context = getContext(props.port)
+      const id = computed(() => context.el?.id || context.id)
 
       const style = computed((): StyleValue => {
-        const rect = context.value.rect
+        const rect = context.rect
         const style: StyleValue = {
           position: 'fixed',
           left: 0,
@@ -46,7 +48,7 @@ export function createStarport<T extends Component>(
           height: `${rect.height ?? 0}px`,
           transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
         }
-        if (!context.value.isVisible || !context.value.el) {
+        if (!context.isVisible || !context.el) {
           return {
             ...style,
             opacity: 0,
@@ -55,35 +57,35 @@ export function createStarport<T extends Component>(
             transition: 'all 400ms ease-in-out',
           }
         }
-        if (context.value.isLanded) {
+        if (context.isLanded) {
           style.pointerEvents = 'none'
         }
         else {
           Object.assign(style, {
             transitionProperty: 'all',
-            transitionDuration: `${context.value.options.duration}ms`,
-            transitionTimingFunction: context.value.options.easing,
+            transitionDuration: `${context.options.duration}ms`,
+            transitionTimingFunction: context.options.easing,
           })
         }
         return style
       })
 
-      const cleanRouterGuard = router.beforeEach(async () => {
-        context.value.liftOff()
+      const cleanRouterGuard = router.beforeEach(async() => {
+        context.liftOff()
         await nextTick()
       })
       onBeforeUnmount(cleanRouterGuard)
 
       return () => {
-        const teleport = context.value.isLanded && context.value.el
+        const teleport = context.isLanded && context.el
         return h(
           'div',
           {
             style: style.value,
-            class: 'starport-container',
-            onTransitionend: async () => {
+            class: `starport-container-${componentId}`,
+            onTransitionend: async() => {
               await nextTick()
-              context.value.land()
+              context.land()
             },
           },
           h(
@@ -94,7 +96,7 @@ export function createStarport<T extends Component>(
                 : 'body',
               disabled: !teleport,
             },
-            h(component as any, context.value.props),
+            h(component as any, context.props),
           ),
         )
       }
@@ -102,7 +104,7 @@ export function createStarport<T extends Component>(
   })
 
   const proxy = defineComponent({
-    name: 'StarportProxy',
+    name: `starport-proxy-${componentId}`,
     props: {
       port: {
         type: String,
@@ -115,29 +117,29 @@ export function createStarport<T extends Component>(
       ...optionsProps,
     },
     setup(props, ctx) {
-      const context = computed(() => getContext(props.port))
-      const el = context.value.elRef()
-      const id = nanoid()
+      const context = getContext(props.port)
+      const el = context.elRef()
+      const id = context.generateId()
 
-      if (!context.value.isVisible)
-        context.value.land()
+      if (!context.isVisible)
+        context.land()
 
       onBeforeUnmount(() => {
-        context.value.rect.update()
-        context.value.liftOff()
+        context.rect.update()
+        context.liftOff()
       })
 
       onMounted(async () => {
         await nextTick()
-        context.value.rect.update()
+        context.rect.update()
       })
 
       watch(
         () => props,
         () => {
           const { props: childProps, ...options } = props
-          context.value.props = childProps
-          context.value.setLocalOptions(options)
+          context.props = childProps
+          context.setLocalOptions(options)
         },
         { deep: true, immediate: true },
       )
@@ -149,10 +151,10 @@ export function createStarport<T extends Component>(
           id,
           style: {
             transitionProperty: 'all',
-            transitionDuration: `${context.value.options.duration}ms`,
-            transitionTimingFunction: context.value.options.easing,
+            transitionDuration: `${context.options.duration}ms`,
+            transitionTimingFunction: context.options.easing,
           },
-          class: 'starport-proxy',
+          class: `starport-proxy-${componentId}`,
         },
         ctx.slots.default
           ? h(ctx.slots.default)
@@ -162,7 +164,7 @@ export function createStarport<T extends Component>(
   })
 
   const carrier = defineComponent({
-    name: 'StarportSubCarrier',
+    name: `starport-subcarrier-${componentId}`,
     render() {
       // Workaround: force renderer
       // eslint-disable-next-line no-unused-expressions

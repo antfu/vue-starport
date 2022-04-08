@@ -17,17 +17,18 @@ const toggle = useToggle(mode)
         Toggle Size
       </button>
     </div>
-    <div grid="~ cols-1 md:cols-3 lg:cols-4 xl:cols-6" px-10 justify-center>
+    <div id="gallery" grid="~ cols-1 md:cols-3 lg:cols-4 xl:cols-6" px-10 justify-center>
       <RouterLink
         v-for="img, idx of images"
         :key="img"
+        :class="`image-${idx}`"
         :to="`/${idx}`"
       >
         <Starport
           :port="String(idx)"
           :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
         >
-          <TheImage
+          <MyComponent
             :class="mode ? 'rounded shadow-lg' : ''"
             :src="img"
           />

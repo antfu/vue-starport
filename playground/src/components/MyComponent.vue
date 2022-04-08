@@ -7,12 +7,13 @@ const counter = $ref(Math.round(Math.random() * 100))
 
 onMounted(() => {
   // eslint-disable-next-line no-console
-  console.log('Image Mounted')
+  console.log('MyComponent Mounted')
 })
 </script>
 
 <template>
   <div
+    class="my-component"
     overflow-hidden w-full h-full
     transition-all duration-900
     relative select-none

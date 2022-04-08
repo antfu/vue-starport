@@ -6,13 +6,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vueuse/core": "^8.2.3",
+    "@vueuse/core": "^8.2.5",
     "nanoid": "^3.3.2",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.1.2",
+    "@iconify-json/carbon": "^1.1.3",
     "@unocss/reset": "^0.30.11",
     "@vitejs/plugin-vue": "^2.3.1",
     "eslint": "^8.12.0",
