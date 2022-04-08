@@ -121,15 +121,13 @@ export function createStarport<T extends Component>(
       if (!context.isVisible)
         context.land()
 
-      onMounted(async() => {
+      onMounted(async () => {
         if (context.el) {
           if (process.env.NODE_ENV === 'development')
             console.error(`[Vue Starport] Multiple proxies of "${componentName}" with port "${props.port}" detected. The later one will be ignored.`)
           return
         }
         context.el = el.value
-        await nextTick()
-        context.rect.update()
         // warn if no width or height
         if (process.env.NODE_ENV === 'development') {
           if (context.rect.width === 0 || context.rect.height === 0) {
@@ -144,7 +142,7 @@ export function createStarport<T extends Component>(
       })
 
       onBeforeUnmount(() => {
-        context.liftOff()
+        // context.liftOff()
         context.el = undefined
       })
 
