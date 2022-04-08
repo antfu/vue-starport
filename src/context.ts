@@ -1,7 +1,7 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { useElementBounding } from '@vueuse/core'
 import type { Ref } from 'vue'
-import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
+import { computed, effectScope, reactive, ref, watch } from 'vue'
 import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 import { kebabCase, nanoid } from './utils'
@@ -27,7 +27,7 @@ export function createStarportContext(
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
-    watch(el, async (v) => {
+    watch(el, async(v) => {
       if (v)
         isVisible.value = true
       if (!el.value)
