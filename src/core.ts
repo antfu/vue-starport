@@ -129,7 +129,7 @@ export function createStarport<T extends Component>(
         context.liftOff()
       })
 
-      onMounted(async () => {
+      onMounted(async() => {
         await nextTick()
         context.rect.update()
       })
