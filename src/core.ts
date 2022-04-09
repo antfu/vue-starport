@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
@@ -121,7 +121,7 @@ export function createStarport<T extends Component>(
       if (!context.isVisible)
         context.land()
 
-      onMounted(async () => {
+      onMounted(async() => {
         if (context.el) {
           if (process.env.NODE_ENV === 'development')
             console.error(`[Vue Starport] Multiple proxies of "${componentName}" with port "${props.port}" detected. The later one will be ignored.`)
