@@ -1,6 +1,6 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, renderList, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -40,7 +40,6 @@ export function createStarport<T extends Component>(
       },
     },
     setup(props) {
-      const router = useRouter()
       const context = getContext(props.port)
       const id = computed(() => context.el?.id || context.id)
 
@@ -79,27 +78,19 @@ export function createStarport<T extends Component>(
         return style
       })
 
-      const cleanRouterGuard = router.beforeEach(async() => {
-        context.liftOff()
-        await nextTick()
-      })
-      onBeforeUnmount(cleanRouterGuard)
-
       return () => {
         const teleport = context.isLanded && context.el
         return h(
           'div',
           {
             style: style.value,
-            class: `starport-container-${componentId}`,
+            class: `starport-craft-${componentId}`,
             onTransitionend: context.land,
           },
           h(
             Teleport,
             {
-              to: teleport
-                ? `#${id.value}`
-                : 'body',
+              to: teleport ? `#${id.value}` : 'body',
               disabled: !teleport,
             },
             h(component as any, context.props),
@@ -148,7 +139,12 @@ export function createStarport<T extends Component>(
         }
       })
 
+      onBeforeRouteLeave(() => {
+        context.liftOff()
+      })
+
       onBeforeUnmount(() => {
+        context.liftOff()
         context.el = undefined
       })
 
@@ -187,13 +183,8 @@ export function createStarport<T extends Component>(
       // Workaround: force renderer
       // eslint-disable-next-line no-unused-expressions
       counter.value
-      return renderList(
-        Array.from(portMap.keys()),
-        port => h(starcraft, {
-          port,
-          key: port,
-        }),
-      )
+      return Array.from(portMap.keys())
+        .map(port => h(starcraft, { port, key: port }))
     },
   })
 
