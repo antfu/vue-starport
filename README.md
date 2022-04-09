@@ -7,6 +7,11 @@
 <p align="center">
 Shared Vue component across routes with animations
 </p>
+
+<p align="center"><a href="https://www.npmjs.com/package/vue-starport"><img src="https://img.shields.io/npm/v/vue-starport?color=3fb883&amp;label=" alt="NPM version"></a></p>
+
+<p align="center"><a href="https://vue-starport.netlify.app/">Live Demo</a></p>
+
 <br>
 <br>
 
@@ -50,6 +55,16 @@ This is very similar to [Terran's Buildings](https://starcraft.fandom.com/wiki/L
 <img src="./graphs/starcraft-demo.png" width="500" />
 </p>
 
+## Install
+
+> ⚗️ **Experimental**
+
+```
+npm i vue-starport
+```
+
+> Vue Starport is Vue 3 only and currently requires to use with Vue Router.
+
 ## Usage
 
 At root `App.vue`, add `<StarportCarrier>` component from `vue-starport` at the end of the dom.
@@ -89,6 +104,8 @@ import { Starport } from 'vue-starport'
 On the other page, we do the same thing with the same `port` id to identify the instance.
 
 Note that you might need to apply some styles to `<Starport>` to make it have a defined size indicating the area for the "floating starcraft" to land.
+
+Checkout the [Playground](./playground/) for more examples.
 
 ### Register Components Globally
 

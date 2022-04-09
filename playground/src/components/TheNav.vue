@@ -16,16 +16,11 @@ import { isDark, toggleDark } from '~/composables'
     <div flex-auto />
 
     <div flex="~ gap4" items-center>
-      <p bg-rose p="x4 t1 b0.8" hidden sm:block rounded text-white text-sm shadow>
-        Source code is available to
-        <a href="https://github.com/sponsors/antfu" underline target="_blank">Sponsors</a>
-        as early access
-      </p>
       <a
         class="icon-btn"
         i-carbon-logo-github
         rel="noreferrer"
-        href="https://github.com/antfu-sponsors/vue-starport"
+        href="https://github.com/antfu/vue-starport"
         target="_blank"
         title="GitHub"
       />
