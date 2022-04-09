@@ -12,7 +12,8 @@ export function createStarport<T extends Component>(
   options: StarportOptions = {},
 ): StarportInstance {
   // @ts-expect-error untyped attr
-  const componentId = kebabCase(component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || '') || nanoid()
+  const componentName = component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || ''
+  const componentId = kebabCase(componentName) || nanoid()
   const defaultPort = 'default'
   const counter = ref(0)
   const portMap = new Map<string, StarportContext>()
@@ -124,6 +125,11 @@ export function createStarport<T extends Component>(
       onMounted(async() => {
         await nextTick()
         context.rect.update()
+        // TODO: development specific build
+        if (context.rect.width === 0 || context.rect.height === 0) {
+          const name = context.rect.width === 0 ? 'width' : 'height'
+          console.warn(`[Vue Starport] The proxy of component "${componentName}" has no ${name} on initial render, have you set the size for it?`)
+        }
       })
 
       watch(

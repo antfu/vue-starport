@@ -1,8 +1,11 @@
 <script setup lang="ts">
-defineProps<{
-  src: string
+import { images } from '~/composables/data'
+
+const { index } = defineProps<{
+  index: number
 }>()
 
+const src = $computed(() => images[index])
 const counter = $ref(Math.round(Math.random() * 100))
 
 onMounted(() => {

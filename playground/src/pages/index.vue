@@ -30,9 +30,15 @@ const toggle = useToggle(mode)
         >
           <MyComponent
             :class="mode ? 'rounded shadow-lg' : ''"
-            :src="img"
+            :index="idx"
           />
         </Starport>
+      </RouterLink>
+    </div>
+    <!-- for cypress -->
+    <div op1>
+      <RouterLink id="link-warning-no-size" to="/warning-no-size">
+        Warning No Size
       </RouterLink>
     </div>
   </div>

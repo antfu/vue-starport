@@ -46,7 +46,7 @@ function reset() {
       >
         <MyComponent
           class="rounded-1/2 shadow-xl"
-          :src="images[index]"
+          :index="index"
         />
       </Starport>
 
@@ -69,7 +69,7 @@ function reset() {
       >
         <MyComponent
           class="rounded-1/2 shadow-xl"
-          :src="images[next]"
+          :index="next"
         />
       </Starport>
       <div />

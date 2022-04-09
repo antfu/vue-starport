@@ -1,6 +1,12 @@
 context('Basic', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        cy.stub(win.console, 'log').as('consoleLog')
+        cy.stub(win.console, 'error').as('consoleError')
+        cy.stub(win.console, 'warn').as('consoleWarn')
+      },
+    })
   })
 
   it('basic nav', () => {
@@ -43,5 +49,8 @@ context('Basic', () => {
     cy.wait(800)
     // landed
     cy.get('.image-0 .my-component').should('exist')
+
+    cy.get('@consoleError').should('not.be.called')
+    cy.get('@consoleWarn').should('not.be.called')
   })
 })
