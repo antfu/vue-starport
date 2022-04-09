@@ -40,6 +40,9 @@ const toggle = useToggle(mode)
       <RouterLink id="link-warning-no-size" to="/warning-no-size">
         Warning No Size
       </RouterLink>
+      <RouterLink id="link-warning-port-conflict" to="/warning-port-conflict">
+        Warning Port Conflict
+      </RouterLink>
     </div>
   </div>
 </template>

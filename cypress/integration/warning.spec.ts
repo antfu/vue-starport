@@ -26,4 +26,22 @@ context('warnings', () => {
     cy.get('@consoleWarn').should('be.calledWith', '[Vue Starport] The proxy of component "MyComponent" has no height on initial render, have you set the size for it?')
     cy.get('@consoleError').should('not.be.called')
   })
+
+  it('port-conflict', () => {
+    cy.url()
+      .should('eq', 'http://localhost:3000/')
+
+    cy.get('.image-0 .my-component').should('exist')
+
+    // navigate
+    cy.get('#link-warning-port-conflict').click()
+    // lift-off
+    cy.get('.image-0 .my-component').should('not.exist')
+
+    cy.url()
+      .should('eq', 'http://localhost:3000/warning-port-conflict')
+
+    cy.get('@consoleWarn').should('not.be.called')
+    cy.get('@consoleError').should('be.calledWith', '[Vue Starport] Multiple proxies of "MyComponent" with port "0" detected. The later one will be ignored.')
+  })
 })

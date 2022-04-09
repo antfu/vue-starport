@@ -55,7 +55,10 @@ export function createStarport<T extends Component>(
             opacity: 0,
             zIndex: -1,
             pointerEvents: 'none',
-            transition: 'all 400ms ease-in-out',
+            transitionProperty: 'all',
+            // TODO: make this configurable
+            transitionDuration: `${context.options.duration / 3}ms`,
+            transitionTimingFunction: context.options.easing,
           }
         }
         if (context.isLanded) {
@@ -116,13 +119,19 @@ export function createStarport<T extends Component>(
     },
     setup(props, ctx) {
       const context = getContext(props.port)
-      const el = context.elRef()
+      const el = ref<HTMLElement>()
       const id = context.generateId()
 
       if (!context.isVisible)
         context.land()
 
       onMounted(async() => {
+        if (context.el) {
+          if (process.env.NODE_ENV === 'development')
+            console.error(`[Vue Starport] Multiple proxies of "${componentName}" with port "${props.port}" detected. The later one will be ignored.`)
+          return
+        }
+        context.el = el.value
         await nextTick()
         context.rect.update()
         // warn if no width or height
@@ -132,6 +141,10 @@ export function createStarport<T extends Component>(
             console.warn(`[Vue Starport] The proxy of component "${componentName}" has no ${attr} on initial render, have you set the size for it?`)
           }
         }
+      })
+
+      onBeforeUnmount(() => {
+        context.el = undefined
       })
 
       watch(

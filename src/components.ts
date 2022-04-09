@@ -42,6 +42,7 @@ export const StarportCarrier = defineComponent({
 
 export const Starport = defineComponent({
   name: 'Starport',
+  inheritAttrs: true,
   props: {
     port: {
       type: String,
