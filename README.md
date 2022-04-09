@@ -67,7 +67,7 @@ npm i vue-starport
 
 ## Usage
 
-At root `App.vue`, add `<StarportCarrier>` component from `vue-starport` at the end of the dom.
+At root `App.vue`, add `<StarportCarrier>` component from `vue-starport` at the end of the dom. `<StarportCarrier>` will be the place to store all the flying components.
 
 ```html
 <script setup>
@@ -120,7 +120,7 @@ And then you can use `Starport` and `StarportCarrier` components without importi
 
 ## Special Thanks
 
-Thanks to [@hangsman](https://github.com/hangsman) who helped to provide the initial solution of proper teleport the element and made this idea valid. Also thanks to the viewers of [my live-streaming on Bilibli](https://space.bilibili.com/668380), those who spend time working on this idea together and provided useful feedback feedback in the chatroom.
+Thanks to [@hangsman](https://github.com/hangsman) who helped to provide the initial solution of proper teleport the element and made this idea valid. Also thanks to the viewers of [my live-streaming on Bilibli](https://space.bilibili.com/668380), those who spend time with me to working on this idea and provided useful feedback during the live.
 
 You can check [the recordings of my live-streams (in Chinese)](https://www.bilibili.com/video/BV1na41147qR), where I wrote this project from scratch.
 
