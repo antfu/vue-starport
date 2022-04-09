@@ -1,4 +1,4 @@
-import type { Component, StyleValue } from 'vue'
+import type { Component, Event, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
@@ -174,15 +174,13 @@ export function createStarport<T extends Component>(
   const board = defineComponent({
     name: `starport-board-${componentId}`,
     setup() {
-      const listenUrl = (e: { currentTarget: { activeElement: { pathname: any } } }) => {
+      const listenUrl = (e: Event) => {
         const { pathname } = e.currentTarget.activeElement
-        if (!pathname)
+        if (!pathname || pathname === window.location.pathname)
           return
-        if (pathname !== undefined && pathname !== window.location.pathname) {
-          portMap.forEach((context) => {
-            context.liftOff()
-          })
-        }
+        portMap.forEach((context) => {
+          context.liftOff()
+        })
       }
 
       onBeforeUnmount(() => {
