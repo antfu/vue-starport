@@ -6,6 +6,9 @@ import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 import { kebabCase, nanoid } from './utils'
 
+/**
+ * @internal
+ */
 export function createStarportContext(
   componentId: string,
   port: string,

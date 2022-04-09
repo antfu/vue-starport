@@ -1,42 +1,59 @@
 import { isObject } from '@vueuse/core'
-import type { Component } from 'vue'
-import { defineComponent, h, isVNode, ref, renderList } from 'vue'
+import type { Component, InjectionKey } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, isVNode, ref, renderList } from 'vue'
 import { createStarport } from './core'
 import { optionsProps } from './options'
-import type { StarportInstance } from './types'
+import type { StarportComponents } from './types'
 
-const componetMapCounter = ref(0)
-const componetMap = new Map<Component, StarportInstance>()
+const ProvideSymbol = Symbol('Starport') as InjectionKey<ReturnType<typeof createInternalState>>
 
-function getStarportInstance(componet: Component) {
-  if (!componetMap.has(componet)) {
-    componetMapCounter.value += 1
-    componetMap.set(componet, createStarport(componet))
+function createInternalState() {
+  const componetMapCounter = ref(0)
+  const componetMap = new Map<Component, StarportComponents>()
+
+  function getStarportInstance(componet: Component) {
+    if (!componetMap.has(componet)) {
+      componetMapCounter.value += 1
+      componetMap.set(componet, createStarport(componet))
+    }
+    return componetMap.get(componet)!
   }
-  return componetMap.get(componet)!
-}
 
-export function toStarportProxy<T extends Component>(componet: T) {
-  return getStarportInstance(componet).proxy
-}
+  function toStarportProxy<T extends Component>(componet: T) {
+    return getStarportInstance(componet).proxy
+  }
 
-export function toStarportCarrier<T extends Component>(componet: T): Component {
-  return getStarportInstance(componet)!.carrier
+  function toStarportCarrier<T extends Component>(componet: T): Component {
+    return getStarportInstance(componet)!.carrier
+  }
+
+  return {
+    componetMapCounter,
+    componetMap,
+    toStarportProxy,
+    toStarportCarrier,
+  }
 }
 
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
-  render() {
-    // Workaround: force renderer
-    // eslint-disable-next-line no-unused-expressions
-    componetMapCounter.value
-    return renderList(
-      Array.from(componetMap.keys()),
-      (comp, idx) => h(
-        toStarportCarrier(comp) as any,
-        { key: idx },
-      ),
-    )
+  setup() {
+    const state = createInternalState()
+    const app = getCurrentInstance()!.appContext.app
+    app.provide(ProvideSymbol, state)
+
+    return () => {
+      // Workaround: force renderer
+      // eslint-disable-next-line no-unused-expressions
+      state.componetMapCounter.value
+      return renderList(
+        Array.from(state.componetMap.keys()),
+        (comp, idx) => h(
+          state.toStarportCarrier(comp) as any,
+          { key: idx },
+        ),
+      )
+    }
   },
 })
 
@@ -51,17 +68,26 @@ export const Starport = defineComponent({
     ...optionsProps,
   },
   setup(props, ctx) {
+    const state = inject(ProvideSymbol)
+
+    if (!state)
+      throw new Error('[Vue Starport] Does not found <StarportCarrier>, have you installed it?')
+
     return () => {
       const slots = ctx.slots.default?.()
+
       if (!slots)
-        throw new Error('Slot is required for Starport')
+        throw new Error('[Vue Starport] Slot is required to use <Starport>')
       if (slots.length !== 1)
-        throw new Error(`Starport requires exactly one slot, but got ${slots.length}`)
+        throw new Error(`[Vue Starport] <Starport> requires exactly one slot, but got ${slots.length}`)
+
       const slot = slots[0]
       const component = slot.type as any
+
       if (!isObject(component) || isVNode(component))
-        throw new Error('The slot in Starport must be a component')
-      const proxy = toStarportProxy(component) as any
+        throw new Error('[Vue Starport] The slot in <Starport> must be a component')
+
+      const proxy = state.toStarportProxy(component) as any
       return h(proxy, {
         ...props,
         port: props.port,

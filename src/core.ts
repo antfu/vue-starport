@@ -4,13 +4,18 @@ import { useRouter } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
-import type { StarportInstance, StarportOptions } from './types'
+import type { StarportComponents, StarportOptions } from './types'
 import { kebabCase, nanoid } from './utils'
 
+/**
+ * Create Starport HOCs from a component
+ *
+ * @advanced
+ */
 export function createStarport<T extends Component>(
   component: T,
   options: StarportOptions = {},
-): StarportInstance {
+): StarportComponents {
   // @ts-expect-error untyped attr
   const componentName = component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || ''
   const componentId = kebabCase(componentName) || nanoid()
