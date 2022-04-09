@@ -125,10 +125,12 @@ export function createStarport<T extends Component>(
       onMounted(async() => {
         await nextTick()
         context.rect.update()
-        // TODO: development specific build
-        if (context.rect.width === 0 || context.rect.height === 0) {
-          const name = context.rect.width === 0 ? 'width' : 'height'
-          console.warn(`[Vue Starport] The proxy of component "${componentName}" has no ${name} on initial render, have you set the size for it?`)
+        // warn if no width or height
+        if (process.env.NODE_ENV === 'development') {
+          if (context.rect.width === 0 || context.rect.height === 0) {
+            const attr = context.rect.width === 0 ? 'width' : 'height'
+            console.warn(`[Vue Starport] The proxy of component "${componentName}" has no ${attr} on initial render, have you set the size for it?`)
+          }
         }
       })
 

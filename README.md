@@ -124,7 +124,7 @@ Thanks to [@hangsman](https://github.com/hangsman) who helped to provide the ini
 
 You can check [the recordings of my live-streams (in Chinese)](https://www.bilibili.com/video/BV1na41147qR), where I wrote this project from scratch.
 
-你可以在哔哩哔哩观看我从头实现此项目的[直播录像](https://www.bilibili.com/video/BV1na41147qR)。
+你可以在哔哩哔哩观看我实现此项目的 [直播录像](https://www.bilibili.com/video/BV1na41147qR)。
 
 ## Sponsors
 
