@@ -92,7 +92,7 @@ import { Starport } from 'vue-starport'
   <div>
     <!-- ... -->
     <Starport
-      port="some-id"
+      port="my-id"
       style="height:400px"
     > 
       <MyComponent :prop="value"/>
@@ -101,7 +101,26 @@ import { Starport } from 'vue-starport'
 </template>
 ```
 
-On the other page, we do the same thing with the same `port` id to identify the instance.
+On the other page, we do the same thing with **the same `port` id** to identify the instance.
+
+```html
+<!-- PageB.vue -->
+<script setup>
+import { Starport } from 'vue-starport'
+</script>
+
+<template>
+  <div>
+    <!-- ... -->
+    <Starport
+      port="my-id"
+      style="height:600px"
+    > 
+      <MyComponent :prop="value"/>
+    </Starport>
+  </div>
+</template>
+```
 
 > Note that you might need to apply some styles to `<Starport>` to make it have a defined size indicating the area for the "floating starcraft" to land.
 
