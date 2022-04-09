@@ -144,7 +144,6 @@ export function createStarport<T extends Component>(
       })
 
       onBeforeUnmount(() => {
-        context.liftOff()
         context.el = undefined
       })
 
