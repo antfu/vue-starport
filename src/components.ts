@@ -35,6 +35,10 @@ function createInternalState() {
   }
 }
 
+/**
+ * The carrier component for all the flying Starport components
+ * Should be intialized in App.vue only once.
+ */
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
   setup() {
@@ -57,6 +61,9 @@ export const StarportCarrier = defineComponent({
   },
 })
 
+/**
+ * The proxy component warpper for the Starport.
+ */
 export const Starport = defineComponent({
   name: 'Starport',
   inheritAttrs: true,
@@ -71,7 +78,7 @@ export const Starport = defineComponent({
     const state = inject(ProvideSymbol)
 
     if (!state)
-      throw new Error('[Vue Starport] Does not found <StarportCarrier>, have you installed it?')
+      throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initalized it?')
 
     return () => {
       const slots = ctx.slots.default?.()
