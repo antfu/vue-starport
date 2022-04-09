@@ -1,6 +1,6 @@
 import { isObject } from '@vueuse/core'
 import type { Component, InjectionKey } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, isVNode, ref, renderList } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, isVNode, renderList, shallowReactive } from 'vue'
 import { createStarport } from './core'
 import { optionsProps } from './options'
 import type { StarportComponents } from './types'
@@ -8,14 +8,12 @@ import type { StarportComponents } from './types'
 const ProvideSymbol = Symbol('Starport') as InjectionKey<ReturnType<typeof createInternalState>>
 
 function createInternalState() {
-  const componetMapCounter = ref(0)
-  const componetMap = new Map<Component, StarportComponents>()
+  const componetMap = shallowReactive(new Map<Component, StarportComponents>())
 
   function getStarportInstance(componet: Component) {
-    if (!componetMap.has(componet)) {
-      componetMapCounter.value += 1
+    if (!componetMap.has(componet))
       componetMap.set(componet, createStarport(componet))
-    }
+
     return componetMap.get(componet)!
   }
 
@@ -28,7 +26,6 @@ function createInternalState() {
   }
 
   return {
-    componetMapCounter,
     componetMap,
     toStarportProxy,
     toStarportBoard,
@@ -47,9 +44,6 @@ export const StarportCarrier = defineComponent({
     app.provide(ProvideSymbol, state)
 
     return () => {
-      // Workaround: force renderer
-      // eslint-disable-next-line no-unused-expressions
-      state.componetMapCounter.value
       return renderList(
         Array.from(state.componetMap.keys()),
         (comp, idx) => h(
