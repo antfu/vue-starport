@@ -29,7 +29,7 @@ By that means you can't directly animate the changes because they are in two dif
 
 However, FLIP only solves the problem of transitions, the components are still not the same. During the navigation, the internal state of the component will lost.
 
-Thus I started this new apporch **Starport** to experiment with a better solution to fit this requirement.
+Thus I started this new approach **Starport** to experiment with a better solution to fit this requirement.
 
 ## How?
 
