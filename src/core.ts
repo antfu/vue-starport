@@ -1,6 +1,5 @@
 import type { Component, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -139,10 +138,6 @@ export function createStarport<T extends Component>(
         }
       })
 
-      onBeforeRouteLeave(() => {
-        context.liftOff()
-      })
-
       onBeforeUnmount(() => {
         context.el = undefined
       })
@@ -178,12 +173,33 @@ export function createStarport<T extends Component>(
 
   const board = defineComponent({
     name: `starport-board-${componentId}`,
-    render() {
-      // Workaround: force renderer
-      // eslint-disable-next-line no-unused-expressions
-      counter.value
-      return Array.from(portMap.keys())
-        .map(port => h(starcraft, { port, key: port }))
+    setup() {
+      const listenUrl = (e) => {
+        const { pathname } = e.currentTarget.activeElement
+        if (!pathname)
+          return
+        if (pathname !== undefined && pathname !== window.location.pathname) {
+          portMap.forEach((context) => {
+            context.liftOff()
+          })
+        }
+      }
+
+      onBeforeUnmount(() => {
+        document.removeEventListener('click', listenUrl, true)
+      })
+
+      onMounted(() => {
+        document.addEventListener('click', listenUrl, true)
+      })
+
+      return () => {
+        // force update
+        // eslint-disable-next-line no-unused-expressions
+        counter.value
+        return Array.from(portMap.keys())
+          .map(port => h(starcraft, { port, key: port }))
+      }
     },
   })
 
