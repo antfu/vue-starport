@@ -121,7 +121,7 @@ export function createStarport<T extends Component>(
       if (!context.isVisible)
         context.land()
 
-      onMounted(async () => {
+      onMounted(async() => {
         if (context.el) {
           if (process.env.NODE_ENV === 'development')
             console.error(`[Vue Starport] Multiple proxies of "${componentName}" with port "${props.port}" detected. The later one will be ignored.`)
