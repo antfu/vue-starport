@@ -1,5 +1,5 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
