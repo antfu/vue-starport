@@ -14,6 +14,7 @@ const router = createRouter({
   routes,
   scrollBehavior() {
     // always scroll to top
+    // TODO: make this not required
     return { top: 0 }
   },
 })

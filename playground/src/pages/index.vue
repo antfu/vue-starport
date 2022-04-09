@@ -17,7 +17,7 @@ const toggle = useToggle(mode)
         Toggle Size
       </button>
     </div>
-    <div id="gallery" grid="~ cols-1 md:cols-3 lg:cols-4 xl:cols-6" px-10 justify-center>
+    <div id="gallery" grid="~ cols-1 sm:cols-2 md:cols-3 lg:cols-4 xl:cols-6" px-10 justify-center>
       <RouterLink
         v-for="img, idx of images"
         :key="img"
