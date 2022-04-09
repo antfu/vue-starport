@@ -80,7 +80,7 @@ import { StarportCarrier } from 'vue-starport'
 </template>
 ```
 
-In routes, wrap the component you want to do the transitions bettween routes.
+In routes, wrap the component with the `<Starport>` component.
 
 ```html
 <!-- PageA.vue -->
@@ -103,7 +103,7 @@ import { Starport } from 'vue-starport'
 
 On the other page, we do the same thing with the same `port` id to identify the instance.
 
-Note that you might need to apply some styles to `<Starport>` to make it have a defined size indicating the area for the "floating starcraft" to land.
+> Note that you might need to apply some styles to `<Starport>` to make it have a defined size indicating the area for the "floating starcraft" to land.
 
 Checkout the [Playground](./playground/) for more examples.
 
