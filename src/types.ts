@@ -25,8 +25,17 @@ export type ResolvedStarportOptions = Required<StarportOptions>
 
 export interface StarportComponents {
   // TODO: proper type them
+  /**
+   * The flying component
+   */
   starcraft: Component
-  carrier: Component
+  /**
+   * Holds all flying instance of the component
+   */
+  board: Component
+  /**
+   * The proxy component
+   */
   proxy: Component
   options: StarportOptions
 }

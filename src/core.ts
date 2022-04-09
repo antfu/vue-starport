@@ -181,8 +181,8 @@ export function createStarport<T extends Component>(
     },
   })
 
-  const carrier = defineComponent({
-    name: `starport-subcarrier-${componentId}`,
+  const board = defineComponent({
+    name: `starport-board-${componentId}`,
     render() {
       // Workaround: force renderer
       // eslint-disable-next-line no-unused-expressions
@@ -198,7 +198,7 @@ export function createStarport<T extends Component>(
   })
 
   return {
-    carrier,
+    board,
     starcraft,
     proxy,
     options,

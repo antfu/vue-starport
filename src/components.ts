@@ -23,15 +23,15 @@ function createInternalState() {
     return getStarportInstance(componet).proxy
   }
 
-  function toStarportCarrier<T extends Component>(componet: T): Component {
-    return getStarportInstance(componet)!.carrier
+  function toStarportBoard<T extends Component>(componet: T): Component {
+    return getStarportInstance(componet)!.board
   }
 
   return {
     componetMapCounter,
     componetMap,
     toStarportProxy,
-    toStarportCarrier,
+    toStarportBoard,
   }
 }
 
@@ -53,7 +53,7 @@ export const StarportCarrier = defineComponent({
       return renderList(
         Array.from(state.componetMap.keys()),
         (comp, idx) => h(
-          state.toStarportCarrier(comp) as any,
+          state.toStarportBoard(comp) as any,
           { key: idx },
         ),
       )
