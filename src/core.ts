@@ -1,4 +1,4 @@
-import type { Component, MouseEvent, StyleValue } from 'vue'
+import type { Component, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
@@ -174,7 +174,7 @@ export function createStarport<T extends Component>(
   const board = defineComponent({
     name: `starport-board-${componentId}`,
     setup() {
-      const listenUrl = (e: MouseEvent) => {
+      const listenUrl = (e: { currentTarget: { activeElement: { pathname: any } } }) => {
         const { pathname } = e.currentTarget.activeElement
         if (!pathname)
           return
