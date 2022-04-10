@@ -1,6 +1,6 @@
 import type { Component, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
+import { Teleport, computed, defineComponent, getCurrentInstance, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import type { Router } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -139,9 +139,15 @@ export function createStarport<T extends Component>(
         }
       })
 
-      onBeforeRouteLeave(() => {
-        context.liftOff()
-      })
+      const router: Router = getCurrentInstance()?.appContext.app.config.globalProperties?.$router
+      if (router) {
+        onBeforeUnmount(router.beforeEach(() => {
+          context.liftOff()
+        }))
+      }
+      else if (process.env.NODE_ENV === 'development') {
+        console.warn('[Vue Starport] No Vue Router detected, have you installed it?')
+      }
 
       onBeforeUnmount(() => {
         context.liftOff()

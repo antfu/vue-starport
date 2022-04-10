@@ -5,7 +5,7 @@ import { createStarport } from './core'
 import { optionsProps } from './options'
 import type { StarportComponents } from './types'
 
-const ProvideSymbol = Symbol('Starport') as InjectionKey<ReturnType<typeof createInternalState>>
+const ProvideSymbol = 'vue-starport-injection' as unknown as InjectionKey<ReturnType<typeof createInternalState>>
 
 function createInternalState() {
   const componetMap = shallowReactive(new Map<Component, StarportComponents>())
