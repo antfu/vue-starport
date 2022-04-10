@@ -1,5 +1,5 @@
 import type { Component, DefineComponent, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -19,14 +19,11 @@ export function createStarport<T extends Component>(
   const componentName = component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || ''
   const componentId = kebabCase(componentName) || nanoid()
   const defaultPort = 'default'
-  const counter = ref(0)
-  const portMap = new Map<string, StarportContext>()
+  const portMap = reactive(new Map<string, StarportContext>())
 
   function getContext(port = defaultPort) {
-    if (!portMap.has(port)) {
-      counter.value += 1
+    if (!portMap.has(port))
       portMap.set(port, createStarportContext(componentId, port, options))
-    }
     return portMap.get(port)!
   }
 
@@ -178,9 +175,6 @@ export function createStarport<T extends Component>(
   const board = defineComponent({
     name: `starport-board-${componentId}`,
     render() {
-      // Workaround: force renderer
-      // eslint-disable-next-line no-unused-expressions
-      counter.value
       return Array.from(portMap.keys())
         .map(port => h(starcraft, { port, key: port }))
     },
