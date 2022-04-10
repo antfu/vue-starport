@@ -56,7 +56,7 @@ export const StarportCarrier = defineComponent({
       ]
     }
   },
-}) as DefineComponent<{}, >
+}) as DefineComponent<{}>
 
 /**
  * The proxy component warpper for the Starport.
