@@ -35,6 +35,14 @@ const toggle = useToggle(mode)
         </Starport>
       </RouterLink>
     </div>
+    <div p4>
+      <div font-600>
+        Other Examples
+      </div>
+      <RouterLink to="/in-page" hover:text-teal5>
+        In page transitions
+      </RouterLink>
+    </div>
     <!-- for cypress -->
     <div op1>
       <RouterLink id="link-warning-no-size" to="/warning-no-size">
@@ -42,9 +50,6 @@ const toggle = useToggle(mode)
       </RouterLink>
       <RouterLink id="link-warning-port-conflict" to="/warning-port-conflict">
         Warning Port Conflict
-      </RouterLink>
-      <RouterLink id="link-warning-same-page" to="/warning-same-page">
-        Warning Same Page
       </RouterLink>
     </div>
   </div>
