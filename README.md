@@ -133,7 +133,7 @@ And then you can use `Starport` and `StarportCarrier` components without importi
 
 ### Keep Alive
 
-By default, when navigating to a page without a corresponding `<Starport>` proxy to land, the componet will be destroyed. If you want to keep the component alive even when it's not presented in the current route, you can set `keepAlive` to `true` for that specific instance.
+By default, when navigating to a page without a corresponding `<Starport>` proxy to land, the component will be destroyed. If you want to keep the component alive even when it's not presented in the current route, you can set `keepAlive` to `true` for that specific instance.
 
 ```html
 <Starport keep-alive port="my-id">

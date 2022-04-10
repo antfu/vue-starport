@@ -21,7 +21,7 @@ export const StarportCarrier = defineComponent({
       return [
         slots.default?.(),
         renderList(
-          Array.from(state.componetMap.keys()),
+          Array.from(state.componentMap.keys()),
           (comp, idx) => h(
             state.toStarportBoard(comp) as any,
             { key: idx },

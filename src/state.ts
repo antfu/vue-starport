@@ -4,24 +4,24 @@ import { createStarport } from './core'
 import type { StarportComponents, StarportOptions } from './types'
 
 export function createInternalState(options: StarportOptions) {
-  const componetMap = shallowReactive(new Map<Component, StarportComponents>())
+  const componentMap = shallowReactive(new Map<Component, StarportComponents>())
 
-  function getStarportInstance(componet: Component) {
-    if (!componetMap.has(componet))
-      componetMap.set(componet, createStarport(componet, options))
-    return componetMap.get(componet)!
+  function getStarportInstance(component: Component) {
+    if (!componentMap.has(component))
+      componentMap.set(component, createStarport(component, options))
+    return componentMap.get(component)!
   }
 
-  function toStarportProxy<T extends Component>(componet: T) {
-    return getStarportInstance(componet).proxy
+  function toStarportProxy<T extends Component>(component: T) {
+    return getStarportInstance(component).proxy
   }
 
-  function toStarportBoard<T extends Component>(componet: T): Component {
-    return getStarportInstance(componet)!.board
+  function toStarportBoard<T extends Component>(component: T): Component {
+    return getStarportInstance(component)!.board
   }
 
   return {
-    componetMap,
+    componentMap,
     toStarportProxy,
     toStarportBoard,
   }
