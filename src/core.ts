@@ -150,6 +150,11 @@ export function createStarport<T extends Component>(
       }
 
       onBeforeUnmount(() => {
+        if (context.isLanded) {
+          if (process.env.NODE_ENV === 'development')
+            console.warn('[Vue Starport] Don\'t have enough time to lift off, you might encounter discontinue transitions.')
+          context.liftOff()
+        }
         context.el = undefined
       })
 
