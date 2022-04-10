@@ -30,7 +30,7 @@ export function createStarportContext(
 
   scope.run(() => {
     rect = useElementBounding(el, { reset: false })
-    watch(el, async(v) => {
+    watch(el, (v: any) => {
       if (v)
         isVisible.value = true
       if (!el.value)
@@ -38,9 +38,8 @@ export function createStarportContext(
     })
   })
 
-  const portId = kebabCase(port)
   function generateId() {
-    return `starport-${componentId}-${portId}-${nanoid()}`
+    return `starport-${componentId}-${kebabCase(port)}-${nanoid()}`
   }
 
   const id = generateId()

@@ -2,9 +2,9 @@ import type { Component, DefineComponent, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
-import { optionsProps } from './options'
+import { defaultStyle, optionsProps } from './options'
 import type { StarportComponents, StarportCraftProps, StarportOptions, StarportProps } from './types'
-import { kebabCase, nanoid } from './utils'
+import { isDevelopment, kebabCase, nanoid } from './utils'
 
 /**
  * Create Starport HOCs from a component
@@ -52,33 +52,20 @@ export function createStarport<T extends Component>(
           height: `${rect.height ?? 0}px`,
           transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
         }
-        if (!context.isVisible || !context.el) {
-          return {
-            ...style,
-            opacity: 0,
-            zIndex: -1,
+
+        return Object.assign(style, readyLiftOff()
+          ? defaultStyle(context)
+          : {
             pointerEvents: 'none',
-            transitionProperty: 'all',
-            // TODO: make this configurable
-            transitionDuration: `${context.options.duration / 3}ms`,
-            transitionTimingFunction: context.options.easing,
-          }
-        }
-        if (context.isLanded) {
-          style.pointerEvents = 'none'
-        }
-        else {
-          Object.assign(style, {
-            transitionProperty: 'all',
-            transitionDuration: `${context.options.duration}ms`,
-            transitionTimingFunction: context.options.easing,
           })
-        }
-        return style
       })
 
+      function readyLiftOff() {
+        return !context.isVisible || !context.el || !context.isLanded
+      }
+
       return () => {
-        const teleport = !!(context.isLanded && context.el)
+        const teleport = context.isLanded && context.el
         return h(
           'div',
           {
@@ -122,7 +109,7 @@ export function createStarport<T extends Component>(
 
       onMounted(async() => {
         if (context.el) {
-          if (process.env.NODE_ENV === 'development')
+          if (isDevelopment())
             console.error(`[Vue Starport] Multiple proxies of "${componentName}" with port "${props.port}" detected. The later one will be ignored.`)
           return
         }
@@ -130,7 +117,7 @@ export function createStarport<T extends Component>(
         await nextTick()
         context.rect.update()
         // warn if no width or height
-        if (process.env.NODE_ENV === 'development') {
+        if (isDevelopment()) {
           if (context.rect.width === 0 || context.rect.height === 0) {
             const attr = context.rect.width === 0 ? 'width' : 'height'
             console.warn(`[Vue Starport] The proxy of component "${componentName}" has no ${attr} on initial render, have you set the size for it?`)
@@ -161,11 +148,7 @@ export function createStarport<T extends Component>(
         {
           ref: el,
           id,
-          style: {
-            transitionProperty: 'all',
-            transitionDuration: `${context.options.duration}ms`,
-            transitionTimingFunction: context.options.easing,
-          },
+          style: defaultStyle(context),
           class: `starport-proxy-${componentId}`,
         },
         ctx.slots.default
