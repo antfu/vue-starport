@@ -3,7 +3,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite --port 3333 --open",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@vueuse/core": "^8.2.5",

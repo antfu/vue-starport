@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { DefineComponent } from 'vue'
 
 export interface StarportOptions {
   /**
@@ -23,19 +23,27 @@ export interface StarportOptions {
 
 export type ResolvedStarportOptions = Required<StarportOptions>
 
+export interface StarportCraftProps {
+  /**
+   * The id of the starport instance across routes
+   */
+  port: string
+}
+
+export interface StarportProps extends StarportOptions, StarportCraftProps {
+}
+
 export interface StarportComponents {
-  // TODO: proper type them
   /**
    * The flying component
    */
-  starcraft: Component
+  starcraft: DefineComponent<StarportCraftProps>
   /**
    * Holds all flying instance of the component
    */
-  board: Component
+  board: DefineComponent<{}>
   /**
    * The proxy component
    */
-  proxy: Component
-  options: StarportOptions
+  proxy: DefineComponent<StarportProps>
 }

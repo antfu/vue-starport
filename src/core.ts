@@ -1,10 +1,10 @@
-import type { Component, StyleValue } from 'vue'
+import type { Component, DefineComponent, StyleValue } from 'vue'
 import { Teleport, computed, defineComponent, getCurrentInstance, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Router } from 'vue-router'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
-import type { StarportComponents, StarportOptions } from './types'
+import type { StarportComponents, StarportCraftProps, StarportOptions, StarportProps } from './types'
 import { kebabCase, nanoid } from './utils'
 
 /**
@@ -26,7 +26,7 @@ export function createStarport<T extends Component>(
   function getContext(port = defaultPort) {
     if (!portMap.has(port)) {
       counter.value += 1
-      portMap.set(port, createStarportContext(componentId, port))
+      portMap.set(port, createStarportContext(componentId, port, options))
     }
     return portMap.get(port)!
   }
@@ -98,7 +98,7 @@ export function createStarport<T extends Component>(
         )
       }
     },
-  })
+  }) as DefineComponent<StarportCraftProps>
 
   const proxy = defineComponent({
     name: `starport-proxy-${componentId}`,
@@ -181,7 +181,7 @@ export function createStarport<T extends Component>(
           : undefined,
       )
     },
-  })
+  }) as DefineComponent<StarportProps>
 
   const board = defineComponent({
     name: `starport-board-${componentId}`,
@@ -192,12 +192,11 @@ export function createStarport<T extends Component>(
       return Array.from(portMap.keys())
         .map(port => h(starcraft, { port, key: port }))
     },
-  })
+  }) as DefineComponent<{}>
 
   return {
     board,
     starcraft,
     proxy,
-    options,
   }
 }

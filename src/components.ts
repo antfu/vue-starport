@@ -1,9 +1,9 @@
 import { isObject } from '@vueuse/core'
-import type { Component, InjectionKey } from 'vue'
+import type { Component, DefineComponent, InjectionKey } from 'vue'
 import { defineComponent, getCurrentInstance, h, inject, isVNode, renderList, shallowReactive } from 'vue'
 import { createStarport } from './core'
 import { optionsProps } from './options'
-import type { StarportComponents } from './types'
+import type { StarportComponents, StarportOptions } from './types'
 
 const ProvideSymbol = 'vue-starport-injection' as unknown as InjectionKey<ReturnType<typeof createInternalState>>
 
@@ -56,7 +56,7 @@ export const StarportCarrier = defineComponent({
       ]
     }
   },
-})
+}) as DefineComponent<{}, >
 
 /**
  * The proxy component warpper for the Starport.
@@ -100,4 +100,4 @@ export const Starport = defineComponent({
       })
     }
   },
-})
+}) as DefineComponent<{ port: string } & StarportOptions>

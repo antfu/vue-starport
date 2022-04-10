@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "esnext",
     "module": "esnext",
     "baseUrl": ".",
     "lib": ["esnext", "DOM"],
@@ -10,6 +10,7 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "jsx": "preserve",
     "skipDefaultLibCheck": true,
     "types": [
       "vite/client",
