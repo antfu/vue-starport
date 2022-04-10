@@ -13,9 +13,7 @@ export function createInternalState(options: StarportOptions) {
       context = createStarportContext(port, component, options)
       portMap.set(port, context)
     }
-    else if (context.component !== component) {
-      throw new Error(`[Vue Starport] Port "${port}" is already used by "${context.componentName}"`)
-    }
+    context.component = component
     return context
   }
 

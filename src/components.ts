@@ -61,10 +61,15 @@ export const Starport = defineComponent({
         throw new Error(`[Vue Starport] <Starport> requires exactly one slot, but got ${slots.length}`)
 
       const slot = slots[0]
-      const component = slot.type as any
+      let component = slot.type as any
 
-      if (!isObject(component) || isVNode(component))
-        throw new Error('[Vue Starport] The slot in <Starport> must be a component')
+      if (!isObject(component) || isVNode(component)) {
+        component = {
+          render() {
+            return slots
+          },
+        }
+      }
 
       return h(StarportProxy, {
         ...props,
