@@ -18,5 +18,6 @@ export const optionsProps = {
   keepAlive: {
     type: Boolean,
     require: false,
+    default: null,
   },
 }

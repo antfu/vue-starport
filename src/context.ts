@@ -57,7 +57,7 @@ export function createStarportContext(
     options,
     generateId,
     setLocalOptions(options: StarportOptions = {}) {
-      localOptions.value = Object.assign(localOptions.value, JSON.parse(JSON.stringify(options)))
+      localOptions.value = JSON.parse(JSON.stringify(options))
     },
     elRef() {
       return el
