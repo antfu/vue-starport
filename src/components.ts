@@ -38,19 +38,22 @@ function createInternalState() {
  */
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
-  setup() {
+  setup(_, { slots }) {
     const state = createInternalState()
     const app = getCurrentInstance()!.appContext.app
     app.provide(ProvideSymbol, state)
 
     return () => {
-      return renderList(
-        Array.from(state.componetMap.keys()),
-        (comp, idx) => h(
-          state.toStarportBoard(comp) as any,
-          { key: idx },
+      return [
+        slots.default?.(),
+        renderList(
+          Array.from(state.componetMap.keys()),
+          (comp, idx) => h(
+            state.toStarportBoard(comp) as any,
+            { key: idx },
+          ),
         ),
-      )
+      ]
     }
   },
 })
