@@ -7,8 +7,7 @@ export const defaultOptions: ResolvedStarportOptions = {
 }
 
 export function defaultStyle(context: any): {} {
-  const duration = context.options.duration
-  const transitionTimingFunction = context.options.easing
+  const { duration, easing: transitionTimingFunction } = context.options
   const isVisible = context.isVisible && context.el
   const transitionDuration = `${isVisible ? duration : duration / 3}ms`
 
