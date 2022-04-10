@@ -3,7 +3,7 @@ import { Starport, StarportCarrier } from './components'
 import { InjectionOptions } from './constants'
 import type { StarportOptions } from './types'
 
-export function createPlugin(defaultOptions: StarportOptions = {}): Plugin {
+export function StarportPlugin(defaultOptions: StarportOptions = {}): Plugin {
   return {
     install(app) {
       app.provide(InjectionOptions, defaultOptions)

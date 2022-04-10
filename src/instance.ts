@@ -9,7 +9,7 @@ import { getComponentName, kebabCase, nanoid } from './utils'
 /**
  * @internal
  */
-export function createStarportContext(
+export function createStarportInstance(
   port: string,
   component: Component,
   inlineOptions: StarportOptions = {},
@@ -81,4 +81,4 @@ export function createStarportContext(
   })
 }
 
-export type StarportContext = ReturnType<typeof createStarportContext>
+export type StarportInstance = ReturnType<typeof createStarportInstance>

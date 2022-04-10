@@ -1,25 +1,31 @@
 import { reactive } from 'vue'
 import type { Component } from 'vue'
 import type { StarportOptions } from './types'
-import type { StarportContext } from './context'
-import { createStarportContext } from './context'
+import type { StarportInstance } from './instance'
+import { createStarportInstance } from './instance'
 
 export function createInternalState(options: StarportOptions) {
-  const portMap = reactive(new Map<string, StarportContext>())
+  const portMap = reactive(new Map<string, StarportInstance>())
 
-  function getContext(port: string, component: Component) {
+  function getInstance(port: string, component: Component) {
     let context = portMap.get(port)
     if (!context) {
-      context = createStarportContext(port, component, options)
+      context = createStarportInstance(port, component, options)
       portMap.set(port, context)
     }
     context.component = component
     return context
   }
 
+  function dispose(port: string) {
+    portMap.get(port)?.scope.stop()
+    portMap.delete(port)
+  }
+
   return {
     portMap,
-    getContext,
+    dispose,
+    getInstance,
   }
 }
 

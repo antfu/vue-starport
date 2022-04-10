@@ -21,11 +21,11 @@ export const StarportCraft = defineComponent({
   },
   setup(props) {
     const state = inject(InjectionState)!
-    const context = state.getContext(props.port, props.component)
-    const id = computed(() => context.el?.id || context.id)
+    const sp = state.getInstance(props.port, props.component)
+    const id = computed(() => sp.el?.id || sp.id)
 
     const style = computed((): StyleValue => {
-      const rect = context.rect
+      const rect = sp.rect
       const style: StyleValue = {
         position: 'fixed',
         left: 0,
@@ -34,7 +34,7 @@ export const StarportCraft = defineComponent({
         height: `${rect.height ?? 0}px`,
         transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
       }
-      if (!context.isVisible || !context.el) {
+      if (!sp.isVisible || !sp.el) {
         return {
           ...style,
           opacity: 0,
@@ -42,31 +42,31 @@ export const StarportCraft = defineComponent({
           pointerEvents: 'none',
           transitionProperty: 'all',
           // TODO: make this configurable
-          transitionDuration: `${context.options.duration / 3}ms`,
-          transitionTimingFunction: context.options.easing,
+          transitionDuration: `${sp.options.duration / 3}ms`,
+          transitionTimingFunction: sp.options.easing,
         }
       }
-      if (context.isLanded) {
+      if (sp.isLanded) {
         style.pointerEvents = 'none'
       }
       else {
         Object.assign(style, {
           transitionProperty: 'all',
-          transitionDuration: `${context.options.duration}ms`,
-          transitionTimingFunction: context.options.easing,
+          transitionDuration: `${sp.options.duration}ms`,
+          transitionTimingFunction: sp.options.easing,
         })
       }
       return style
     })
 
     return () => {
-      const teleport = !!(context.isLanded && context.el)
+      const teleport = !!(sp.isLanded && sp.el)
       return h(
         'div',
         {
           style: style.value,
-          class: `starport-craft-${context.componentId}`,
-          onTransitionend: context.land,
+          class: `starport-craft-${sp.componentId}`,
+          onTransitionend: sp.land,
         },
         h(
           Teleport,
@@ -74,7 +74,7 @@ export const StarportCraft = defineComponent({
             to: teleport ? `#${id.value}` : 'body',
             disabled: !teleport,
           },
-          h(context.component as any, context.props),
+          h(sp.component as any, sp.props),
         ),
       )
     }
@@ -103,54 +103,57 @@ export const StarportProxy = defineComponent({
   },
   setup(props, ctx) {
     const state = inject(InjectionState)!
-    const context = state.getContext(props.port, props.component)
+    const sp = state.getInstance(props.port, props.component)
     const el = ref<HTMLElement>()
-    const id = context.generateId()
+    const id = sp.generateId()
 
-    if (!context.isVisible)
-      context.land()
+    // first time appearing, directly landed
+    if (!sp.isVisible)
+      sp.land()
 
     onMounted(async() => {
-      if (context.el) {
+      if (sp.el) {
         if (process.env.NODE_ENV === 'development')
-          console.error(`[Vue Starport] Multiple proxies of "${context.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
+          console.error(`[Vue Starport] Multiple proxies of "${sp.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
         return
       }
-      context.el = el.value
+      sp.el = el.value
       await nextTick()
-      context.rect.update()
+      sp.rect.update()
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
-        if (context.rect.width === 0 || context.rect.height === 0) {
-          const attr = context.rect.width === 0 ? 'width' : 'height'
-          console.warn(`[Vue Starport] The proxy of component "${context.componentName}" has no ${attr} on initial render, have you set the size for it?`)
+        if (sp.rect.width === 0 || sp.rect.height === 0) {
+          const attr = sp.rect.width === 0 ? 'width' : 'height'
+          console.warn(`[Vue Starport] The proxy of component "${sp.componentName}" has no ${attr} on initial render, have you set the size for it?`)
         }
       }
     })
 
-    onBeforeUnmount(() => {
-      context.liftOff()
-      context.el = undefined
+    onBeforeUnmount(async() => {
+      sp.liftOff()
+      sp.el = undefined
 
-      if (!context.options.keepAlive) {
-        setTimeout(() => {
-          if (context.el)
-            return
-          context.scope.stop()
-          state.portMap.delete(context.port)
-        }, 100)
-      }
+      if (sp.options.keepAlive)
+        return
+
+      await nextTick()
+      await nextTick()
+      if (sp.el)
+        return
+
+      // dispose
+      state.dispose(sp.port)
     })
 
     watch(
       () => props,
       async() => {
         // wait a tick for teleport to lift off then update the props
-        if (context.props)
+        if (sp.props)
           await nextTick()
         const { props: childProps, ...options } = props
-        context.props = childProps
-        context.setLocalOptions(options)
+        sp.props = childProps
+        sp.setLocalOptions(options)
       },
       { deep: true, immediate: true },
     )
@@ -162,10 +165,10 @@ export const StarportProxy = defineComponent({
         id,
         style: {
           transitionProperty: 'all',
-          transitionDuration: `${context.options.duration}ms`,
-          transitionTimingFunction: context.options.easing,
+          transitionDuration: `${sp.options.duration}ms`,
+          transitionTimingFunction: sp.options.easing,
         },
-        class: `starport-proxy-${context.componentId}`,
+        class: `starport-proxy-${sp.componentId}`,
       },
       ctx.slots.default
         ? h(ctx.slots.default)
