@@ -1,28 +1,28 @@
-import { shallowReactive } from 'vue'
+import { reactive } from 'vue'
 import type { Component } from 'vue'
-import { createStarport } from './core'
-import type { StarportComponents, StarportOptions } from './types'
+import type { StarportOptions } from './types'
+import type { StarportContext } from './context'
+import { createStarportContext } from './context'
 
 export function createInternalState(options: StarportOptions) {
-  const componentMap = shallowReactive(new Map<Component, StarportComponents>())
+  const portMap = reactive(new Map<string, StarportContext>())
 
-  function getStarportInstance(component: Component) {
-    if (!componentMap.has(component))
-      componentMap.set(component, createStarport(component, options))
-    return componentMap.get(component)!
-  }
-
-  function toStarportProxy<T extends Component>(component: T) {
-    return getStarportInstance(component).proxy
-  }
-
-  function toStarportBoard<T extends Component>(component: T): Component {
-    return getStarportInstance(component)!.board
+  function getContext(port: string, component: Component) {
+    let context = portMap.get(port)
+    if (!context) {
+      context = createStarportContext(port, component, options)
+      portMap.set(port, context)
+    }
+    else if (context.component !== component) {
+      throw new Error(`[Vue Starport] Port "${port}" is already used by "${context.componentName}"`)
+    }
+    return context
   }
 
   return {
-    componentMap,
-    toStarportProxy,
-    toStarportBoard,
+    portMap,
+    getContext,
   }
 }
+
+export type InternalState = ReturnType<typeof createInternalState>

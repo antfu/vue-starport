@@ -1,10 +1,11 @@
 import { isObject } from '@vueuse/core'
 import type { DefineComponent } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, isVNode, renderList } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, isVNode, markRaw, renderList } from 'vue'
 import { InjectionOptions, InjectionState } from './constants'
 import { optionsProps } from './options'
 import type { StarportOptions } from './types'
 import { createInternalState } from './state'
+import { StarportCraft, StarportProxy } from './core'
 
 /**
  * The carrier component for all the flying Starport components
@@ -21,10 +22,10 @@ export const StarportCarrier = defineComponent({
       return [
         slots.default?.(),
         renderList(
-          Array.from(state.componentMap.keys()),
-          (comp, idx) => h(
-            state.toStarportBoard(comp) as any,
-            { key: idx },
+          Array.from(state.portMap.entries()),
+          ([port, context], idx) => h(
+            StarportCraft,
+            { key: idx, port, component: context.component },
           ),
         ),
       ]
@@ -41,7 +42,7 @@ export const Starport = defineComponent({
   props: {
     port: {
       type: String,
-      required: false,
+      required: true,
     },
     ...optionsProps,
   },
@@ -65,10 +66,10 @@ export const Starport = defineComponent({
       if (!isObject(component) || isVNode(component))
         throw new Error('[Vue Starport] The slot in <Starport> must be a component')
 
-      const proxy = state.toStarportProxy(component) as any
-      return h(proxy, {
+      return h(StarportProxy, {
         ...props,
         port: props.port,
+        component: markRaw(component),
         props: slot.props,
         key: props.port,
       })

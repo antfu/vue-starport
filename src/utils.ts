@@ -8,3 +8,7 @@ export function kebabCase(str: string) {
     .toLowerCase()
     .replace(/[^\w\d_-]/g, '')
 }
+
+export function getComponentName(component: any) {
+  return component.name || component.__file?.split(/[\/\\.]/).slice(-2)[0] || ''
+}

@@ -1,19 +1,22 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { useElementBounding } from '@vueuse/core'
-import type { Ref } from 'vue'
+import type { Component, Ref } from 'vue'
 import { computed, effectScope, reactive, ref, watch } from 'vue'
 import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
-import { kebabCase, nanoid } from './utils'
+import { getComponentName, kebabCase, nanoid } from './utils'
 
 /**
  * @internal
  */
 export function createStarportContext(
-  componentId: string,
   port: string,
+  component: Component,
   inlineOptions: StarportOptions = {},
 ) {
+  const componentName = getComponentName(component)
+  const componentId = kebabCase(componentName) || nanoid()
+
   const el: Ref<HTMLElement | undefined> = ref()
   const props: Ref<any> = ref(null)
   const isLanded: Ref<boolean> = ref(false)
@@ -55,6 +58,9 @@ export function createStarportContext(
     isLanded,
     isVisible,
     options,
+    component,
+    componentName,
+    componentId,
     generateId,
     setLocalOptions(options: StarportOptions = {}) {
       localOptions.value = JSON.parse(JSON.stringify(options))

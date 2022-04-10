@@ -1,5 +1,3 @@
-import type { DefineComponent } from 'vue'
-
 export interface StarportOptions {
   /**
    * The duration of the animation in milliseconds.
@@ -30,19 +28,4 @@ export interface StarportCraftProps {
 }
 
 export interface StarportProps extends StarportOptions, StarportCraftProps {
-}
-
-export interface StarportComponents {
-  /**
-   * The flying component
-   */
-  starcraft: DefineComponent<StarportCraftProps>
-  /**
-   * Holds all flying instance of the component
-   */
-  board: DefineComponent<{}>
-  /**
-   * The proxy component
-   */
-  proxy: DefineComponent<StarportProps>
 }
