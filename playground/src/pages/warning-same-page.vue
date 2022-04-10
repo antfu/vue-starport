@@ -13,7 +13,7 @@ const toggle = useToggle(a)
       <MyComponent :index="0" />
     </Starport>
     <Starport v-else port="0" w-50 h-50 m10>
-      <MyComponent :index="0" rounded-full />
+      <MyComponent :index="0" class="rounded-1/2" />
     </Starport>
   </div>
 </template>

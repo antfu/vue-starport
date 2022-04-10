@@ -1,6 +1,5 @@
 import type { Component, DefineComponent, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, getCurrentInstance, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import type { Router } from 'vue-router'
+import { Teleport, computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { StarportContext } from './context'
 import { createStarportContext } from './context'
 import { optionsProps } from './options'
@@ -79,7 +78,7 @@ export function createStarport<T extends Component>(
       })
 
       return () => {
-        const teleport = context.isLanded && context.el
+        const teleport = !!(context.isLanded && context.el)
         return h(
           'div',
           {
@@ -139,28 +138,17 @@ export function createStarport<T extends Component>(
         }
       })
 
-      const router: Router = getCurrentInstance()?.appContext.app.config.globalProperties?.$router
-      if (router) {
-        onBeforeUnmount(router.beforeEach(() => {
-          context.liftOff()
-        }))
-      }
-      else if (process.env.NODE_ENV === 'development') {
-        console.warn('[Vue Starport] No Vue Router detected, have you installed it?')
-      }
-
       onBeforeUnmount(() => {
-        if (context.isLanded) {
-          if (process.env.NODE_ENV === 'development')
-            console.warn('[Vue Starport] Don\'t have enough time to lift off, you might encounter discontinue transitions.')
-          context.liftOff()
-        }
+        context.liftOff()
         context.el = undefined
       })
 
       watch(
         () => props,
-        () => {
+        async() => {
+          // wait a tick for teleport to lift off then update the props
+          if (context.props)
+            await nextTick()
           const { props: childProps, ...options } = props
           context.props = childProps
           context.setLocalOptions(options)

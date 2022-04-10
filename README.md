@@ -63,7 +63,7 @@ This is very similar to [Terran's Buildings](https://starcraft.fandom.com/wiki/L
 npm i vue-starport
 ```
 
-> Vue Starport is Vue 3 only and currently requires to use with Vue Router.
+> Vue Starport only works for Vue 3
 
 ## Usage
 

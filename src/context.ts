@@ -15,7 +15,7 @@ export function createStarportContext(
   inlineOptions: StarportOptions = {},
 ) {
   const el: Ref<HTMLElement | undefined> = ref()
-  const props: Ref<any> = ref()
+  const props: Ref<any> = ref(null)
   const isLanded: Ref<boolean> = ref(false)
   const isVisible = ref(false)
   const scope = effectScope(true)
