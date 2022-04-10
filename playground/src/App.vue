@@ -9,6 +9,6 @@
         />
       </transition>
     </router-view>
+    <StarportCarrier />
   </main>
-  <StarportCarrier />
 </template>
