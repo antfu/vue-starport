@@ -7,6 +7,8 @@ declare module '@vue/runtime-core' {
     MyComponent: typeof import('./src/components/MyComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Starport: typeof import('vue-starport')['Starport']
+    StarportCarrier: typeof import('vue-starport')['StarportCarrier']
     TheLogo: typeof import('./src/components/TheLogo.vue')['default']
     TheNav: typeof import('./src/components/TheNav.vue')['default']
   }

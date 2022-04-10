@@ -1,36 +1,10 @@
 import { isObject } from '@vueuse/core'
-import type { Component, DefineComponent, InjectionKey } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, isVNode, renderList, shallowReactive } from 'vue'
-import { createStarport } from './core'
+import type { DefineComponent } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, isVNode, renderList } from 'vue'
+import { InjectionOptions, InjectionState } from './constants'
 import { optionsProps } from './options'
-import type { StarportComponents, StarportOptions } from './types'
-
-const ProvideSymbol = 'vue-starport-injection' as unknown as InjectionKey<ReturnType<typeof createInternalState>>
-
-function createInternalState() {
-  const componetMap = shallowReactive(new Map<Component, StarportComponents>())
-
-  function getStarportInstance(componet: Component) {
-    if (!componetMap.has(componet))
-      componetMap.set(componet, createStarport(componet))
-
-    return componetMap.get(componet)!
-  }
-
-  function toStarportProxy<T extends Component>(componet: T) {
-    return getStarportInstance(componet).proxy
-  }
-
-  function toStarportBoard<T extends Component>(componet: T): Component {
-    return getStarportInstance(componet)!.board
-  }
-
-  return {
-    componetMap,
-    toStarportProxy,
-    toStarportBoard,
-  }
-}
+import type { StarportOptions } from './types'
+import { createInternalState } from './state'
 
 /**
  * The carrier component for all the flying Starport components
@@ -39,9 +13,9 @@ function createInternalState() {
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
   setup(_, { slots }) {
-    const state = createInternalState()
+    const state = createInternalState(inject(InjectionOptions, {}))
     const app = getCurrentInstance()!.appContext.app
-    app.provide(ProvideSymbol, state)
+    app.provide(InjectionState, state)
 
     return () => {
       return [
@@ -72,7 +46,7 @@ export const Starport = defineComponent({
     ...optionsProps,
   },
   setup(props, ctx) {
-    const state = inject(ProvideSymbol)
+    const state = inject(InjectionState)
 
     if (!state)
       throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initalized it?')

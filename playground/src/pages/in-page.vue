@@ -6,9 +6,14 @@ const toggle = useToggle(a)
 
 <template>
   <div>
-    <button btn @click="toggle()">
-      Toggle
-    </button>
+    <div flex="~ gap2" justify-center>
+      <RouterLink btn to="/" saturate-0 class="back-btn">
+        Back
+      </RouterLink>
+      <button btn @click="toggle()">
+        Toggle
+      </button>
+    </div>
     <Starport v-if="a" port="0" w-20 h-20>
       <MyComponent :index="0" />
     </Starport>

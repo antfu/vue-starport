@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Starport } from 'vue-starport'
 import { images } from '~/composables/data'
 
 const mode = useStorage('starport-image-mode', true)

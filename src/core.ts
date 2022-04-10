@@ -138,6 +138,15 @@ export function createStarport<T extends Component>(
       onBeforeUnmount(() => {
         context.liftOff()
         context.el = undefined
+
+        if (!context.options.keepAlive) {
+          setTimeout(() => {
+            if (context.el)
+              return
+            context.scope.stop()
+            portMap.delete(context.port)
+          }, 100)
+        }
       })
 
       watch(

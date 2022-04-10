@@ -14,9 +14,8 @@ export interface StarportOptions {
   easing?: string
   /**
    * Should keep the component alive if no proxy is presented
-   * // TODO:
-   * @todo
-   * @default true
+   *
+   * @default false
    */
   keepAlive?: boolean
 }

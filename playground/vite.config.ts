@@ -39,6 +39,22 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-components
     Components({
       dts: true,
+      types: [
+        {
+          from: 'vue-router',
+          names: [
+            'RouterView',
+            'RouterLink',
+          ],
+        },
+        {
+          from: 'vue-starport',
+          names: [
+            'Starport',
+            'StarportCarrier',
+          ],
+        },
+      ],
     }),
 
     // https://github.com/antfu/unocss

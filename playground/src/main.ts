@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from 'virtual:generated-pages'
+import Starport from 'vue-starport'
 import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
@@ -19,4 +20,5 @@ const router = createRouter({
   },
 })
 app.use(router)
+app.use(Starport({ keepAlive: true }))
 app.mount('#app')

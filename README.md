@@ -91,10 +91,7 @@ import { Starport } from 'vue-starport'
 <template>
   <div>
     <!-- ... -->
-    <Starport
-      port="my-id"
-      style="height:400px"
-    > 
+    <Starport port="my-id" style="height:400px"> 
       <MyComponent :prop="value"/>
     </Starport>
   </div>
@@ -112,10 +109,7 @@ import { Starport } from 'vue-starport'
 <template>
   <div>
     <!-- ... -->
-    <Starport
-      port="my-id"
-      style="height:600px"
-    > 
+    <Starport port="my-id" style="height:600px">
       <MyComponent :prop="value"/>
     </Starport>
   </div>
@@ -136,6 +130,25 @@ app.use(StarportPlugin())
 ```
 
 And then you can use `Starport` and `StarportCarrier` components without importing.
+
+### Keep Alive
+
+By default, when navigating to a page without a corresponding `<Starport>` proxy to land, the componet will be destroyed. If you want to keep the component alive even when it's not presented in the current route, you can set `keepAlive` to `true` for that specific instance.
+
+```html
+<Starport keep-alive port="my-id">
+  <MyComponent />
+</Starport>
+```
+
+To configure it globally, you can pass options to the plugin:
+
+```ts
+// main.ts
+import StarportPlugin from 'vue-starport'
+
+app.use(StarportPlugin({ keepAlive: true }))
+```
 
 ## Special Thanks
 

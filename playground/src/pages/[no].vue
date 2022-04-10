@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Starport } from 'vue-starport'
 import { images } from '~/composables/data'
 
 const props = defineProps<{
@@ -22,9 +21,9 @@ function reset() {
 <template>
   <div px6 py-2 flex="~ col" items-center>
     <div p2 flex="~ gap-2">
-      <router-link btn to="/" saturate-0 class="back-btn">
+      <RouterLink btn to="/" saturate-0 class="back-btn">
         Back
-      </router-link>
+      </RouterLink>
       <button btn @click="enlarge()">
         Enlarge
       </button>
