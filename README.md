@@ -150,6 +150,19 @@ import StarportPlugin from 'vue-starport'
 app.use(StarportPlugin({ keepAlive: true }))
 ```
 
+## Debug
+
+To debug what happends during the transition, you can add the follow CSS to highlight the parts
+
+```css
+[data-starport-craft] {
+  background: #0805;
+}
+[data-starport-proxy]:not([data-starport-landed]) {
+  background: #8005;
+}
+```
+
 ## Special Thanks
 
 Thanks to [@hangsman](https://github.com/hangsman) who helped to provide the initial solution of proper teleport the element and made this idea valid. Also thanks to the viewers of [my live-streaming on Bilibli](https://space.bilibili.com/668380), those who spend time with me to working on this idea and provided useful feedback during the live.

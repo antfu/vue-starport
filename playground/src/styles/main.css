@@ -19,3 +19,10 @@ html.dark {
 .page-fade-leave-to {
   opacity: 0;
 }
+
+.debug [data-starport-craft] {
+  background: #0805;
+}
+.debug [data-starport-proxy]:not([data-starport-landed]) {
+  background: #8005;
+}

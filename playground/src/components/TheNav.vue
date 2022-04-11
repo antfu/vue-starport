@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isDark, toggleDark } from '~/composables'
+import { isDark, isDebug, toggleDark, toggleDebug } from '~/composables'
 </script>
 
 <template>
@@ -19,6 +19,13 @@ import { isDark, toggleDark } from '~/composables'
     <div flex-auto />
 
     <div flex="~ gap4" items-center>
+      <button
+        class="icon-btn !outline-none p1"
+        :class="isDebug ? '!text-red bg-red:10 rounded' : ''"
+        @click="toggleDebug()"
+      >
+        <div i-carbon-debug />
+      </button>
       <a
         class="icon-btn"
         i-carbon-logo-github

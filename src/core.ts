@@ -48,6 +48,7 @@ export const StarportCraft = defineComponent({
       }
       if (sp.isLanded) {
         style.pointerEvents = 'none'
+        style.display = 'none'
       }
       else {
         Object.assign(style, {
@@ -64,9 +65,11 @@ export const StarportCraft = defineComponent({
       return h(
         'div',
         {
-          style: style.value,
-          class: `starport-craft-${sp.componentId}`,
-          onTransitionend: sp.land,
+          'style': style.value,
+          'data-starport-craft': sp.componentId,
+          'data-starport-landed': sp.isLanded ? 'true' : undefined,
+          'data-starport-floating': !sp.isLanded ? 'true' : undefined,
+          'onTransitionend': sp.land,
         },
         h(
           Teleport,
@@ -161,14 +164,16 @@ export const StarportProxy = defineComponent({
     return () => h(
       'div',
       {
-        ref: el,
         id,
-        style: {
+        'ref': el,
+        'style': {
           transitionProperty: 'all',
           transitionDuration: `${sp.options.duration}ms`,
           transitionTimingFunction: sp.options.easing,
         },
-        class: `starport-proxy-${sp.componentId}`,
+        'data-starport-proxy': sp.componentId,
+        'data-starport-landed': sp.isLanded ? 'true' : undefined,
+        'data-starport-floating': !sp.isLanded ? 'true' : undefined,
       },
       ctx.slots.default
         ? h(ctx.slots.default)
