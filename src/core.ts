@@ -21,7 +21,7 @@ export const StarportCraft = defineComponent({
   },
   setup(props) {
     const state = inject(InjectionState)!
-    const sp = state.getInstance(props.port, props.component)
+    const sp = $computed(() => state.getInstance(props.port, props.component))
     const id = computed(() => sp.el?.id || sp.id)
 
     const style = computed((): StyleValue => {
@@ -60,6 +60,7 @@ export const StarportCraft = defineComponent({
       return style
     })
 
+
     return () => {
       const teleport = !!(sp.isLanded && sp.el)
       return h(
@@ -69,7 +70,10 @@ export const StarportCraft = defineComponent({
           'data-starport-craft': sp.componentId,
           'data-starport-landed': sp.isLanded ? 'true' : undefined,
           'data-starport-floating': !sp.isLanded ? 'true' : undefined,
-          'onTransitionend': sp.land,
+          'onTransitionend': () => {
+            sp.land()
+            console.log('transition end', sp.isLanded)
+          },
         },
         h(
           Teleport,
@@ -114,7 +118,7 @@ export const StarportProxy = defineComponent({
     if (!sp.isVisible)
       sp.land()
 
-    onMounted(async() => {
+    onMounted(async () => {
       if (sp.el) {
         if (process.env.NODE_ENV === 'development')
           console.error(`[Vue Starport] Multiple proxies of "${sp.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
@@ -123,6 +127,7 @@ export const StarportProxy = defineComponent({
       sp.el = el.value
       await nextTick()
       sp.rect.update()
+
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
         if (sp.rect.width === 0 || sp.rect.height === 0) {
@@ -132,14 +137,13 @@ export const StarportProxy = defineComponent({
       }
     })
 
-    onBeforeUnmount(async() => {
+    onBeforeUnmount(async () => {
       sp.liftOff()
       sp.el = undefined
-
       if (sp.options.keepAlive)
         return
 
-      await nextTick()
+      // await nextTick()
       await nextTick()
       if (sp.el)
         return
@@ -150,7 +154,7 @@ export const StarportProxy = defineComponent({
 
     watch(
       () => props,
-      async() => {
+      async () => {
         // wait a tick for teleport to lift off then update the props
         if (sp.props)
           await nextTick()
