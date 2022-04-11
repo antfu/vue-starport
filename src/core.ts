@@ -1,5 +1,5 @@
 import type { DefineComponent, StyleValue } from 'vue'
-import { Teleport, computed, defineComponent, h, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Teleport, computed, defineComponent, h, inject, mergeProps, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { InjectionState } from './constants'
 import { optionsProps } from './options'
 import type { StarportCraftProps, StarportProps } from './types'
@@ -60,6 +60,16 @@ export const StarportCraft = defineComponent({
       return style
     })
 
+    const additionalProps = process.env.NODE_ENV === 'production'
+      ? {}
+      : {
+        onTransitionend(e: TransitionEvent) {
+          if (sp.value.isLanded)
+            return
+          console.warn(`[Vue Starport] Transition duration of component "${sp.value.componentName}" is too short (${e.elapsedTime}s) that may cause animation glitches. Try to increase the duration of that component, or decrease the duration the Starport (current: ${sp.value.options.duration / 1000}s).`)
+        },
+      }
+
     return () => {
       const teleport = !!(sp.value.isLanded && sp.value.el)
       return h(
@@ -77,7 +87,9 @@ export const StarportCraft = defineComponent({
             to: teleport ? `#${id.value}` : 'body',
             disabled: !teleport,
           },
-          h(sp.value.component as any, sp.value.props),
+          h(sp.value.component as any,
+            mergeProps(additionalProps, sp.value.props),
+          ),
         ),
       )
     }
