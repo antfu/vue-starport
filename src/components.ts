@@ -21,11 +21,11 @@ export const StarportCarrier = defineComponent({
     return () => {
       return [
         slots.default?.(),
-        renderList(
+        ...renderList(
           Array.from(state.portMap.entries()),
-          ([port, context], idx) => h(
+          ([port, context]) => h(
             StarportCraft,
-            { key: idx, port, component: context.component },
+            { key: port, port, component: context.component },
           ),
         ),
       ]
