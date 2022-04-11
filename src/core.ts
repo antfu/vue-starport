@@ -60,7 +60,6 @@ export const StarportCraft = defineComponent({
       return style
     })
 
-
     return () => {
       const teleport = !!(sp.isLanded && sp.el)
       return h(
@@ -70,10 +69,7 @@ export const StarportCraft = defineComponent({
           'data-starport-craft': sp.componentId,
           'data-starport-landed': sp.isLanded ? 'true' : undefined,
           'data-starport-floating': !sp.isLanded ? 'true' : undefined,
-          'onTransitionend': () => {
-            sp.land()
-            console.log('transition end', sp.isLanded)
-          },
+          'onTransitionend': () => sp.land,
         },
         h(
           Teleport,
@@ -118,7 +114,7 @@ export const StarportProxy = defineComponent({
     if (!sp.isVisible)
       sp.land()
 
-    onMounted(async () => {
+    onMounted(async() => {
       if (sp.el) {
         if (process.env.NODE_ENV === 'development')
           console.error(`[Vue Starport] Multiple proxies of "${sp.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
@@ -137,13 +133,13 @@ export const StarportProxy = defineComponent({
       }
     })
 
-    onBeforeUnmount(async () => {
+    onBeforeUnmount(async() => {
       sp.liftOff()
       sp.el = undefined
       if (sp.options.keepAlive)
         return
 
-      // await nextTick()
+      await nextTick()
       await nextTick()
       if (sp.el)
         return
@@ -154,7 +150,7 @@ export const StarportProxy = defineComponent({
 
     watch(
       () => props,
-      async () => {
+      async() => {
         // wait a tick for teleport to lift off then update the props
         if (sp.props)
           await nextTick()
