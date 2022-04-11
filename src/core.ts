@@ -69,7 +69,7 @@ export const StarportCraft = defineComponent({
           'data-starport-craft': sp.componentId,
           'data-starport-landed': sp.isLanded ? 'true' : undefined,
           'data-starport-floating': !sp.isLanded ? 'true' : undefined,
-          'onTransitionend': () => sp.land,
+          'onTransitionend': sp.land,
         },
         h(
           Teleport,
