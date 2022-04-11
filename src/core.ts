@@ -21,11 +21,11 @@ export const StarportCraft = defineComponent({
   },
   setup(props) {
     const state = inject(InjectionState)!
-    const sp = state.getInstance(props.port, props.component)
-    const id = computed(() => sp.el?.id || sp.id)
+    const sp = computed(() => state.getInstance(props.port, props.component))
+    const id = computed(() => sp.value.el?.id || sp.value.id)
 
     const style = computed((): StyleValue => {
-      const rect = sp.rect
+      const rect = sp.value.rect
       const style: StyleValue = {
         position: 'fixed',
         left: 0,
@@ -34,7 +34,7 @@ export const StarportCraft = defineComponent({
         height: `${rect.height ?? 0}px`,
         transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
       }
-      if (!sp.isVisible || !sp.el) {
+      if (!sp.value.isVisible || !sp.value.el) {
         return {
           ...style,
           opacity: 0,
@@ -42,34 +42,34 @@ export const StarportCraft = defineComponent({
           pointerEvents: 'none',
           transitionProperty: 'all',
           // TODO: make this configurable
-          transitionDuration: `${sp.options.duration / 3}ms`,
-          transitionTimingFunction: sp.options.easing,
+          transitionDuration: `${sp.value.options.duration / 3}ms`,
+          transitionTimingFunction: sp.value.options.easing,
         }
       }
-      if (sp.isLanded) {
+      if (sp.value.isLanded) {
         style.pointerEvents = 'none'
         style.display = 'none'
       }
       else {
         Object.assign(style, {
           transitionProperty: 'all',
-          transitionDuration: `${sp.options.duration}ms`,
-          transitionTimingFunction: sp.options.easing,
+          transitionDuration: `${sp.value.options.duration}ms`,
+          transitionTimingFunction: sp.value.options.easing,
         })
       }
       return style
     })
 
     return () => {
-      const teleport = !!(sp.isLanded && sp.el)
+      const teleport = !!(sp.value.isLanded && sp.value.el)
       return h(
         'div',
         {
           'style': style.value,
-          'data-starport-craft': sp.componentId,
-          'data-starport-landed': sp.isLanded ? 'true' : undefined,
-          'data-starport-floating': !sp.isLanded ? 'true' : undefined,
-          'onTransitionend': sp.land,
+          'data-starport-craft': sp.value.componentId,
+          'data-starport-landed': sp.value.isLanded ? 'true' : undefined,
+          'data-starport-floating': !sp.value.isLanded ? 'true' : undefined,
+          'onTransitionend': sp.value.land,
         },
         h(
           Teleport,
@@ -77,7 +77,7 @@ export const StarportCraft = defineComponent({
             to: teleport ? `#${id.value}` : 'body',
             disabled: !teleport,
           },
-          h(sp.component as any, sp.props),
+          h(sp.value.component as any, sp.value.props),
         ),
       )
     }
@@ -106,57 +106,57 @@ export const StarportProxy = defineComponent({
   },
   setup(props, ctx) {
     const state = inject(InjectionState)!
-    const sp = state.getInstance(props.port, props.component)
+    const sp = computed(() => state.getInstance(props.port, props.component))
     const el = ref<HTMLElement>()
-    const id = sp.generateId()
+    const id = sp.value.generateId()
 
     // first time appearing, directly landed
-    if (!sp.isVisible)
-      sp.land()
+    if (!sp.value.isVisible)
+      sp.value.land()
 
     onMounted(async() => {
-      if (sp.el) {
+      if (sp.value.el) {
         if (process.env.NODE_ENV === 'development')
-          console.error(`[Vue Starport] Multiple proxies of "${sp.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
+          console.error(`[Vue Starport] Multiple proxies of "${sp.value.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
         return
       }
-      sp.el = el.value
+      sp.value.el = el.value
       await nextTick()
-      sp.rect.update()
+      sp.value.rect.update()
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
-        if (sp.rect.width === 0 || sp.rect.height === 0) {
-          const attr = sp.rect.width === 0 ? 'width' : 'height'
-          console.warn(`[Vue Starport] The proxy of component "${sp.componentName}" has no ${attr} on initial render, have you set the size for it?`)
+        if (sp.value.rect.width === 0 || sp.value.rect.height === 0) {
+          const attr = sp.value.rect.width === 0 ? 'width' : 'height'
+          console.warn(`[Vue Starport] The proxy of component "${sp.value.componentName}" has no ${attr} on initial render, have you set the size for it?`)
         }
       }
     })
 
     onBeforeUnmount(async() => {
-      sp.liftOff()
-      sp.el = undefined
+      sp.value.liftOff()
+      sp.value.el = undefined
 
-      if (sp.options.keepAlive)
+      if (sp.value.options.keepAlive)
         return
 
       await nextTick()
       await nextTick()
-      if (sp.el)
+      if (sp.value.el)
         return
 
       // dispose
-      state.dispose(sp.port)
+      state.dispose(sp.value.port)
     })
 
     watch(
       () => props,
       async() => {
         // wait a tick for teleport to lift off then update the props
-        if (sp.props)
+        if (sp.value.props)
           await nextTick()
         const { props: childProps, ...options } = props
-        sp.props = childProps
-        sp.setLocalOptions(options)
+        sp.value.props = childProps
+        sp.value.setLocalOptions(options)
       },
       { deep: true, immediate: true },
     )
@@ -168,12 +168,12 @@ export const StarportProxy = defineComponent({
         'ref': el,
         'style': {
           transitionProperty: 'all',
-          transitionDuration: `${sp.options.duration}ms`,
-          transitionTimingFunction: sp.options.easing,
+          transitionDuration: `${sp.value.options.duration}ms`,
+          transitionTimingFunction: sp.value.options.easing,
         },
-        'data-starport-proxy': sp.componentId,
-        'data-starport-landed': sp.isLanded ? 'true' : undefined,
-        'data-starport-floating': !sp.isLanded ? 'true' : undefined,
+        'data-starport-proxy': sp.value.componentId,
+        'data-starport-landed': sp.value.isLanded ? 'true' : undefined,
+        'data-starport-floating': !sp.value.isLanded ? 'true' : undefined,
       },
       ctx.slots.default
         ? h(ctx.slots.default)
