@@ -108,7 +108,7 @@ export const StarportProxy = defineComponent({
     },
     props: {
       type: Object,
-      default: () => { },
+      default: () => ({}),
     },
     component: {
       type: Object,
@@ -167,7 +167,7 @@ export const StarportProxy = defineComponent({
         if (sp.value.props)
           await nextTick()
         const { props: childProps, ...options } = props
-        sp.value.props = childProps
+        sp.value.props = childProps || {}
         sp.value.setLocalOptions(options)
       },
       { deep: true, immediate: true },
