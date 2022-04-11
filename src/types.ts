@@ -29,3 +29,11 @@ export interface StarportCraftProps {
 
 export interface StarportProps extends StarportOptions, StarportCraftProps {
 }
+
+export interface IterableIterator {
+  next: () => {
+    value: [string, any]
+    done: boolean
+  },
+  [Symbol.iterator](): IterableIterator
+}
