@@ -3,7 +3,7 @@ import type { DefineComponent } from 'vue'
 import { defineComponent, getCurrentInstance, h, inject, isVNode, markRaw } from 'vue'
 import { InjectionOptions, InjectionState } from './constants'
 import { optionsProps } from './options'
-import type { IterableIterator, StarportProps } from './types'
+import type { StarportProps } from './types'
 import { createInternalState } from './state'
 import { StarportCraft, StarportProxy } from './core'
 
@@ -11,7 +11,6 @@ import { StarportCraft, StarportProxy } from './core'
  * The carrier component for all the flying Starport components
  * Should be intialized in App.vue only once.
  */
-
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
   setup(_, { slots }) {
@@ -22,10 +21,11 @@ export const StarportCarrier = defineComponent({
     return () => {
       return [
         slots.default?.(),
-        Array.from(state.portMap.entries() as IterableIterator).map(([port, { component }]) => h(
-          StarportCraft,
-          { key: port, port, component },
-        )),
+        Array.from(state.portMap.entries())
+          .map(([port, { component }]) => h(
+            StarportCraft,
+            { key: port, port, component },
+          )),
       ]
     }
   },
