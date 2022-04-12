@@ -3,7 +3,7 @@ import type { DefineComponent } from 'vue'
 import { defineComponent, getCurrentInstance, h, inject, isVNode, markRaw } from 'vue'
 import { InjectionOptions, InjectionState } from './constants'
 import { optionsProps } from './options'
-import type { IterableIterator, StarportOptions } from './types'
+import type { IterableIterator, StarportProps } from './types'
 import { createInternalState } from './state'
 import { StarportCraft, StarportProxy } from './core'
 
@@ -78,4 +78,4 @@ export const Starport = defineComponent({
       })
     }
   },
-}) as DefineComponent<{ port: string } & StarportOptions>
+}) as DefineComponent<StarportProps>
