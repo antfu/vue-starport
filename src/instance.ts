@@ -42,6 +42,7 @@ export function createStarportInstance(
   })
 
   const portId = kebabCase(port)
+  
   function generateId() {
     return `starport-${componentId}-${portId}-${nanoid()}`
   }
@@ -69,14 +70,10 @@ export function createStarportInstance(
       return el
     },
     liftOff() {
-      if (!isLanded.value)
-        return
-      isLanded.value = false
+      isLanded.value && (isLanded.value = false)
     },
     land() {
-      if (isLanded.value)
-        return
-      isLanded.value = true
+      !isLanded.value && (isLanded.value = true)
     },
   })
 }
