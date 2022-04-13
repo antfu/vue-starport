@@ -120,8 +120,10 @@ export const StarportProxy = defineComponent({
     const isMounted = ref(false)
 
     // first time appearing, directly landed
-    if (!sp.value.isVisible)
+    if (!sp.value.isVisible) {
       sp.value.land()
+      isMounted.value = true
+    }
 
     onMounted(async() => {
       if (sp.value.el) {
