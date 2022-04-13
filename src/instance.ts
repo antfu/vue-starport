@@ -1,7 +1,6 @@
 import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
-import type { UseElementBoundingReturn } from '@vueuse/core'
-import { useElementBounding } from '@vueuse/core'
 import type { Component, Ref } from 'vue'
+import { useElementBounding } from './composables'
 import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 import { getComponentName, kebabCase, nanoid } from './utils'
@@ -29,10 +28,10 @@ export function createStarportInstance(
     ...localOptions.value,
   }))
 
-  let rect: UseElementBoundingReturn = undefined!
+  let rect: ReturnType<typeof useElementBounding> = undefined!
 
   scope.run(() => {
-    rect = useElementBounding(el, { reset: false, windowScroll: false, windowResize: false })
+    rect = useElementBounding(el)
     watch(el, async(v) => {
       if (v)
         isVisible.value = true
@@ -73,12 +72,14 @@ export function createStarportInstance(
       if (!isLanded.value)
         return
       isLanded.value = false
+      rect.listen()
       // console.log('lift off', port)
     },
     land() {
       if (isLanded.value)
         return
       isLanded.value = true
+      rect.pause()
       // console.log('land', port)
     },
   })
