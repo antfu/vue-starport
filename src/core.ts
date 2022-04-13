@@ -47,7 +47,7 @@ export const StarportCraft = defineComponent({
       else {
         Object.assign(style, {
           transitionProperty: 'all',
-          transitionDuration: `${duration}ms`,
+          transitionDuration: `${sp.value.options.duration}ms`,
           transitionTimingFunction: sp.value.options.easing,
         })
       }
@@ -113,6 +113,7 @@ export const StarportProxy = defineComponent({
     const el = ref<HTMLElement>()
     const id = sp.value.generateId()
     const isMounted = ref(false)
+    const Dom = document.documentElement
 
     // first time appearing, directly landed
     if (!sp.value.isVisible) {
@@ -129,6 +130,8 @@ export const StarportProxy = defineComponent({
       sp.value.el = el.value
       await nextTick()
       sp.value.rect.update()
+      const scrollTop = Dom.scrollTop
+      sp.value.rect.y = scrollTop + sp.value.rect.y
       isMounted.value = true
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
