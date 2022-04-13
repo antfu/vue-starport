@@ -12,6 +12,14 @@ const list1 = computed(() => data.filter(i => i.list === 1))
 function toggle(index: number) {
   data[index].list = data[index].list === 0 ? 1 : 0
 }
+
+const mounted = ref(false)
+
+onMounted(() => {
+  nextTick(() => {
+    mounted.value = true
+  })
+})
 </script>
 
 <template>
@@ -28,7 +36,7 @@ function toggle(index: number) {
         </div>
         <Starport
           v-for="i of list0" :key="i.index +10" :port="String(i.index)"
-          :initial-props="{ class: 'mb--30' }"
+          :initial-props="mounted ? { class: 'mb--30' } : {}"
           h-30 m2 transition-all duration-800
         >
           <MyComponent :index="i.index" rounded @click="toggle(i.index)" />
@@ -40,7 +48,7 @@ function toggle(index: number) {
         </div>
         <Starport
           v-for="i of list1" :key="i.index" :port="String(i.index)"
-          :initial-props="{ class: 'mb--40' }"
+          :initial-props="mounted ? { class: 'mb--40' } : {}"
           h-40 transition-all duration-800
         >
           <MyComponent :index="i.index" @click="toggle(i.index)" />
