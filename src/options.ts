@@ -6,18 +6,30 @@ export const defaultOptions: ResolvedStarportOptions = {
   keepAlive: false,
 }
 
-export const optionsProps = {
+export const proxyProps = {
+  port: {
+    type: String,
+    required: true,
+  },
   duration: {
     type: Number,
-    require: false,
+    required: false,
   },
   easing: {
     type: String,
-    require: false,
+    required: false,
   },
   keepAlive: {
     type: Boolean,
-    require: false,
+    required: false,
     default: undefined,
   },
-}
+  mountedProps: {
+    type: Object,
+    required: false,
+  },
+  initialProps: {
+    type: Object,
+    required: false,
+  },
+} as const

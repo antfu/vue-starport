@@ -38,9 +38,17 @@ const toggle = useToggle(mode)
       <div font-600>
         Other Examples
       </div>
-      <RouterLink to="/in-page" hover:text-teal5>
-        In page transitions
-      </RouterLink>
+      <div flex="~ gap-2" justify-center>
+        <RouterLink to="/in-page" hover:text-teal5>
+          In page transitions
+        </RouterLink>
+        <div op20>
+          /
+        </div>
+        <RouterLink to="/transfer-list" hover:text-teal5>
+          Transfer List
+        </RouterLink>
+      </div>
     </div>
     <!-- for cypress -->
     <div op1>

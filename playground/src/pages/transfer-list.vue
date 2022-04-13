@@ -3,7 +3,7 @@ import { images } from '~/composables/data'
 
 const data = reactive(images.map((u, i) => ({
   index: i,
-  list: 0,
+  list: Math.random() < 0.5 ? 1 : 0,
 })))
 
 const list0 = computed(() => data.filter(i => i.list === 0))
@@ -16,21 +16,32 @@ function toggle(index: number) {
 
 <template>
   <div>
-    <div grid="~ cols-2">
+    <div flex="~ gap2" justify-center>
+      <RouterLink btn to="/" saturate-0 class="back-btn">
+        Back
+      </RouterLink>
+    </div>
+    <div grid="~ cols-2" w-200 ma p4>
       <div>
-        <div>List 0</div>
+        <div font-bold mb-2>
+          List A
+        </div>
         <Starport
-          v-for="i of list0" :key="i.index" :port="String(i.index)"
-          h-30
+          v-for="i of list0" :key="i.index +10" :port="String(i.index)"
+          :initial-props="{ class: 'mb--30' }"
+          h-30 m2 transition-all duration-800
         >
-          <MyComponent :index="i.index" @click="toggle(i.index)" />
+          <MyComponent :index="i.index" rounded @click="toggle(i.index)" />
         </Starport>
       </div>
       <div>
-        <div>List 0</div>
+        <div font-bold mb-2>
+          List B
+        </div>
         <Starport
           v-for="i of list1" :key="i.index" :port="String(i.index)"
-          h-30
+          :initial-props="{ class: 'mb--40' }"
+          h-40 transition-all duration-800
         >
           <MyComponent :index="i.index" @click="toggle(i.index)" />
         </Starport>
