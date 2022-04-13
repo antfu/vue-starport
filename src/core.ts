@@ -25,6 +25,8 @@ export const StarportCraft = defineComponent({
     const id = computed(() => sp.value.el?.id || sp.value.id)
 
     const style = computed((): StyleValue => {
+      const elapsed = Date.now() - sp.value.liftOffTime
+      const duration = Math.max(0, sp.value.options.duration - elapsed)
       const rect = sp.value.rect
       const style: StyleValue = {
         position: 'fixed',
@@ -47,7 +49,7 @@ export const StarportCraft = defineComponent({
       else {
         Object.assign(style, {
           transitionProperty: 'all',
-          transitionDuration: `${sp.value.options.duration}ms`,
+          transitionDuration: `${duration}ms`,
           transitionTimingFunction: sp.value.options.easing,
         })
       }

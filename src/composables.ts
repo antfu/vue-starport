@@ -1,7 +1,7 @@
 import type { MaybeElementRef } from '@vueuse/core'
-import { unrefElement, useResizeObserver } from '@vueuse/core'
+import { unrefElement, useRafFn } from '@vueuse/core'
 import type { EffectScope } from 'vue'
-import { effectScope, reactive, watch } from 'vue'
+import { reactive } from 'vue'
 
 export function useElementBounding(
   target: MaybeElementRef,
@@ -47,20 +47,16 @@ export function useElementBounding(
       y,
     })
   }
+  const raf = useRafFn(update, { immediate: false })
 
   function listen() {
     if (scope)
       return
     update()
-    scope = effectScope()
-    scope.run(() => {
-      useResizeObserver(target, update)
-      watch(() => unrefElement(target), ele => !ele && update())
-    })
+    raf.resume()
   }
   function pause() {
-    scope?.stop()
-    scope = undefined
+    raf.pause()
   }
 
   return rect

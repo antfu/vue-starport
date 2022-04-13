@@ -27,6 +27,7 @@ export function createStarportInstance(
     ...inlineOptions,
     ...localOptions.value,
   }))
+  const liftOffTime = ref(0)
 
   let rect: ReturnType<typeof useElementBounding> = undefined!
 
@@ -58,6 +59,7 @@ export function createStarportInstance(
     isLanded,
     isVisible,
     options,
+    liftOffTime,
     component,
     componentName,
     componentId,
@@ -72,6 +74,7 @@ export function createStarportInstance(
       if (!isLanded.value)
         return
       isLanded.value = false
+      liftOffTime.value = Date.now()
       rect.listen()
       // console.log('lift off', port)
     },
