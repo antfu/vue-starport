@@ -12,14 +12,6 @@ const listB = computed(() => data.filter(i => i.list === 1))
 function toggle(index: number) {
   data[index].list = data[index].list === 0 ? 1 : 0
 }
-
-const mounted = ref(false)
-
-onMounted(() => {
-  nextTick(() => {
-    mounted.value = true
-  })
-})
 </script>
 
 <template>
