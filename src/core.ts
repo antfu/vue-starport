@@ -23,31 +23,26 @@ export const StarportCraft = defineComponent({
     const state = inject(InjectionState)!
     const sp = computed(() => state.getInstance(props.port, props.component))
     const id = computed(() => sp.value.el?.id || sp.value.id)
+    const rect = sp.value.rect
 
     const style = computed((): StyleValue => {
-      const rect = sp.value.rect
+      console.log('computed:', rect.x, rect.y)
       const style: StyleValue = {
         position: 'fixed',
         left: 0,
         top: 0,
         width: `${rect.width ?? 0}px`,
         height: `${rect.height ?? 0}px`,
-        transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
+        transform: `translate3d(${rect.x ?? 0}px,${rect.y ?? 0}px,0px)`,
       }
       if (!sp.value.isVisible || !sp.value.el) {
         return {
           ...style,
-          opacity: 0,
           zIndex: -1,
-          pointerEvents: 'none',
-          transitionProperty: 'all',
-          // TODO: make this configurable
-          transitionDuration: `${sp.value.options.duration / 3}ms`,
-          transitionTimingFunction: sp.value.options.easing,
+          display: 'none',
         }
       }
       if (sp.value.isLanded) {
-        style.pointerEvents = 'none'
         style.display = 'none'
       }
       else {
@@ -79,7 +74,8 @@ export const StarportCraft = defineComponent({
           'data-starport-craft': sp.value.componentId,
           'data-starport-landed': sp.value.isLanded ? 'true' : undefined,
           'data-starport-floating': !sp.value.isLanded ? 'true' : undefined,
-          'onTransitionend': sp.value.land,
+          'onTransitionend': sp.value.land
+
         },
         h(
           Teleport,
@@ -125,16 +121,18 @@ export const StarportProxy = defineComponent({
       isMounted.value = true
     }
 
-    onMounted(async() => {
+    onMounted(async () => {
       if (sp.value.el) {
         if (process.env.NODE_ENV === 'development')
           console.error(`[Vue Starport] Multiple proxies of "${sp.value.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
         return
       }
+      debugger
       sp.value.el = el.value
       await nextTick()
-      isMounted.value = true
       sp.value.rect.update()
+      isMounted.value = true
+      console.log('mountrd')
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
         if (sp.value.rect.width === 0 || sp.value.rect.height === 0) {
@@ -143,16 +141,15 @@ export const StarportProxy = defineComponent({
         }
       }
     })
-    onBeforeUnmount(async() => {
+    onBeforeUnmount(async () => {
       sp.value.rect.update()
-      sp.value.liftOff()
       sp.value.el = undefined
+      sp.value.liftOff()
       isMounted.value = false
 
       if (sp.value.options.keepAlive)
         return
 
-      await nextTick()
       await nextTick()
       if (sp.value.el)
         return
@@ -163,7 +160,7 @@ export const StarportProxy = defineComponent({
 
     watch(
       () => props,
-      async() => {
+      async () => {
         // wait a tick for teleport to lift off then update the props
         if (sp.value.props)
           await nextTick()
@@ -180,7 +177,7 @@ export const StarportProxy = defineComponent({
         _attrs as any,
         (isMounted.value ? mountedProps : initialProps) || {},
       )
-
+      console.log(sp.value.isLanded)
       return h(
         'div',
         mergeProps(attrs, {
