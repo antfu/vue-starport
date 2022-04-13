@@ -6,8 +6,8 @@ const data = reactive(images.map((u, i) => ({
   list: Math.random() < 0.5 ? 1 : 0,
 })))
 
-const list0 = computed(() => data.filter(i => i.list === 0))
-const list1 = computed(() => data.filter(i => i.list === 1))
+const listA = computed(() => data.filter(i => i.list === 0))
+const listB = computed(() => data.filter(i => i.list === 1))
 
 function toggle(index: number) {
   data[index].list = data[index].list === 0 ? 1 : 0
@@ -34,26 +34,46 @@ onMounted(() => {
         <div font-bold mb-2>
           List A
         </div>
-        <Starport
-          v-for="i of list0" :key="i.index +10" :port="String(i.index)"
-          :initial-props="mounted ? { class: 'mb--30' } : {}"
-          h-30 m2 transition-all duration-800
-        >
-          <MyComponent :index="i.index" rounded @click="toggle(i.index)" />
-        </Starport>
+        <TransitionGroup name="proxy-list-a">
+          <Starport
+            v-for="i of listA" :key="i.index" :port="String(i.index)"
+            h-30 m2
+          >
+            <MyComponent :index="i.index" rounded @click="toggle(i.index)" />
+          </Starport>
+        </TransitionGroup>
       </div>
       <div>
         <div font-bold mb-2>
           List B
         </div>
-        <Starport
-          v-for="i of list1" :key="i.index" :port="String(i.index)"
-          :initial-props="mounted ? { class: 'mb--40' } : {}"
-          h-40 transition-all duration-800
-        >
-          <MyComponent :index="i.index" @click="toggle(i.index)" />
-        </Starport>
+        <TransitionGroup name="proxy-list-b">
+          <Starport
+            v-for="i of listB" :key="i.index" :port="String(i.index)"
+            h-40
+          >
+            <MyComponent :index="i.index" @click="toggle(i.index)" />
+          </Starport>
+        </TransitionGroup>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+.proxy-list-a-enter-active,
+.proxy-list-a-leave-active,
+.proxy-list-b-enter-active,
+.proxy-list-b-leave-active {
+  transition: all 0.8s ease;
+}
+
+.proxy-list-a-enter-from,
+.proxy-list-a-leave-to {
+  margin-bottom: -7.5rem !important;
+}
+.proxy-list-b-enter-from,
+.proxy-list-b-leave-to {
+  margin-bottom: -10rem !important;
+}
+</style>

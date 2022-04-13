@@ -37,7 +37,6 @@ export const StarportCraft = defineComponent({
       if (!sp.value.isVisible || !sp.value.el) {
         return {
           ...style,
-          opacity: 0,
           zIndex: -1,
           pointerEvents: 'none',
           transitionProperty: 'all',
