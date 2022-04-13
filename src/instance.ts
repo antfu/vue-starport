@@ -32,8 +32,8 @@ export function createStarportInstance(
   let rect: UseElementBoundingReturn = undefined!
 
   scope.run(() => {
-    rect = useElementBounding(el, { reset: false })
-    watch(el, async(v) => {
+    rect = useElementBounding(el, { reset: false, windowScroll: false, windowResize: false })
+    watch(el, async (v) => {
       if (v)
         isVisible.value = true
       await nextTick()
