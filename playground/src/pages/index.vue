@@ -26,6 +26,7 @@ const toggle = useToggle(mode)
         <Starport
           :port="String(idx)"
           :class="mode ? 'aspect-1/1 m2' : 'aspect-16/9'"
+          transition-all duration-800
         >
           <MyComponent
             :class="mode ? 'rounded shadow-lg' : ''"
