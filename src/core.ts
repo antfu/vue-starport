@@ -32,21 +32,16 @@ export const StarportCraft = defineComponent({
         top: 0,
         width: `${rect.width ?? 0}px`,
         height: `${rect.height ?? 0}px`,
-        transform: `translate3d(${rect.x ?? 0}px, ${rect.y ?? 0}px,0px)`,
+        transform: `translate3d(${rect.x ?? 0}px,${rect.y ?? 0}px,0px)`,
       }
       if (!sp.value.isVisible || !sp.value.el) {
         return {
           ...style,
           zIndex: -1,
-          pointerEvents: 'none',
-          transitionProperty: 'all',
-          // TODO: make this configurable
-          transitionDuration: `${sp.value.options.duration / 3}ms`,
-          transitionTimingFunction: sp.value.options.easing,
+          display: 'none',
         }
       }
       if (sp.value.isLanded) {
-        style.pointerEvents = 'none'
         style.display = 'none'
       }
       else {
