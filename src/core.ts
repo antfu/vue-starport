@@ -26,7 +26,6 @@ export const StarportCraft = defineComponent({
     const rect = sp.value.rect
 
     const style = computed((): StyleValue => {
-      console.log('computed:', rect.x, rect.y)
       const style: StyleValue = {
         position: 'fixed',
         left: 0,
@@ -74,7 +73,7 @@ export const StarportCraft = defineComponent({
           'data-starport-craft': sp.value.componentId,
           'data-starport-landed': sp.value.isLanded ? 'true' : undefined,
           'data-starport-floating': !sp.value.isLanded ? 'true' : undefined,
-          'onTransitionend': sp.value.land
+          'onTransitionend': sp.value.land,
 
         },
         h(
@@ -121,18 +120,16 @@ export const StarportProxy = defineComponent({
       isMounted.value = true
     }
 
-    onMounted(async () => {
+    onMounted(async() => {
       if (sp.value.el) {
         if (process.env.NODE_ENV === 'development')
           console.error(`[Vue Starport] Multiple proxies of "${sp.value.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
         return
       }
-      debugger
       sp.value.el = el.value
       await nextTick()
       sp.value.rect.update()
       isMounted.value = true
-      console.log('mountrd')
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {
         if (sp.value.rect.width === 0 || sp.value.rect.height === 0) {
@@ -141,7 +138,7 @@ export const StarportProxy = defineComponent({
         }
       }
     })
-    onBeforeUnmount(async () => {
+    onBeforeUnmount(async() => {
       sp.value.rect.update()
       sp.value.el = undefined
       sp.value.liftOff()
@@ -160,7 +157,7 @@ export const StarportProxy = defineComponent({
 
     watch(
       () => props,
-      async () => {
+      async() => {
         // wait a tick for teleport to lift off then update the props
         if (sp.value.props)
           await nextTick()
@@ -177,7 +174,6 @@ export const StarportProxy = defineComponent({
         _attrs as any,
         (isMounted.value ? mountedProps : initialProps) || {},
       )
-      console.log(sp.value.isLanded)
       return h(
         'div',
         mergeProps(attrs, {

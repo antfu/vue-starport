@@ -5,7 +5,6 @@ import { reactive } from 'vue'
 export function useElementBounding(
   target: MaybeElementRef,
 ) {
-
   const rect = reactive({
     height: 0,
     bottom: 0,
