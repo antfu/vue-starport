@@ -13,11 +13,6 @@ const app = createApp(App)
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior() {
-    // always scroll to top
-    // TODO: make this not required
-    return { top: 0 }
-  },
 })
 app.use(router)
 app.use(Starport({ keepAlive: true }))

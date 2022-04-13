@@ -47,7 +47,7 @@ export const StarportCraft = defineComponent({
       else {
         Object.assign(style, {
           transitionProperty: 'all',
-          transitionDuration: `${sp.value.options.duration}ms`,
+          transitionDuration: `${duration}ms`,
           transitionTimingFunction: sp.value.options.easing,
         })
       }
