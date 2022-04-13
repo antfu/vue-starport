@@ -1,7 +1,7 @@
+import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { useElementBounding } from '@vueuse/core'
 import type { Component, Ref } from 'vue'
-import { computed, effectScope, reactive, ref, watch } from 'vue'
 import { defaultOptions } from './options'
 import type { ResolvedStarportOptions, StarportOptions } from './types'
 import { getComponentName, kebabCase, nanoid } from './utils'
@@ -36,6 +36,7 @@ export function createStarportInstance(
     watch(el, async(v) => {
       if (v)
         isVisible.value = true
+      await nextTick()
       if (!el.value)
         isVisible.value = false
     })
@@ -72,11 +73,13 @@ export function createStarportInstance(
       if (!isLanded.value)
         return
       isLanded.value = false
+      // console.log('lift off', port)
     },
     land() {
       if (isLanded.value)
         return
       isLanded.value = true
+      // console.log('land', port)
     },
   })
 }

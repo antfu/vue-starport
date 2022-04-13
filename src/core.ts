@@ -145,6 +145,7 @@ export const StarportProxy = defineComponent({
     })
 
     onBeforeUnmount(async() => {
+      sp.value.rect.update()
       sp.value.liftOff()
       sp.value.el = undefined
 
