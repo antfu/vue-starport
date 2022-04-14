@@ -19,6 +19,7 @@ export function useElementBounding(
   })
 
   let scope: EffectScope | undefined
+  const dom = document.documentElement || document.body
 
   function update() {
     const el = unrefElement(target)
@@ -38,7 +39,7 @@ export function useElementBounding(
       bottom,
       left,
       right,
-      top,
+      top: dom.scrollTop + top,
     })
   }
   const raf = useRafFn(update, { immediate: false })
