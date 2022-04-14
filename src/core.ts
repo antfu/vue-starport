@@ -28,8 +28,9 @@ export const StarportCraft = defineComponent({
       const elapsed = Date.now() - sp.value.liftOffTime
       const duration = Math.max(0, sp.value.options.duration - elapsed)
       const rect = sp.value.rect
+
       const style: StyleValue = {
-        position: 'fixed',
+        position: 'absolute',
         left: 0,
         top: 0,
         width: `${rect.width ?? 0}px`,
