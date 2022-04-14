@@ -35,7 +35,7 @@ Thus I started this new approach **Starport** to experiment with a better soluti
 
 So since we can't share the components across different branches in the component tree, we could actually hoist them to the root so they become independent from the routes.
 
-To allow each page to still have control of the components, we introduced a **Proxy component** to present the expected size and position of that component. The proxy will pass the props and position infomation to the actual component and let it "fly over" the proxy with animations.
+To allow each page to still have control of the components, we introduced a **Proxy component** to present the expected size and position of that component. The proxy will pass the props and position information to the actual component and let it "fly over" the proxy with animations.
 
 <p align="center">
 <img src="./graphs/graph2.png" width="450" />
@@ -152,7 +152,7 @@ app.use(StarportPlugin({ keepAlive: true }))
 
 ## Debug
 
-To debug what happends during the transition, you can add the follow CSS to highlight the parts
+To debug what happens during the transition, you can add the follow CSS to highlight the parts
 
 ```css
 [data-starport-craft] {
