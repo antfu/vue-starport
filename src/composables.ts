@@ -13,8 +13,6 @@ export function useElementBounding(
     left: 0,
     right: 0,
     top: 0,
-    x: 0,
-    y: 0,
     update,
     listen,
     pause,
@@ -33,8 +31,6 @@ export function useElementBounding(
       left,
       right,
       top,
-      x,
-      y,
     } = el.getBoundingClientRect()
     Object.assign(rect, {
       height,
@@ -43,8 +39,6 @@ export function useElementBounding(
       left,
       right,
       top,
-      x,
-      y,
     })
   }
   const raf = useRafFn(update, { immediate: false })
