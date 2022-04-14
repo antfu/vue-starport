@@ -27,7 +27,7 @@ export const StarportCraft = defineComponent({
 
     const style = computed((): StyleValue => {
       const style: StyleValue = {
-        position: 'fixed',
+        position: 'absolute',
         left: 0,
         top: 0,
         width: `${rect.width ?? 0}px`,
@@ -113,7 +113,6 @@ export const StarportProxy = defineComponent({
     const el = ref<HTMLElement>()
     const id = sp.value.generateId()
     const isMounted = ref(false)
-    const Dom = document.documentElement
 
     // first time appearing, directly landed
     if (!sp.value.isVisible) {
@@ -130,8 +129,7 @@ export const StarportProxy = defineComponent({
       sp.value.el = el.value
       await nextTick()
       sp.value.rect.update()
-      const scrollTop = Dom.scrollTop
-      sp.value.rect.y = scrollTop + sp.value.rect.y
+      await nextTick()
       isMounted.value = true
       // warn if no width or height
       if (process.env.NODE_ENV === 'development') {

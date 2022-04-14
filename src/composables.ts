@@ -16,11 +16,13 @@ export function useElementBounding(
     y: 0,
     update,
   })
+  const dom = document.documentElement || document.body
 
   function update() {
     const el = unrefElement(target)
     if (!el)
       return
+
     const {
       height,
       width,
@@ -40,7 +42,7 @@ export function useElementBounding(
       right,
       top,
       x,
-      y,
+      y: dom.scrollTop + y,
     })
   }
 
