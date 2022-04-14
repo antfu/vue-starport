@@ -12,8 +12,6 @@ export function useElementBounding(
     left: 0,
     right: 0,
     top: 0,
-    x: 0,
-    y: 0,
     update,
   })
   const dom = document.documentElement || document.body
@@ -30,8 +28,6 @@ export function useElementBounding(
       left,
       right,
       top,
-      x,
-      y,
     } = el.getBoundingClientRect()
 
     Object.assign(rect, {
@@ -40,9 +36,7 @@ export function useElementBounding(
       bottom,
       left,
       right,
-      top,
-      x,
-      y: dom.scrollTop + y,
+      top: dom.scrollTop + top,
     })
   }
 
