@@ -9,7 +9,7 @@ import { StarportCraft, StarportProxy } from './core'
 
 /**
  * The carrier component for all the flying Starport components
- * Should be intialized in App.vue only once.
+ * Should be initialized in App.vue only once.
  */
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
@@ -42,7 +42,7 @@ export const Starport = defineComponent({
     const state = inject(InjectionState)
 
     if (!state)
-      throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initalized it?')
+      throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
 
     const isMounted = ref(false)
     onMounted(() => {
