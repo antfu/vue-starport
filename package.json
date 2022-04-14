@@ -1,6 +1,6 @@
 {
   "name": "vue-starport",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "packageManager": "pnpm@6.32.3",
   "description": "Shared Vue component across routes with animations",
   "keywords": [
