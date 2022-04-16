@@ -1,35 +1,10 @@
 import { isObject } from '@vueuse/core'
 import type { DefineComponent } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, isVNode, markRaw, onMounted, ref } from 'vue'
-import { InjectionOptions, InjectionState } from './constants'
-import { proxyProps } from './options'
-import type { StarportProps } from './types'
-import { createInternalState } from './state'
-import { StarportCraft, StarportProxy } from './core'
-
-/**
- * The carrier component for all the flying Starport components
- * Should be initialized in App.vue only once.
- */
-export const StarportCarrier = defineComponent({
-  name: 'StarportCarrier',
-  setup(_, { slots }) {
-    const state = createInternalState(inject(InjectionOptions, {}))
-    const app = getCurrentInstance()!.appContext.app
-    app.provide(InjectionState, state)
-
-    return () => {
-      return [
-        slots.default?.(),
-        Array.from(state.portMap.entries())
-          .map(([port, { component }]) => h(
-            StarportCraft,
-            { key: port, port, component },
-          )),
-      ]
-    }
-  },
-}) as DefineComponent<{}>
+import { defineComponent, h, inject, isVNode, markRaw, onMounted, ref } from 'vue'
+import { InjectionState } from '../constants'
+import { proxyProps } from '../options'
+import type { StarportProps } from '../types'
+import { StarportProxy } from './StarportProxy'
 
 /**
  * The proxy component wrapper for the Starport.
