@@ -66,7 +66,7 @@ npm i vue-starport
 
 > Vue Starport 仅支持 Vue 3
 
-## 实用
+## 使用
 
 在`App.vue`根组件处,从`vue-starport`导出并添加`<StarportCarrier>`组件到 DOM 末尾处。 `<StarportCarrier>`将是存放所有飞行组件的地方。
 
