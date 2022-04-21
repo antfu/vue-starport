@@ -23,7 +23,7 @@ Vue 跨路由组件共享
 Vue 的组件结构以 **树** 的形式呈现，在不同分支中的子组件有其各自的实例，这意味着当用户在路由之间跳转时，同样的组件并不会跨路由共享。
 
 <p align="center">
-<img src="./graphs/graph1-zh.png" width="400" style="border-radius:10px"/>
+<img src="./graphs/graph1.zh.png" width="400" style="border-radius:10px"/>
 </p>
 
 因为它们是两个不同的实例，这意味着你无法直接为它们的添加补间动画。幸运的是，有一种叫做 [FLIP](https://github.com/googlearchive/flipjs) 的技术可以模拟不同组件之间的过渡动画。
@@ -39,13 +39,13 @@ Vue 的组件结构以 **树** 的形式呈现，在不同分支中的子组件�
 为了让每个页面仍然可以控制组件，我们引入了一个 **代理组件** 来表示该组件的预期大小和位置。代理组件将把 props 和位置信息传递给真实的组件，并让它通过补间动画 “飞” 到代理组件的位置。
 
 <p align="center">
-<img src="./graphs/graph2-zh.png" width="450" style="border-radius:10px"/>
+<img src="./graphs/graph2.zh.png" width="450" style="border-radius:10px"/>
 </p>
 
 当动画结束并且它到达预期位置时，它将使用 [`<Teleport/>`](https://vuejs.org/guide/built-ins/teleport.html) 组件来 “着陆” 到 DOM 树的实际节点。
 
 <p align="center">
-<img src="./graphs/graph3-zh.png" width="400" style="border-radius:10px"/>
+<img src="./graphs/graph3.zh.png" width="400" style="border-radius:10px"/>
 </p>
 
 有了这种 “着陆” 的机制，DOM 树将保留原始的结构。当跳转到另一路由时，组件又将 “起飞” 变回漂浮的状态，“飞行” 到新的位置，然后再次 “着陆”。
