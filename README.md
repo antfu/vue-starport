@@ -10,7 +10,7 @@ Shared Vue component across routes with animations
 
 <p align="center"><a href="https://www.npmjs.com/package/vue-starport"><img src="https://img.shields.io/npm/v/vue-starport?color=3fb883&amp;label=" alt="NPM version"></a></p>
 
-<p align="center"><a href="https://vue-starport.netlify.app/">Live Demo</a></p>
+<p align="center"><a href="http://www.hejian.club/">Live Demo</a></p>
 <p align="center">English | <a href="./README.zh-Hans.md">简体中文</a></p>
 
 <br>
