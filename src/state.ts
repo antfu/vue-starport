@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import type { Component } from 'vue'
 import type { StarportOptions } from './types'
 import type { StarportInstance } from './instance'
@@ -28,5 +28,19 @@ export function createInternalState(options: StarportOptions) {
     getInstance,
   }
 }
-
 export type InternalState = ReturnType<typeof createInternalState>
+
+export function createGlobalState() {
+  const isCarrierReady = ref(false)
+
+  function ready() {
+    isCarrierReady.value = true
+  }
+
+  return {
+    isCarrierReady,
+    ready,
+  }
+}
+
+export type GlobalState = ReturnType<typeof createGlobalState>

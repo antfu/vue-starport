@@ -1,7 +1,7 @@
 import { isObject } from '@vueuse/core'
 import type { DefineComponent } from 'vue'
-import { defineComponent, h, inject, isVNode, markRaw, onMounted, ref } from 'vue'
-import { InjectionState } from '../constants'
+import { defineComponent, h, inject, isVNode, markRaw, watch } from 'vue'
+import { InjectionGlobalState, InjectionState } from '../constants'
 import { proxyProps } from '../options'
 import type { StarportProps } from '../types'
 import { StarportProxy } from './StarportProxy'
@@ -14,17 +14,24 @@ export const Starport = defineComponent({
   inheritAttrs: true,
   props: proxyProps,
   setup(props, ctx) {
-    const state = inject(InjectionState)
+    const globalState = inject(InjectionGlobalState)
 
-    if (!state)
-      throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
+    function init() {
+      const state = inject(InjectionState)
 
-    const isMounted = ref(false)
-    onMounted(() => {
-      isMounted.value = true
+      if (!state)
+        throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
+    }
+
+    watch(() => globalState?.isCarrierReady, (nVal) => {
+      if (nVal)
+        init()
     })
 
     return () => {
+      if (!globalState?.isCarrierReady.value)
+        return null
+
       const slots = ctx.slots.default?.()
 
       if (!slots)

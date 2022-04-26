@@ -1,6 +1,6 @@
 import type { DefineComponent } from 'vue'
 import { defineComponent, getCurrentInstance, h, inject } from 'vue'
-import { InjectionOptions, InjectionState } from '../constants'
+import { InjectionGlobalState, InjectionOptions, InjectionState } from '../constants'
 import { createInternalState } from '../state'
 import { StarportCraft } from './StarportCraft'
 
@@ -14,6 +14,7 @@ export const StarportCarrier = defineComponent({
     const state = createInternalState(inject(InjectionOptions, {}))
     const app = getCurrentInstance()!.appContext.app
     app.provide(InjectionState, state)
+    inject(InjectionGlobalState)?.ready()
 
     return () => {
       return [
