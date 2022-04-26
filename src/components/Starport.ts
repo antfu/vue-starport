@@ -1,6 +1,6 @@
 import { isObject } from '@vueuse/core'
 import type { DefineComponent } from 'vue'
-import { defineComponent, h, inject, isVNode, markRaw, watch } from 'vue'
+import { defineComponent, h, inject, isVNode, markRaw, onMounted, watch } from 'vue'
 import { InjectionGlobalState, InjectionState } from '../constants'
 import { proxyProps } from '../options'
 import type { StarportProps } from '../types'
@@ -22,6 +22,14 @@ export const Starport = defineComponent({
       if (!state)
         throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
     }
+
+    onMounted(() => {
+      setTimeout(() => {
+        // avoiding forgeting to create <StarportCarrier> component
+        if (!globalState?.isCarrierReady.value)
+          init()
+      })
+    })
 
     watch(() => globalState?.isCarrierReady, (nVal) => {
       if (nVal)
