@@ -15,6 +15,9 @@ export const Starport = defineComponent({
   props: proxyProps,
   setup(props, ctx) {
     const globalState = inject(InjectionGlobalState)
+    if (!globalState)
+      return
+    const { isCarrierReady } = globalState
 
     function init() {
       const state = inject(InjectionState)
@@ -23,21 +26,20 @@ export const Starport = defineComponent({
         throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
     }
 
+    const _unWatch = watch(() => isCarrierReady, nVal => nVal && init())
+
     onMounted(() => {
+      // avoiding forgeting to create <StarportCarrier> component
       setTimeout(() => {
-        // avoiding forgeting to create <StarportCarrier> component
-        if (!globalState?.isCarrierReady.value)
+        if (!isCarrierReady.value)
           init()
+
+        _unWatch()
       })
     })
 
-    watch(() => globalState?.isCarrierReady, (nVal) => {
-      if (nVal)
-        init()
-    })
-
     return () => {
-      if (!globalState?.isCarrierReady.value)
+      if (!isCarrierReady.value)
         return null
 
       const slots = ctx.slots.default?.()
