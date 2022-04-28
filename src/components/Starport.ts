@@ -14,14 +14,15 @@ export const Starport = defineComponent({
   inheritAttrs: true,
   props: proxyProps,
   setup(props, ctx) {
-    const state = inject(InjectionState)
-
-    if (!state)
-      throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
-
     const isMounted = ref(false)
     onMounted(() => {
       isMounted.value = true
+
+      if (process.env.NODE_ENV === 'development') {
+        const state = inject(InjectionState)
+        if (!state)
+          throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
+      }
     })
 
     return () => {
