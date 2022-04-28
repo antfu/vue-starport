@@ -1,5 +1,5 @@
 import type { DefineComponent } from 'vue'
-import { computed, defineComponent, h, inject, mergeProps, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, h, inject, mergeProps, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { InjectionState } from '../constants'
 import { proxyProps } from '../options'
 import type { StarportProxyProps } from '../types'
@@ -105,3 +105,12 @@ export const StarportProxy = defineComponent({
     }
   },
 }) as DefineComponent<StarportProxyProps>
+
+export const AsyncStarportProxy = defineAsyncComponent(async() => {
+  const state = inject(InjectionState, null)
+
+  if (!state)
+    await nextTick()
+
+  return StarportProxy
+})

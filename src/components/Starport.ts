@@ -4,7 +4,7 @@ import { defineComponent, h, inject, isVNode, markRaw, onMounted, ref } from 'vu
 import { InjectionState } from '../constants'
 import { proxyProps } from '../options'
 import type { StarportProps } from '../types'
-import { StarportProxy } from './StarportProxy'
+import { AsyncStarportProxy as StarportProxy } from './StarportProxy'
 
 /**
  * The proxy component wrapper for the Starport.
