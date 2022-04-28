@@ -17,6 +17,6 @@ const router = createRouter({
 app.use(router)
 app.use(Starport({ keepAlive: true }))
 
-await router.isReady()
-
-app.mount('#app')
+router.isReady().then(() => {
+  app.mount('#app')
+})
