@@ -75,14 +75,12 @@ export function createStarportInstance(
         return
       isLanded.value = false
       liftOffTime.value = Date.now()
-      rect.listen()
       // console.log('lift off', port)
     },
     land() {
       if (isLanded.value)
         return
       isLanded.value = true
-      rect.pause()
       // console.log('land', port)
     },
   })
