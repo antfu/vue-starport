@@ -21,7 +21,7 @@ export const Starport = defineComponent({
       if (process.env.NODE_ENV === 'development') {
         const state = inject(InjectionState)
         if (!state)
-          throw new Error('[Vue Starport] Failed to find <StarportCarrier>, have you initialized it?')
+          throw new Error('[Vue Starport] Failed to find the carrier, all Starport components must be wrapped in a <StarportCarrier> component.')
       }
     })
 

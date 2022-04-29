@@ -20,6 +20,9 @@ export const StarportCraft = defineComponent({
   },
   setup(props) {
     const state = inject(InjectionState)!
+    if (!state)
+      throw new Error('[Vue Starport] Failed to find the carrier, all Starport components must be wrapped in a <StarportCarrier> component.')
+
     const sp = computed(() => state.getInstance(props.port, props.component))
     const id = computed(() => sp.value.el?.id || sp.value.id)
 
