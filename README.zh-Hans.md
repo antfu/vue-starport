@@ -68,7 +68,7 @@ npm i vue-starport
 
 ## 使用
 
-在 `App.vue` 根组件处，从 `vue-starport` 导出并添加 `<StarportCarrier>` 组件到 DOM 末尾处。 `<StarportCarrier>` 将是存放所有飞行组件的地方。
+从 `vue-starport` 导出并添加 `<StarportCarrier>` 组件到根组件 (`app.vue`)。 所有的 `<Startport>` 组件调用需要在 `<StarportCarrier>` 组件内部。
 
 ```html
 <script setup>
@@ -76,9 +76,9 @@ npm i vue-starport
 </script>
 
 <template>
-  <RouterView />
-  <StarportCarrier />
-  <!-- 这里 -->
+  <StarportCarrier> <!-- 这里 -->
+    <RouterView />
+  </StarportCarrier>
 </template>
 ```
 

@@ -68,7 +68,7 @@ npm i vue-starport
 
 ## Usage
 
-At root `App.vue`, add `<StarportCarrier>` component from `vue-starport` at the end of the dom. `<StarportCarrier>` will be the place to store all the flying components.
+Add `<StarportCarrier>` component from `vue-starport` to your root component (`app.vue`). All `<Startport>` usage should be inside `<StarportCarrier>` component.
 
 ```html
 <script setup>
@@ -76,8 +76,9 @@ import { StarportCarrier } from 'vue-starport'
 </script>
 
 <template>
-  <RouterView />
-  <StarportCarrier /> <!-- here -->
+  <StarportCarrier> <!-- here -->
+    <RouterView />
+  </StarportCarrier>
 </template>
 ```
 
