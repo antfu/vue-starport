@@ -1,5 +1,5 @@
 import type { MaybeElementRef } from '@vueuse/core'
-import { unrefElement, useRafFn } from '@vueuse/core'
+import { isClient, unrefElement, useRafFn } from '@vueuse/core'
 import type { EffectScope } from 'vue'
 import { reactive } from 'vue'
 
@@ -17,18 +17,22 @@ export function useElementBounding(
   })
 
   let scope: EffectScope | undefined
-  const root = document.documentElement || document.body
+  const root = isClient ? (document.documentElement || document.body) : undefined
 
   function update() {
+    if (!isClient)
+      return
     const el = unrefElement(target)
     if (!el)
       return
     const { height, width, left, top } = el.getBoundingClientRect()
-    Object.assign(rect, { height, width, left, top: root.scrollTop + top })
+    Object.assign(rect, { height, width, left, top: root!.scrollTop + top })
   }
   const raf = useRafFn(update, { immediate: false })
 
   function listen() {
+    if (!isClient)
+      return
     if (scope)
       return
     update()
