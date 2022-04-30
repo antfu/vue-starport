@@ -167,7 +167,7 @@ app.use(StarportPlugin({ keepAlive: true }))
 
 ## 鸣谢
 
-感谢 [@hangsman](https://github.com/hangsman)，他帮助提供了使用 `<Teleport>` 的最初解决方案，从而让这个想法得以实装。也感谢 [我在 Bilibili 的直播](https://space.bilibili.com/668380)观众，与我一起研究这个想法并在直播期间提供了许多宝贵的反馈。
+感谢 [@hangsman](https://github.com/hangsman)，他帮助提供了使用 `<Teleport>` 的最初解决方案，从而让这个想法得以实现。也感谢 [我在 Bilibili 的直播](https://space.bilibili.com/668380)观众，与我一起研究这个想法并在直播期间提供了许多宝贵的反馈。
 
 你可以在哔哩哔哩观看我实现此项目的 [直播录像](https://www.bilibili.com/video/BV1na41147qR)。
 
