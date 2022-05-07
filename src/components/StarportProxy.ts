@@ -61,7 +61,6 @@ export const StarportProxy = defineComponent({
         return
 
       await nextTick()
-      await nextTick()
       if (sp.value.el)
         return
 
