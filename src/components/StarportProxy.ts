@@ -43,13 +43,6 @@ export const StarportProxy = defineComponent({
       await nextTick()
       isMounted.value = true
       sp.value.rect.update()
-      // warn if no width or height
-      if (process.env.NODE_ENV === 'development') {
-        if (sp.value.rect.width === 0 || sp.value.rect.height === 0) {
-          const attr = sp.value.rect.width === 0 ? 'width' : 'height'
-          console.warn(`[Vue Starport] The proxy of component "${sp.value.componentName}" has no ${attr} on initial render, have you set the size for it?`)
-        }
-      }
     })
     onBeforeUnmount(async() => {
       sp.value.rect.update()
