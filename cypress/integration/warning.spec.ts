@@ -23,7 +23,7 @@ context('warnings', () => {
     cy.url()
       .should('eq', 'http://localhost:3000/warning-no-size')
 
-    cy.get('@consoleWarn').should('be.calledWith', 'has no height on initial render, have you set the size for it?')
+    cy.get('@consoleWarn').should('be.calledWith', '[Vue Starport] The proxy of component "MyComponent" (port "0") has no height on initial render, have you set the size for it?')
     cy.get('@consoleError').should('not.be.called')
   })
 
