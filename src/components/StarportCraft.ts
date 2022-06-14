@@ -37,6 +37,8 @@ export const StarportCraft = defineComponent({
         top: 0,
         width: `${rect.width}px`,
         height: `${rect.height}px`,
+        margin: rect.margin,
+        padding: rect.padding,
         transform: `translate3d(${rect.left}px,${rect.top}px,0px)`,
       }
       if (!sp.value.isVisible || !sp.value.el) {
