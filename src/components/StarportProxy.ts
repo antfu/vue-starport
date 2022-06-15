@@ -33,7 +33,7 @@ export const StarportProxy = defineComponent({
       isMounted.value = true
     }
 
-    onMounted(async() => {
+    onMounted(async () => {
       if (sp.value.el) {
         if (process.env.NODE_ENV === 'development')
           console.error(`[Vue Starport] Multiple proxies of "${sp.value.componentName}" with port "${props.port}" detected. The later one will be ignored.`)
@@ -53,7 +53,7 @@ export const StarportProxy = defineComponent({
         }
       }
     })
-    onBeforeUnmount(async() => {
+    onBeforeUnmount(async () => {
       sp.value.rect.update()
       sp.value.liftOff()
       sp.value.el = undefined
@@ -73,7 +73,7 @@ export const StarportProxy = defineComponent({
 
     watch(
       () => props,
-      async() => {
+      async () => {
         // wait a tick for teleport to lift off then update the props
         if (sp.value.props)
           await nextTick()

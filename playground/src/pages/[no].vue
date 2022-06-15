@@ -41,7 +41,7 @@ function reset() {
     >
       <Starport
         :port="String(index)"
-        :style="{ width: size + 'px', height: size + 'px' }"
+        :style="{ width: `${size}px`, height: `${size}px` }"
         transition-all duration-800
       >
         <MyComponent
@@ -65,7 +65,7 @@ function reset() {
       </p>
       <Starport
         :port="String(next)"
-        :style="{ width: size + 'px', height: size + 'px' }"
+        :style="{ width: `${size}px`, height: `${size}px` }"
         transition-all duration-800
       >
         <MyComponent

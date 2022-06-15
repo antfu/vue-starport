@@ -64,12 +64,12 @@ export const StarportCraft = defineComponent({
     const additionalProps = process.env.NODE_ENV === 'production'
       ? {}
       : {
-        onTransitionend(e: TransitionEvent) {
-          if (sp.value.isLanded)
-            return
-          console.warn(`[Vue Starport] Transition duration of component "${sp.value.componentName}" is too short (${e.elapsedTime}s) that may cause animation glitches. Try to increase the duration of that component, or decrease the duration the Starport (current: ${sp.value.options.duration / 1000}s).`)
-        },
-      }
+          onTransitionend(e: TransitionEvent) {
+            if (sp.value.isLanded)
+              return
+            console.warn(`[Vue Starport] Transition duration of component "${sp.value.componentName}" is too short (${e.elapsedTime}s) that may cause animation glitches. Try to increase the duration of that component, or decrease the duration the Starport (current: ${sp.value.options.duration / 1000}s).`)
+          },
+        }
 
     return () => {
       const teleport = !!(sp.value.isLanded && sp.value.el)

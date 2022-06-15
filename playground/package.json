@@ -7,20 +7,20 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@vueuse/core": "^8.2.5",
-    "nanoid": "^3.3.2",
-    "vue": "^3.2.32",
-    "vue-router": "^4.0.14"
+    "@vueuse/core": "^8.6.0",
+    "nanoid": "^4.0.0",
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.1.3",
-    "@unocss/reset": "^0.31.2",
-    "@vitejs/plugin-vue": "^2.3.1",
-    "eslint": "^8.13.0",
-    "unocss": "^0.31.2",
-    "unplugin-auto-import": "^0.7.0",
-    "unplugin-vue-components": "^0.19.2",
-    "vite": "^2.9.1",
-    "vite-plugin-pages": "^0.22.0"
+    "@iconify-json/carbon": "^1.1.5",
+    "@unocss/reset": "^0.39.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "eslint": "^8.17.0",
+    "unocss": "^0.39.0",
+    "unplugin-auto-import": "^0.8.8",
+    "unplugin-vue-components": "^0.19.6",
+    "vite": "^2.9.12",
+    "vite-plugin-pages": "^0.24.1"
   }
 }
