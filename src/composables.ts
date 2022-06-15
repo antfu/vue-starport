@@ -14,6 +14,8 @@ export function useElementBounding(
     update,
     listen,
     pause,
+    margin: '0px',
+    padding: '0px',
   })
 
   let scope: EffectScope | undefined
@@ -26,7 +28,10 @@ export function useElementBounding(
     if (!el)
       return
     const { height, width, left, top } = el.getBoundingClientRect()
-    Object.assign(rect, { height, width, left, top: root!.scrollTop + top })
+    const domStyle = window.getComputedStyle(el)
+    const margin = domStyle.margin
+    const padding = domStyle.padding
+    Object.assign(rect, { height, width, left, top: root!.scrollTop + top, margin, padding })
   }
   const raf = useRafFn(update, { immediate: false })
 
