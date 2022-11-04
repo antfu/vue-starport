@@ -68,7 +68,7 @@ npm i vue-starport
 
 ## Usage
 
-Add `<StarportCarrier>` component from `vue-starport` to your root component (`app.vue`). All `<Startport>` usage should be inside `<StarportCarrier>` component.
+Add `<StarportCarrier>` component from `vue-starport` to your root component (`app.vue`). All `<Starport>` usage should be inside `<StarportCarrier>` component.
 
 ```html
 <script setup>
