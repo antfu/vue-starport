@@ -68,7 +68,7 @@ npm i vue-starport
 
 ## 使用
 
-从 `vue-starport` 导出并添加 `<StarportCarrier>` 组件到根组件 (`app.vue`)。 所有的 `<Startport>` 组件调用需要在 `<StarportCarrier>` 组件内部。
+从 `vue-starport` 导出并添加 `<StarportCarrier>` 组件到根组件 (`app.vue`)。 所有的 `<Starport>` 组件调用需要在 `<StarportCarrier>` 组件内部。
 
 ```html
 <script setup>
