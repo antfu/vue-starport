@@ -53,7 +53,7 @@
     "@antfu/ni": "^0.21.8",
     "@types/node": "^20.5.9",
     "bumpp": "^9.2.0",
-    "cypress": "^13.1.0",
+    "cypress": "^9.5.4",
     "eslint": "^8.48.0",
     "nanoid": "^4.0.2",
     "pkgroll": "^1.11.0",
