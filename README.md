@@ -16,6 +16,8 @@ Shared Vue component across routes with animations
 <br>
 <br>
 
+> **Note**: With the [View Transitions API](https://developer.chrome.com/docs/web-platform/view-transitions/) coming to the browsers, you may not this library anymore (even tho it's not a 1:1 replacement as View Transition does not preseve dom and state).
+
 ## Why?
 
 It's quite common you might have a same component used in different routes (pages) with a bit different sizes and positions. Sometimes you might want to animate them when user navigates between routes to provide a smooth UX. While such animation is common to be seen in native apps, it's could be a bit challenging to do it in Web.

@@ -16,6 +16,8 @@ Vue 跨路由组件共享
 <br>
 <br>
 
+> **Note**：随着 [View Transitions API](https://developer.chrome.com/docs/web-platform/view-transitions/) 的到来，你可能不再需要这个库了（尽管它不是完全的替代品，因为 View Transition 不会保留 DOM 和状态）。
+
 ## 由来
 
 我们经常会在在不同的路由（页面）上使用统一组件，但他们的位置和大小可以不尽相同。这时你可能会希望在用户进行路由跳转时，想让它们展示流畅的过渡动画。尽管这样的动画在原生应用中较为常见，但要在 Web 中实现却有一些挑战。
