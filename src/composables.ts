@@ -14,6 +14,8 @@ export function useElementBounding(
     update,
     listen,
     pause,
+    marginTop: '0px',
+    marginLeft: '0px',
     margin: '0px',
     padding: '0px',
   })
@@ -29,9 +31,11 @@ export function useElementBounding(
       return
     const { height, width, left, top } = el.getBoundingClientRect()
     const domStyle = window.getComputedStyle(el)
+    const marginTop = domStyle.marginTop
+    const marginLeft = domStyle.marginLeft
     const margin = domStyle.margin
     const padding = domStyle.padding
-    Object.assign(rect, { height, width, left, top: root!.scrollTop + top, margin, padding })
+    Object.assign(rect, { height, width, left, top: root!.scrollTop + top, marginTop, marginLeft, margin, padding })
   }
   const raf = useRafFn(update, { immediate: false })
 
