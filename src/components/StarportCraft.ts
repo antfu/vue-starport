@@ -39,7 +39,7 @@ export const StarportCraft = defineComponent({
         height: `${rect.height}px`,
         margin: rect.margin,
         padding: rect.padding,
-        transform: `translate3d(${rect.left}px,${rect.top}px,0px)`,
+        transform: `translate3d(calc(${rect.left}px - ${rect.marginLeft}),calc(${rect.top}px - ${rect.marginTop}),0px)`,
       }
       if (!sp.value.isVisible || !sp.value.el) {
         return {
