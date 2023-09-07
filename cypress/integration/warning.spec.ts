@@ -11,7 +11,7 @@ context('warnings', () => {
 
   it('no-size', () => {
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', 'http://localhost:5173/')
 
     cy.get('.image-0 .my-component').should('exist')
 
@@ -21,7 +21,7 @@ context('warnings', () => {
     cy.get('.image-0 .my-component').should('not.exist')
 
     cy.url()
-      .should('eq', 'http://localhost:3000/warning-no-size')
+      .should('eq', 'http://localhost:5173/warning-no-size')
 
     cy.get('@consoleWarn').should('be.calledWith', '[Vue Starport] The proxy of component "MyComponent" (port "0") has no height on initial render, have you set the size for it?')
     cy.get('@consoleError').should('not.be.called')
@@ -29,7 +29,7 @@ context('warnings', () => {
 
   it('port-conflict', () => {
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', 'http://localhost:5173/')
 
     cy.get('.image-0 .my-component').should('exist')
 
@@ -39,7 +39,7 @@ context('warnings', () => {
     cy.get('.image-0 .my-component').should('not.exist')
 
     cy.url()
-      .should('eq', 'http://localhost:3000/warning-port-conflict')
+      .should('eq', 'http://localhost:5173/warning-port-conflict')
 
     cy.get('@consoleWarn').should('not.be.called')
     cy.get('@consoleError').should('be.calledWith', '[Vue Starport] Multiple proxies of "MyComponent" with port "0" detected. The later one will be ignored.')

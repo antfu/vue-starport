@@ -11,7 +11,7 @@ context('Basic', () => {
     })
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', 'http://localhost:5173/')
 
     cy.get('.image-0 .my-component').should('exist')
     cy.get('.image-1 .my-component').should('exist')
@@ -23,7 +23,7 @@ context('Basic', () => {
     cy.get('.image-0 .my-component').should('not.exist')
 
     cy.url()
-      .should('eq', 'http://localhost:3000/0')
+      .should('eq', 'http://localhost:5173/0')
 
     // flying
     cy.get('.circle-0 .my-component').should('not.exist')
@@ -39,7 +39,7 @@ context('Basic', () => {
     cy.get('.circle-0 .my-component').should('not.exist')
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', 'http://localhost:5173/')
     // flying
     cy.get('.image-0 .my-component').should('not.exist')
 
@@ -69,7 +69,7 @@ context('Basic', () => {
     })
 
     cy.url()
-      .should('eq', 'http://localhost:3000/0')
+      .should('eq', 'http://localhost:5173/0')
 
     cy.get('@consoleLog').should((_v) => {
       const v = _v as any as Sinon.SinonStub
@@ -86,7 +86,7 @@ context('Basic', () => {
     cy.get('.circle-0 .my-component').should('not.exist')
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', 'http://localhost:5173/')
     // flying
     cy.get('.image-0 .my-component').should('not.exist')
 
