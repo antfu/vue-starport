@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Starport } from 'vue-starport'
+
 const a = ref(false)
 const toggle = useToggle(a)
 </script>

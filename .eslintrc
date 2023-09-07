@@ -1,6 +1,7 @@
 {
   "extends": "@antfu",
   "rules": {
-    "vue/one-component-per-file": "off"
+    "vue/one-component-per-file": "off",
+    "n/prefer-global/process": "off"
   }
 }

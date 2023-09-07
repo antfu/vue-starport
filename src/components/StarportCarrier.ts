@@ -26,4 +26,4 @@ export const StarportCarrier = defineComponent({
       ]
     }
   },
-}) as DefineComponent<{}>
+}) as DefineComponent<Record<string, any>>
